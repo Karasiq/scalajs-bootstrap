@@ -12,6 +12,6 @@ case class ButtonBuilder(style: ButtonStyle = ButtonStyle.default, size: ButtonS
 
   def build: ConcreteHtmlTag[dom.html.Button] = {
     val classList = Seq(style.styleClass, size.sizeClass, optionalClass(block, "btn-block"), optionalClass(active, "active"), optionalClass(disabled, "disabled"))
-    button(`type` := "button", `class` := (classList.flatten ++ classes).mkString(" "))
+    button(`type` := "button", `class` := (Seq("btn") ++ classList.flatten ++ classes).mkString(" "))
   }
 }

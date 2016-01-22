@@ -5,20 +5,24 @@ import rx._
 
 import scalatags.JsDom.all._
 
-final class ToggleButton(btn: ConcreteHtmlTag[dom.html.Button]) {
+final class ToggleButton(btn: ConcreteHtmlTag[dom.html.Button]) extends ButtonWrapper {
   val state: Var[Boolean] = Var(false)
 
   val button: dom.html.Button = {
-    btn(onclick := {
+    btn(onclick := { () ⇒
       state.update(!state())
     }).render
   }
 
-  Obs(state, "toggle-button-state-changer") {
+  private val obs = Obs(state, "toggle-button-state-changer") {
     if (state()) {
-      button.classList.remove("active")
-    } else {
       button.classList.add("active")
+    } else {
+      button.classList.remove("active")
     }
+  }
+
+  def destroy(): Unit = {
+    obs.kill()
   }
 }
