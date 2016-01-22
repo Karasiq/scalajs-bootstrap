@@ -4,29 +4,27 @@ import org.scalajs.dom
 
 import scalatags.JsDom.all._
 
-class Table(style: Seq[String] = Nil) {
-  protected val head: dom.Element = thead().render
+class Table {
+  private val head: dom.Element = thead().render
 
-  protected val body: dom.Element = tbody().render
+  private val body: dom.Element = tbody().render
 
   def setHeading(heading: Seq[String]): Unit = {
     head.innerHTML = ""
-    heading.foreach { h ⇒
-      head.appendChild(th(h).render)
-    }
+    head.appendChild(tr(for (h <- heading) yield th(h)).render)
   }
 
   def setContent(content: Seq[TableRow]): Unit = {
     body.innerHTML = ""
-    for (TableRow(data, styles) <- content) {
+    for (TableRow(data, modifiers @ _*) <- content) {
       body.appendChild(tr(
-        `class` := styles.mkString(" "),
+        modifiers,
         for (col <- data) yield td(col)
       ).render)
     }
   }
 
-  def render: Tag = {
+  def render(style: String*): Tag = {
     val cls = (Seq("table") ++ style).mkString(" ")
     table(`class` := cls)(
       head,
