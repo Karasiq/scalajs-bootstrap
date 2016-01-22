@@ -6,6 +6,7 @@ import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons._
 import com.karasiq.bootstrap.grid.GridSystem.{col, row}
 import com.karasiq.bootstrap.navbar.{NavigationBar, NavigationTab}
+import com.karasiq.bootstrap.panel.{Panel, PanelBuilder, PanelStyle}
 import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableStyles}
 import org.scalajs.dom
 import org.scalajs.jquery._
@@ -16,7 +17,6 @@ import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
 
-// TODO: Panels
 @JSExport
 object BootstrapTestApp extends JSApp {
   private def testButtons: dom.Element = {
@@ -35,23 +35,31 @@ object BootstrapTestApp extends JSApp {
       }
     }
 
-    Bootstrap
-      .jumbotron(ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)).render)
+    // Render panel
+    import Panel._
+    val panelId = Bootstrap.newId
+    PanelBuilder(PanelStyle.warning)
+      .withHeader(title("euro", collapse(panelId, "Serious business panel"), buttons(
+        button("plus", onclick := { () ⇒ dom.alert("Panel add") }),
+        button("minus", onclick := { () ⇒ dom.alert("Panel remove") }))
+      ))
+      .build(ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)), panelId)
       .render
   }
 
   private def testPagedTable: dom.Element = {
-    val tables = div().render
+    val container = div(`class` := "table-responsive").render
     def testRow(i: Int): TableRow = {
       TableRow(Seq(i, i + 1, i + 2), onclick := js.ThisFunction.fromFunction1[dom.Element, Unit] { (th: dom.Element) ⇒
         th.classList.add("success")
       })
     }
-    val pagedTable = PagedTable(10, (1 to 45).map(testRow))
+    val pagedTable = PagedTable((1 to 45).map(testRow), 10)
     pagedTable.setHeading(Seq("First", "Second", "Third"))
-    tables.appendChild(div(div(textAlign.center, pagedTable.pagination), pagedTable.render(TableStyles.bordered, TableStyles.hover, TableStyles.striped)).render)
+    container.appendChild(div(div(textAlign.center, pagedTable.pagination), pagedTable.render(TableStyles.bordered, TableStyles.hover, TableStyles.striped)).render)
     pagedTable.currentPage.update(2)
-    tables
+    pagedTable.staticContent.update(pagedTable.staticContent().reverse)
+    container
   }
 
   @JSExport
