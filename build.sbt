@@ -34,7 +34,8 @@ lazy val commonSettings = Seq(
 lazy val librarySettings = Seq(
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.8.1",
-    "com.lihaoyi" %%% "scalatags" % "0.5.3"
+    "com.lihaoyi" %%% "scalatags" % "0.5.3",
+    "com.lihaoyi" %%% "scalarx" % "0.2.8"
   ),
   name := "scalajs-bootstrap"
 )
