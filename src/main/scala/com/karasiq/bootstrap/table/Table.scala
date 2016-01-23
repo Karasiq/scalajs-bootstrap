@@ -16,7 +16,7 @@ trait Table extends Modifier {
   }
 
   private lazy val body: Rx[Tag] = Rx {
-    tbody(for (TableRow(data, modifiers @ _*) <- content()) yield {
+    tbody(for (TableRow(data, modifiers) <- content()) yield {
       tr(
         modifiers,
         for (col <- data) yield td(col)
