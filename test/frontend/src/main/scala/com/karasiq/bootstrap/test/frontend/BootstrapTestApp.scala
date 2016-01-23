@@ -54,11 +54,14 @@ object BootstrapTestApp extends JSApp {
         th.classList.add("success")
       })
     }
-    val pagedTable = PagedTable((1 to 45).map(testRow), 10)
-    pagedTable.setHeading(Seq("First", "Second", "Third"))
-    container.appendChild(div(div(textAlign.center, pagedTable.pagination), pagedTable.render(TableStyles.bordered, TableStyles.hover, TableStyles.striped)).render)
+    val heading = Var(Seq("First", "Second", "Third"))
+    val content = Var((1 to 45).map(testRow))
+    val pagedTable = PagedTable(heading, content, 10)
+    container.appendChild(pagedTable.withStyles(TableStyles.bordered, TableStyles.hover, TableStyles.striped).render)
+
     pagedTable.currentPage.update(2)
-    pagedTable.staticContent.update(pagedTable.staticContent().reverse)
+    content.update(content().reverse)
+    heading.update(Seq("Eins", "Zwei", "Drei"))
     container
   }
 
