@@ -12,7 +12,8 @@ import scalatags.JsDom.all._
 
 @js.native
 trait BootstrapJQuery extends js.Object {
-  def tab(arg: String): Unit
+  def tab(arg: String): Unit = js.native
+  def carousel(options: js.Any = ???): Unit = js.native
 }
 
 object BootstrapImplicits {

@@ -7,7 +7,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-case class NavigationTab(name: String, id: String, icon: String, content: Modifier, active: Boolean = false)
+case class NavigationTab(name: String, id: String, icon: String, content: Modifier)
 
 /**
   * Simple bootstrap navigation bar
@@ -20,32 +20,36 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
 
   val navigationTabs: Var[Seq[NavigationTab]] = Var(Nil)
 
-  private def renderTab(tab: NavigationTab): Tag = {
-    li(
-      `class` := (if (tab.active) "active" else ""),
-      a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
-        span(`class` := s"glyphicon glyphicon-${tab.icon}"),
-        raw("&nbsp;"),
-        tab.name
-      )
-    )
-  }
-
   private val tabContainer = Rx {
+    def renderTab(active: Boolean, tab: NavigationTab): Tag = {
+      li(
+        `class` := (if (active) "active" else ""),
+        a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
+          span(`class` := s"glyphicon glyphicon-${tab.icon}"),
+          raw("&nbsp;"),
+          tab.name
+        )
+      )
+    }
+
+    val tabs = navigationTabs()
     ul(`class` := "nav navbar-nav")(
-      for (tab <- navigationTabs()) yield {
-        renderTab(tab)
-      }
+      renderTab(active = true, tabs.head),
+      for (tab <- tabs.tail) yield renderTab(active = false, tab)
     )
   }
 
   private val tabContentContainer = Rx {
+    def renderContent(active: Boolean, tab: NavigationTab): Tag = {
+      div(id := s"$barId-${tab.id}-tab", role := "tabpanel", `class` := (if (active) "tab-pane active fade in" else "tab-pane fade"))(
+        tab.content
+      )
+    }
+
+    val tabs = navigationTabs()
     div(id := s"$barId-tabcontent", `class` := "tab-content")(
-      for (NavigationTab(_, tabId, _, content, active) <- navigationTabs()) yield {
-        div(id := s"$barId-$tabId-tab", role := "tabpanel", `class` := (if (active) "tab-pane active fade in" else "tab-pane fade"))(
-          content
-        )
-      }
+      renderContent(active = true, tabs.head),
+      for (tab <- tabs.tail) yield renderContent(active = false, tab)
     )
   }
 
