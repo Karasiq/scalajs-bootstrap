@@ -1,5 +1,6 @@
 package com.karasiq.bootstrap.table
 
+import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import org.scalajs.dom.Element
 import rx._
@@ -9,7 +10,7 @@ import scalatags.JsDom.all._
 class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
   private def previousPageButton: Tag = {
     li(
-      a(href := "javascript:void(0);", aria.label := "Previous", onclick := { () ⇒
+      a(href := "#", aria.label := "Previous", onclick := Bootstrap.jsClick { _ ⇒
         if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
       }, span(aria.hidden := true, raw("&laquo;"))),
       `class` := Rx(if (currentPage() == 1) "disabled" else "")
@@ -18,7 +19,7 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
 
   private def nextPageButton: Tag = {
     li(
-      a(href := "javascript:void(0);", aria.label := "Next", onclick := { () ⇒
+      a(href := "#", aria.label := "Next", onclick := Bootstrap.jsClick { _ ⇒
         if (currentPage.now < pages()) currentPage.update(currentPage.now + 1)
       }, span(aria.hidden := true, raw("&raquo;"))),
       `class` := Rx(if (currentPage() == pages()) "disabled" else "")
@@ -28,7 +29,7 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
   private def pageButton(page: Int): Tag = {
     li(
       `class` := Rx(if (page == currentPage()) "active" else ""),
-      a(href := "javascript:void(0);", onclick := { () ⇒ currentPage.update(page) }, page)
+      a(href := "#", onclick := Bootstrap.jsClick(_ ⇒ currentPage.update(page)), page)
     )
   }
 
