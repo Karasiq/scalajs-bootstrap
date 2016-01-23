@@ -22,6 +22,12 @@ object Bootstrap {
   def well: ConcreteHtmlTag[dom.html.Div] = div("well".addClass)
 
   /**
+    * Badge
+    * @see [[https://getbootstrap.com/components/#badges]]
+    */
+  def badge: ConcreteHtmlTag[dom.html.Span] = span("badge".addClass)
+
+  /**
     * Default button
     */
   def button: ConcreteHtmlTag[dom.html.Button] = ButtonBuilder()

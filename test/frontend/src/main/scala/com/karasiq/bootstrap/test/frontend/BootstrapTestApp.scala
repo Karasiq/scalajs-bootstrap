@@ -9,7 +9,7 @@ import com.karasiq.bootstrap.collapse.Collapse
 import com.karasiq.bootstrap.dropdown.Dropdown
 import com.karasiq.bootstrap.grid.GridSystem.{col, row}
 import com.karasiq.bootstrap.modal.Modal
-import com.karasiq.bootstrap.navbar.{NavigationBar, NavigationTab}
+import com.karasiq.bootstrap.navbar.{Navigation, NavigationBar, NavigationTab}
 import com.karasiq.bootstrap.panel.{Panel, PanelBuilder, PanelStyle}
 import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableStyles}
 import org.scalajs.dom
@@ -46,16 +46,21 @@ object BootstrapTestApp extends JSApp {
     import Panel._
     val panelId = Bootstrap.newId
     PanelBuilder(panelId, PanelStyle.warning)
-      .withHeader(title("euro", collapse(panelId, "Serious business panel"), buttons(
+      .withHeader(title("euro", collapse(panelId, "Serious business panel", raw("&nbsp"), Bootstrap.badge("42")), buttons(
         button("plus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel add"))),
         button("minus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel remove")))
       )))
       .build(
-        Collapse("Dropdowns")(
-          Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 1"))), Dropdown.item("Test 2")),
-          Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 3"))), Dropdown.item("Test 4"))
-        ),
-        ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton))
+        Navigation.tabs(
+          NavigationTab("Simple buttons", Bootstrap.newId, "remove", Bootstrap.well(
+            ButtonGroup(ButtonGroupSize.default, successButton, dangerButton),
+            Collapse("Dropdowns")(
+              Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 1"))), Dropdown.item("Test 2")),
+              Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 3"))), Dropdown.item("Test 4"))
+            )
+          )),
+          NavigationTab("Reactive buttons", Bootstrap.newId, "play-circle", Bootstrap.well(ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)))
+        )
       )
   }
 
@@ -102,8 +107,12 @@ object BootstrapTestApp extends JSApp {
     jQuery(() ⇒ {
       // Create navigation elements
       val navigationBar = new NavigationBar("bstest")
+
+      // Table tab will appear after 4 seconds
+      val tableVisible = Var(false)
+      dom.setTimeout(() ⇒ { tableVisible.update(true) }, 4000)
       navigationBar.setTabs(
-        NavigationTab("Table", "table", "briefcase", this.testPagedTable),
+        NavigationTab("Table", "table", "briefcase", this.testPagedTable, tableVisible.rxShow),
         NavigationTab("Carousel", "carousel", "picture", this.testCarousel)
       )
 
