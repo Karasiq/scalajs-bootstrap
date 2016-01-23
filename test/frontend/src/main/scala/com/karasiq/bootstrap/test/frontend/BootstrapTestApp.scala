@@ -4,6 +4,7 @@ package com.karasiq.bootstrap.test.frontend
 import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons._
+import com.karasiq.bootstrap.carousel.Carousel
 import com.karasiq.bootstrap.grid.GridSystem.{col, row}
 import com.karasiq.bootstrap.navbar.{NavigationBar, NavigationTab}
 import com.karasiq.bootstrap.panel.{Panel, PanelBuilder, PanelStyle}
@@ -19,7 +20,7 @@ import scalatags.JsDom.all._
 
 @JSExport
 object BootstrapTestApp extends JSApp {
-  private def testButtons: dom.Element = {
+  private def testButtons: Modifier = {
     val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$").render
     val dangerButton = ButtonBuilder(ButtonStyle.danger)("Format C:\\", onclick := { () ⇒ dom.alert("Boom") }).render
 
@@ -44,10 +45,9 @@ object BootstrapTestApp extends JSApp {
         button("minus", onclick := { () ⇒ dom.alert("Panel remove") }))
       ))
       .build(ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)), panelId)
-      .render
   }
 
-  private def testPagedTable: dom.Element = {
+  private def testPagedTable: Modifier = {
     val reactiveColumn = Var(2)
     val container = div(`class` := "table-responsive").render
     def testRow(i: Int): TableRow = {
@@ -67,13 +67,30 @@ object BootstrapTestApp extends JSApp {
     container
   }
 
+  private def testCarousel: Modifier = {
+    val imgSrc: String = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG"
+    Carousel(
+      Carousel.slide(
+        imgSrc,
+        h3("First slide label"),
+        p("Nulla vitae elit libero, a pharetra augue mollis interdum.")
+      ),
+      Carousel.slide(
+        imgSrc,
+        h3("Second slide label"),
+        p("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+      )
+    )
+  }
+
   @JSExport
   override def main(): Unit = {
     jQuery(() ⇒ {
       // Create navigation elements
       val navigationBar = new NavigationBar()
       navigationBar.setTabs(
-        NavigationTab("Table", "bs-test-table", "briefcase", this.testPagedTable, active = true)
+        NavigationTab("Table", "bs-test-table", "briefcase", this.testPagedTable),
+        NavigationTab("Carousel", "bs-test-carousel", "picture", this.testCarousel)
       )
 
       // Bootstrap container
