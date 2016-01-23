@@ -5,7 +5,9 @@ import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons._
 import com.karasiq.bootstrap.carousel.Carousel
+import com.karasiq.bootstrap.dropdown.Dropdown
 import com.karasiq.bootstrap.grid.GridSystem.{col, row}
+import com.karasiq.bootstrap.modal.Modal
 import com.karasiq.bootstrap.navbar.{NavigationBar, NavigationTab}
 import com.karasiq.bootstrap.panel.{Panel, PanelBuilder, PanelStyle}
 import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableStyles}
@@ -21,7 +23,11 @@ import scalatags.JsDom.all._
 @JSExport
 object BootstrapTestApp extends JSApp {
   private def testButtons: Modifier = {
-    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$").render
+    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$", onclick := { () ⇒
+      Modal("Lottery", "You won 10000000$")
+        .withButtons(Modal.closeButton(), Modal.button("Take", Modal.dismiss))
+        .show()
+    }).render
     val dangerButton = ButtonBuilder(ButtonStyle.danger)("Format C:\\", onclick := { () ⇒ dom.alert("Boom") }).render
 
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
@@ -39,12 +45,16 @@ object BootstrapTestApp extends JSApp {
     // Render panel
     import Panel._
     val panelId = Bootstrap.newId
-    PanelBuilder(PanelStyle.warning)
+    PanelBuilder(panelId, PanelStyle.warning)
       .withHeader(title("euro", collapse(panelId, "Serious business panel"), buttons(
         button("plus", onclick := { () ⇒ dom.alert("Panel add") }),
         button("minus", onclick := { () ⇒ dom.alert("Panel remove") }))
       ))
-      .build(ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)), panelId)
+      .build(
+        ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)),
+        Dropdown("Dropdown", Dropdown.item("Test 1", onclick := { () ⇒ dom.alert("Test 1") }), Dropdown.item("Test 2")),
+        Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := { () ⇒ dom.alert("Test 3") }), Dropdown.item("Test 4"))
+      )
   }
 
   private def testPagedTable: Modifier = {
@@ -87,10 +97,10 @@ object BootstrapTestApp extends JSApp {
   override def main(): Unit = {
     jQuery(() ⇒ {
       // Create navigation elements
-      val navigationBar = new NavigationBar()
+      val navigationBar = new NavigationBar("bstest")
       navigationBar.setTabs(
-        NavigationTab("Table", "bs-test-table", "briefcase", this.testPagedTable),
-        NavigationTab("Carousel", "bs-test-carousel", "picture", this.testCarousel)
+        NavigationTab("Table", "table", "briefcase", this.testPagedTable),
+        NavigationTab("Carousel", "carousel", "picture", this.testCarousel)
       )
 
       // Bootstrap container
@@ -106,7 +116,7 @@ object BootstrapTestApp extends JSApp {
       body.append(container)
 
       // Reactive navbar test
-      navigationBar.addTabs(NavigationTab("Buttons", "bs-test-buttons", "log-in", this.testButtons))
+      navigationBar.addTabs(NavigationTab("Buttons", "buttons", "log-in", this.testButtons))
       navigationBar.selectTab(1)
     })
   }

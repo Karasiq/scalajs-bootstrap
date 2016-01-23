@@ -1,13 +1,13 @@
 package com.karasiq.bootstrap.carousel
 
 import com.karasiq.bootstrap.Bootstrap
+import com.karasiq.bootstrap.BootstrapAttrs._
 import com.karasiq.bootstrap.BootstrapImplicits._
 import org.scalajs.dom.Element
 import org.scalajs.jquery.jQuery
 import rx._
 
 import scala.scalajs.js
-import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
 /**
@@ -18,11 +18,7 @@ sealed trait Carousel extends Modifier {
 
   def content: Rx[Seq[Modifier]]
 
-  private val `data-target` = "data-target".attr
-
   private def indicators = Rx {
-    val `data-slide-to` = "data-slide-to".attr
-
     def mkIndicator(index: Int): Tag = {
       li(`data-target` := s"#$carouselId-carousel", `data-slide-to` := index)
     }
@@ -43,8 +39,6 @@ sealed trait Carousel extends Modifier {
   }
 
   private def carousel: Tag = {
-    val `data-ride` = "data-ride".attr
-    val `data-slide` = "data-slide".attr
     div(id := s"$carouselId-carousel", `class` := "carousel slide"/*, `data-ride` := "carousel"*/)(
       indicators,
       slides,
@@ -74,7 +68,7 @@ object Carousel {
   def reactive(data: Rx[Seq[Modifier]], id: String = Bootstrap.newId): Carousel = new Carousel {
     override val carouselId: String = id
 
-    override val content: Rx[Seq[all.Modifier]] = data
+    override val content: Rx[Seq[Modifier]] = data
   }
 
   def apply(content: Modifier*): Carousel = {

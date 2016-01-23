@@ -1,14 +1,13 @@
 package com.karasiq.bootstrap.panel
 
 import com.karasiq.bootstrap.Bootstrap
+import com.karasiq.bootstrap.BootstrapAttrs._
 import org.scalajs.dom
 
 import scalatags.JsDom.all._
 
 object Panel {
   def collapse(panelId: String, modifiers: Modifier*): Tag = {
-    val `data-toggle` = "data-toggle".attr
-    val `data-target` = "data-target".attr
     span(cursor.pointer, `data-toggle` := "collapse", `data-target` := s"#$panelId-panel-body", modifiers)
   }
 
