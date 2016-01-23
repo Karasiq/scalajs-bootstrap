@@ -7,7 +7,7 @@ import rx._
 import scalatags.JsDom.all._
 
 class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
-  private val previous = Rx {
+  private def previousPageButton: Tag = {
     li(
       a(href := "javascript:void(0);", aria.label := "Previous", onclick := { () ⇒
         if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
@@ -16,7 +16,7 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
     )
   }
 
-  private val next = Rx {
+  private def nextPageButton: Tag = {
     li(
       a(href := "javascript:void(0);", aria.label := "Next", onclick := { () ⇒
         if (currentPage.now < pages()) currentPage.update(currentPage.now + 1)
@@ -25,18 +25,18 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
     )
   }
 
-  private def pageControl(page: Int): Rx[Tag] = Rx {
+  private def pageButton(page: Int): Tag = {
     li(
       `class` := Rx(if (page == currentPage()) "active" else ""),
       a(href := "javascript:void(0);", onclick := { () ⇒ currentPage.update(page) }, page)
     )
   }
 
-  private val pagination = Rx {
+  private def pagination: Tag = {
     ul(`class` := "pagination")(
-      previous,
-      (1 to pages()).map(pageControl),
-      next
+      previousPageButton,
+      for(page <- 1 to pages()) yield pageButton(page),
+      nextPageButton
     )
   }
 
