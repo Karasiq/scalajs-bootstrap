@@ -1,7 +1,14 @@
 package com.karasiq.bootstrap.buttons
 
 import org.scalajs.dom
+import org.scalajs.dom.Element
 
-trait ButtonWrapper {
+import scalatags.JsDom.all._
+
+trait ButtonWrapper extends Modifier {
   val button: dom.html.Button
+
+  override def applyTo(t: Element): Unit = {
+    this.button.applyTo(t)
+  }
 }
