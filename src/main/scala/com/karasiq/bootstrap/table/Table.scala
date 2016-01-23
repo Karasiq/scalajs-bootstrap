@@ -7,7 +7,7 @@ import rx._
 import scalatags.JsDom.all._
 
 trait Table extends Modifier {
-  def heading: Rx[Seq[String]]
+  def heading: Rx[Seq[Modifier]]
 
   def content: Rx[Seq[TableRow]]
 

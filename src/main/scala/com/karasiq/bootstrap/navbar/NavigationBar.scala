@@ -2,6 +2,7 @@ package com.karasiq.bootstrap.navbar
 
 import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
+import org.scalajs.jquery.jQuery
 import rx._
 
 import scalatags.JsDom.all._
@@ -49,8 +50,25 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
   }
 
   /**
+    * Selects tab by ID
+    * @param id Tab ID
+    */
+  def selectTab(id: String): Unit = {
+    jQuery(s"a[href='#$barId-$id-tab']").tab("show")
+  }
+
+  /**
+    * Selects tab by index
+    * @param i Tab index, starting from `0`
+    */
+  def selectTab(i: Int): Unit = {
+    val tabs = navigationTabs()
+    require(i >= 0 && tabs.length > i, s"Invalid tab index: $i")
+    this.selectTab(tabs(i).id)
+  }
+
+  /**
     * Appends provided tabs to tab list
-    *
     * @param tabs Navbar tabs
     */
   def addTabs(tabs: NavigationTab*): Unit = {
@@ -59,7 +77,6 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
 
   /**
     * Updates tab list
-    *
     * @param tabs Navbar tabs
     */
   def setTabs(tabs: NavigationTab*): Unit = {

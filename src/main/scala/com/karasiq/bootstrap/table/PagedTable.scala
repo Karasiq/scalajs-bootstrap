@@ -18,7 +18,7 @@ trait PagedTable extends Table {
 }
 
 object PagedTable {
-  final class StaticPagedTable(val heading: Rx[Seq[String]], contentProvider: Rx[Seq[TableRow]], perPage: Int) extends PagedTable {
+  final class StaticPagedTable(val heading: Rx[Seq[Modifier]], contentProvider: Rx[Seq[TableRow]], perPage: Int) extends PagedTable {
     override val currentPage: Var[Int] = Var(1)
 
     override val content: Rx[Seq[TableRow]] = Rx {
@@ -39,11 +39,11 @@ object PagedTable {
     }
   }
 
-  def apply(heading: Rx[Seq[String]], content: Rx[Seq[TableRow]], perPage: Int = 20): StaticPagedTable = {
+  def apply(heading: Rx[Seq[Modifier]], content: Rx[Seq[TableRow]], perPage: Int = 20): StaticPagedTable = {
     new StaticPagedTable(heading, content, perPage)
   }
 
-  def static(heading: Seq[String], content: Seq[TableRow], perPage: Int = 20): StaticPagedTable = {
+  def static(heading: Seq[Modifier], content: Seq[TableRow], perPage: Int = 20): StaticPagedTable = {
     this.apply(Rx(heading), Rx(content), perPage)
   }
 }

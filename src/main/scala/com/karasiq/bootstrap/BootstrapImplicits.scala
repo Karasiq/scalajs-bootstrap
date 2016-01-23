@@ -3,13 +3,24 @@ package com.karasiq.bootstrap
 import com.karasiq.bootstrap.buttons._
 import org.scalajs.dom
 import org.scalajs.dom.Element
+import org.scalajs.jquery.JQuery
 import rx.{Obs, Rx, Var}
 
 import scala.language.implicitConversions
+import scala.scalajs.js
 import scalatags.JsDom.all._
+
+@js.native
+trait BootstrapJQuery extends js.Object {
+  def tab(arg: String): Unit
+}
 
 object BootstrapImplicits {
   private type HtmlButton = ConcreteHtmlTag[dom.html.Button]
+
+  implicit def bootstrapJquery(jq: JQuery): BootstrapJQuery = {
+    jq.asInstanceOf[BootstrapJQuery]
+  }
 
   implicit class ButtonOps(val button: HtmlButton) extends AnyVal {
     def toggleButton: ToggleButton = new ToggleButton(button)
