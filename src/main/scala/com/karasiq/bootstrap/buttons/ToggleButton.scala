@@ -1,5 +1,6 @@
 package com.karasiq.bootstrap.buttons
 
+import com.karasiq.bootstrap.Bootstrap
 import org.scalajs.dom
 import rx._
 
@@ -9,7 +10,7 @@ final class ToggleButton(btn: ConcreteHtmlTag[dom.html.Button]) extends ButtonWr
   val state: Var[Boolean] = Var(false)
 
   val button: dom.html.Button = {
-    btn(onclick := { () ⇒
+    btn(onclick := Bootstrap.jsClick { _ ⇒
       state.update(!state())
     }).render
   }

@@ -2,7 +2,9 @@ package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.buttons.ButtonBuilder
 import org.scalajs.dom
+import org.scalajs.dom.raw.MouseEvent
 
+import scala.scalajs.js
 import scalatags.JsDom.all._
 
 object Bootstrap {
@@ -34,5 +36,12 @@ object Bootstrap {
   def newId: String = {
     idCounter = idCounter + 1
     s"bs-auto-$idCounter"
+  }
+
+  def jsClick(f: dom.Element ⇒ Unit): js.Function = {
+    js.ThisFunction.fromFunction2 { (element: dom.Element, ev: MouseEvent) ⇒
+      ev.preventDefault()
+      f(element)
+    }
   }
 }

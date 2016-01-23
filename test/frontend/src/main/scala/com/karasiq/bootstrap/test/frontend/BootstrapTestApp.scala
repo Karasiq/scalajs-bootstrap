@@ -15,7 +15,6 @@ import org.scalajs.dom
 import org.scalajs.jquery._
 import rx._
 
-import scala.scalajs.js
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
@@ -23,12 +22,12 @@ import scalatags.JsDom.all._
 @JSExport
 object BootstrapTestApp extends JSApp {
   private def testButtons: Modifier = {
-    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$", onclick := { () ⇒
+    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick { _ ⇒
       Modal("Lottery", "You won 10000000$")
         .withButtons(Modal.closeButton(), Modal.button("Take", Modal.dismiss))
         .show()
     }).render
-    val dangerButton = ButtonBuilder(ButtonStyle.danger)("Format C:\\", onclick := { () ⇒ dom.alert("Boom") }).render
+    val dangerButton = ButtonBuilder(ButtonStyle.danger)("Format C:\\", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Boom"))).render
 
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
     val disabledButton = Bootstrap.button("Heavy computation").disabledButton
@@ -47,30 +46,32 @@ object BootstrapTestApp extends JSApp {
     val panelId = Bootstrap.newId
     PanelBuilder(panelId, PanelStyle.warning)
       .withHeader(title("euro", collapse(panelId, "Serious business panel"), buttons(
-        button("plus", onclick := { () ⇒ dom.alert("Panel add") }),
-        button("minus", onclick := { () ⇒ dom.alert("Panel remove") }))
-      ))
+        button("plus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel add"))),
+        button("minus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel remove")))
+      )))
       .build(
         ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)),
-        Dropdown("Dropdown", Dropdown.item("Test 1", onclick := { () ⇒ dom.alert("Test 1") }), Dropdown.item("Test 2")),
-        Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := { () ⇒ dom.alert("Test 3") }), Dropdown.item("Test 4"))
+        Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 1"))), Dropdown.item("Test 2")),
+        Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 3"))), Dropdown.item("Test 4"))
       )
   }
 
   private def testPagedTable: Modifier = {
-    val reactiveColumn = Var(2)
     val container = div(`class` := "table-responsive").render
-    def testRow(i: Int): TableRow = {
-      TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := js.ThisFunction.fromFunction1[dom.Element, Unit] { (th: dom.Element) ⇒
-        reactiveColumn.update(reactiveColumn() + 1)
-        th.classList.add("success")
-      })
-    }
+
+    // Table content
+    val reactiveColumn = Var(2)
     val heading = Var(Seq[Modifier]("First", "Second", "Third"))
-    val content = Var((1 to 45).map(testRow))
+    val content = Var(for (i <- 1 to 45) yield TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := Bootstrap.jsClick { row ⇒
+      reactiveColumn.update(reactiveColumn() + 1)
+      row.classList.add("success")
+    }))
+
+    // Render table
     val pagedTable = PagedTable(heading, content, 10)
     container.appendChild(pagedTable.withStyles(TableStyles.bordered, TableStyles.hover, TableStyles.striped).render)
 
+    // Test reactive components
     pagedTable.currentPage.update(2)
     content.update(content().reverse)
     heading.update(Seq("Eins", "Zwei", Rx("Drei " + reactiveColumn())))
