@@ -7,7 +7,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-case class NavigationTab(name: String, id: String, icon: String, content: Modifier)
+
 
 /**
   * Simple bootstrap navigation bar
@@ -23,7 +23,8 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
   private val tabContainer = Rx {
     def renderTab(active: Boolean, tab: NavigationTab): Tag = {
       li(
-        `class` := (if (active) "active" else ""),
+        tab.modifiers,
+        "active".classIf(active),
         a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
           span(`class` := s"glyphicon glyphicon-${tab.icon}"),
           raw("&nbsp;"),

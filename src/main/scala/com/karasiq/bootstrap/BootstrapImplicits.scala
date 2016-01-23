@@ -37,6 +37,34 @@ object BootstrapImplicits {
     bc.render
   }
 
+  implicit class RxValueOps[T](state: Rx[T]) {
+    def rxModifier(f: (dom.Element, T) ⇒ Unit): Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        Obs(state) {
+          f(t, state.now)
+        }
+      }
+    }
+  }
+
+  implicit class RxStateOps(val state: Rx[Boolean]) extends AnyVal {
+    def rxShow: Modifier = {
+      val oldDisplay = Var("block")
+      state.rxModifier { (e, state) ⇒
+        if (!state) {
+          oldDisplay.updateSilent(e.asInstanceOf[dom.html.Element].style.display)
+          e.asInstanceOf[dom.html.Element].style.display = "none"
+        } else if (e.asInstanceOf[dom.html.Element].style.display == "none") {
+          e.asInstanceOf[dom.html.Element].style.display = oldDisplay.now
+        }
+      }
+    }
+
+    def rxHide: Modifier = {
+      Rx(!state()).rxShow
+    }
+  }
+
   implicit def bindRxAttr[T](implicit ev: AttrValue[T]): AttrValue[Rx[T]] = new AttrValue[Rx[T]] {
     override def apply(t: Element, a: Attr, v: Rx[T]): Unit = {
       Obs(v, "rx-attr-updater") {
@@ -96,12 +124,8 @@ object BootstrapImplicits {
       }
     }
 
-    def classIf(state: Rx[Boolean]): Modifier = new Modifier {
-      override def applyTo(t: Element): Unit = {
-        Obs(state) {
-          classIf(state.now).applyTo(t)
-        }
-      }
+    def classIf(state: Rx[Boolean]): Modifier = state.rxModifier { (e, state) ⇒
+      classIf(state).applyTo(e)
     }
   }
 }
