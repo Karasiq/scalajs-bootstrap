@@ -1,8 +1,17 @@
 package com.karasiq.bootstrap.table
 
+import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.ClassModifier
+
+import scalatags.JsDom.all._
+
 object TableStyles {
-  def striped: String = "table-striped"
-  def hover: String = "table-hover"
-  def bordered: String = "table-bordered"
-  def condensed: String = "table-condensed"
+  private def style(st: String): ClassModifier = new ClassModifier {
+    override def classMod: Modifier = s"table-$st".addClass
+  }
+
+  def striped: ClassModifier = style("striped")
+  def hover: ClassModifier = style("hover")
+  def bordered: ClassModifier = style("bordered")
+  def condensed: ClassModifier = style("condensed")
 }

@@ -9,7 +9,7 @@ import scalatags.JsDom.all._
 private[dropdown] final class Dropdown(title: Modifier, dropdownId: String, items: Modifier) {
   def dropdown: Tag = {
     div(`class` := "dropdown")(
-      ButtonBuilder(classes = Seq("dropdown-toggle")).build(id := dropdownId, `data-toggle` := "dropdown", aria.haspopup := true, aria.expanded := false)(
+      ButtonBuilder(classes = Seq("dropdown-toggle")).renderTag(id := dropdownId, `data-toggle` := "dropdown", aria.haspopup := true, aria.expanded := false)(
         title,
         raw("&nbsp"),
         span(`class` := "caret")

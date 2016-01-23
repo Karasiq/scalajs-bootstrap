@@ -1,7 +1,14 @@
 package com.karasiq.bootstrap.buttons
 
-sealed trait ButtonSize {
+import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.ClassModifier
+
+import scalatags.JsDom.all
+
+sealed trait ButtonSize extends ClassModifier {
   def sizeClass: Option[String]
+
+  override def classMod: all.Modifier = sizeClass.classOpt
 }
 
 /**

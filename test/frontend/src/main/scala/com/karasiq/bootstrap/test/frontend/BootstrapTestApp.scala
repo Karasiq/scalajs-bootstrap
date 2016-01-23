@@ -5,6 +5,7 @@ import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons._
 import com.karasiq.bootstrap.carousel.Carousel
+import com.karasiq.bootstrap.collapse.Collapse
 import com.karasiq.bootstrap.dropdown.Dropdown
 import com.karasiq.bootstrap.grid.GridSystem.{col, row}
 import com.karasiq.bootstrap.modal.Modal
@@ -33,7 +34,7 @@ object BootstrapTestApp extends JSApp {
     val disabledButton = Bootstrap.button("Heavy computation").disabledButton
 
     Obs(disabledButton.state, "disabled-button-click-handler") {
-      if (disabledButton.state()) {
+      if (disabledButton.state.now) {
         dom.setTimeout(() ⇒ {
           dom.alert("Answer: 123")
           disabledButton.state.update(false)
@@ -50,9 +51,11 @@ object BootstrapTestApp extends JSApp {
         button("minus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel remove")))
       )))
       .build(
-        ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)),
-        Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 1"))), Dropdown.item("Test 2")),
-        Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 3"))), Dropdown.item("Test 4"))
+        Collapse("Dropdowns")(
+          Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 1"))), Dropdown.item("Test 2")),
+          Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 3"))), Dropdown.item("Test 4"))
+        ),
+        ButtonToolbar(ButtonGroup(ButtonGroupSize.default, successButton, dangerButton), ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton))
       )
   }
 
@@ -69,7 +72,7 @@ object BootstrapTestApp extends JSApp {
 
     // Render table
     val pagedTable = PagedTable(heading, content, 10)
-    container.appendChild(pagedTable.withStyles(TableStyles.bordered, TableStyles.hover, TableStyles.striped).render)
+    container.appendChild(pagedTable.renderTag(TableStyles.bordered, TableStyles.hover, TableStyles.striped).render)
 
     // Test reactive components
     pagedTable.currentPage.update(2)

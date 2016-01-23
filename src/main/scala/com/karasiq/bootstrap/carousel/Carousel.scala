@@ -1,19 +1,20 @@
 package com.karasiq.bootstrap.carousel
 
-import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapAttrs._
 import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent}
 import org.scalajs.dom.Element
 import org.scalajs.jquery.jQuery
 import rx._
 
 import scala.scalajs.js
+import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
 /**
   * @see [[https://getbootstrap.com/javascript/#carousel]]
   */
-sealed trait Carousel extends Modifier {
+sealed trait Carousel extends BootstrapComponent {
   def carouselId: String
 
   def content: Rx[Seq[Modifier]]
@@ -53,14 +54,14 @@ sealed trait Carousel extends Modifier {
     )
   }
 
-  def render(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true): Element = {
+  def create(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true): Element = {
     val e = carousel.render
     jQuery(e).carousel(js.Dynamic.literal(interval = interval, pause = pause, wrap = wrap, keyboard = keyboard))
     e
   }
 
-  override def applyTo(t: Element): Unit = {
-    this.render().applyTo(t)
+  override def render: all.Modifier = {
+    this.create() // With default settings
   }
 }
 

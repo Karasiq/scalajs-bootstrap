@@ -1,7 +1,14 @@
 package com.karasiq.bootstrap.panel
 
-sealed trait PanelStyle {
+import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.ClassModifier
+
+import scalatags.JsDom.all._
+
+sealed trait PanelStyle extends ClassModifier {
   def styleClass: Option[String]
+
+  override def classMod: Modifier = styleClass.classOpt
 }
 
 object PanelStyle {

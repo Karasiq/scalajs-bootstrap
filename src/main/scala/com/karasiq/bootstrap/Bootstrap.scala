@@ -1,5 +1,6 @@
 package com.karasiq.bootstrap
 
+import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons.ButtonBuilder
 import org.scalajs.dom
 import org.scalajs.dom.raw.MouseEvent
@@ -12,12 +13,18 @@ object Bootstrap {
     * Jumbotron
     * @see [[https://getbootstrap.com/components/#jumbotron]]
     */
-  def jumbotron: ConcreteHtmlTag[dom.html.Div] = div(`class` := "jumbotron")
+  def jumbotron: ConcreteHtmlTag[dom.html.Div] = div("jumbotron".addClass)
+
+  /**
+    * Well
+    * @see [[https://getbootstrap.com/components/#wells]]
+    */
+  def well: ConcreteHtmlTag[dom.html.Div] = div("well".addClass)
 
   /**
     * Default button
     */
-  def button: ConcreteHtmlTag[dom.html.Button] = ButtonBuilder().build
+  def button: ConcreteHtmlTag[dom.html.Button] = ButtonBuilder()
 
   /**
     * Glyphicon

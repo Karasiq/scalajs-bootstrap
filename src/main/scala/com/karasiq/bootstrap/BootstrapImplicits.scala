@@ -29,30 +29,18 @@ object BootstrapImplicits {
     def disabledButton: DisabledButton = new DisabledButton(button)
   }
 
-  implicit def buttonBuilderToButton(btn: ButtonBuilder): HtmlButton = {
-    btn.build
+  implicit def bootstrapHtmlComponentToTag[T <: dom.Element](bc: BootstrapHtmlComponent[T]): ConcreteHtmlTag[T] = {
+    bc.renderTag()
   }
 
-  implicit def buttonGroupToTag(btnGroup: ButtonGroup): Tag = {
-    div(`class` := (Seq("btn-group") ++ btnGroup.size.sizeClass).mkString(" "), role := "group", aria.label := "Button group")(
-      btnGroup.buttons
-    )
-  }
-
-  implicit def buttonToolbarToTag(btnToolbar: ButtonToolbar): Tag = {
-    div(`class` := "btn-toolbar", role := "toolbar", aria.label := "Button toolbar")(
-      btnToolbar.buttonGroups.map(buttonGroupToTag)
-    )
-  }
-
-  implicit def btnWrapperToButtonTag[B](btnWrapper: B)(implicit ev: B <:< ButtonWrapper): dom.html.Button = {
-    btnWrapper.button
+  implicit def renderBootstrapComponent(bc: BootstrapComponent): Modifier = {
+    bc.render
   }
 
   implicit def bindRxAttr[T](implicit ev: AttrValue[T]): AttrValue[Rx[T]] = new AttrValue[Rx[T]] {
     override def apply(t: Element, a: Attr, v: Rx[T]): Unit = {
       Obs(v, "rx-attr-updater") {
-        ev.apply(t, a, v())
+        ev.apply(t, a, v.now)
       }
     }
   }
@@ -61,8 +49,8 @@ object BootstrapImplicits {
     override def applyTo(t: Element): Unit = {
       val container = Var(rx.now)
       Obs(rx, "rx-dom-updater", skipInitial = true) {
-        val element = container()
-        val newElement = rx()
+        val element = container.now
+        val newElement = rx.now
         container.updateSilent(newElement)
         element.parentNode.replaceChild(newElement, element)
       }
@@ -73,6 +61,47 @@ object BootstrapImplicits {
   implicit class RxFragNode[T](value: Rx[T])(implicit ev: T ⇒ Frag) extends Modifier {
     override def applyTo(t: Element): Unit = {
       new RxNode(Rx(value().render)).applyTo(t)
+    }
+  }
+
+  implicit class HtmlClassOptOps(val className: Option[String]) extends AnyVal {
+    def classOpt: Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        className.foreach(t.classList.add)
+      }
+    }
+  }
+
+  //noinspection MutatorLikeMethodIsParameterless
+  implicit class HtmlClassOps(val className: String) extends AnyVal {
+    def addClass: Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        t.classList.add(className)
+      }
+    }
+
+    def removeClass: Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        t.classList.remove(className)
+      }
+    }
+
+    def classIf(state: Boolean): Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        if (state) {
+          t.classList.add(className)
+        } else {
+          t.classList.remove(className)
+        }
+      }
+    }
+
+    def classIf(state: Rx[Boolean]): Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        Obs(state) {
+          classIf(state.now).applyTo(t)
+        }
+      }
     }
   }
 }

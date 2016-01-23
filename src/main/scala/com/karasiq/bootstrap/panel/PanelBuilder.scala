@@ -1,6 +1,7 @@
 package com.karasiq.bootstrap.panel
 
 import com.karasiq.bootstrap.Bootstrap
+import com.karasiq.bootstrap.BootstrapImplicits._
 
 import scalatags.JsDom.all._
 
@@ -22,10 +23,10 @@ case class PanelBuilder(panelId: String = Bootstrap.newId, style: PanelStyle = P
   }
 
   def build(content: Modifier*): Tag = {
-    div(`class` := (Seq("panel") ++ style.styleClass).mkString(" "), id := panelId)(
-      header.map(h ⇒ div(`class` := "panel-heading", id := s"$panelId-panel-header", h)),
+    div((Seq("panel") ++ style.styleClass).map(_.addClass), id := panelId)(
+      for (h <- header) yield div(`class` := "panel-heading", id := s"$panelId-panel-header", h),
       div(`class` := "panel-body collapse in", id := s"$panelId-panel-body", content),
-      footer.map(f ⇒ div(`class` := "panel-footer", id := s"$panelId-panel-footer", f))
+      for (f <- footer) yield div(`class` := "panel-footer", id := s"$panelId-panel-footer", f)
     )
   }
 }
