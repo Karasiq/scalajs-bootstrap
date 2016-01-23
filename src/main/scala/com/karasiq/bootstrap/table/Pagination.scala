@@ -1,13 +1,13 @@
 package com.karasiq.bootstrap.table
 
-import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
-import org.scalajs.dom.Element
+import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
+import org.scalajs.dom
 import rx._
 
 import scalatags.JsDom.all._
 
-class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
+class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends BootstrapHtmlComponent[dom.html.Element] {
   private def previousPageButton: Tag = {
     li(
       a(href := "#", aria.label := "Previous", onclick := Bootstrap.jsClick { _ ⇒
@@ -33,15 +33,11 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends Modifier {
     )
   }
 
-  private def pagination: Tag = {
-    ul(`class` := "pagination")(
+  override def renderTag(md: Modifier*): RenderedTag = {
+    ul(`class` := "pagination", md)(
       previousPageButton,
       for(page <- 1 to pages()) yield pageButton(page),
       nextPageButton
     )
-  }
-
-  override def applyTo(t: Element): Unit = {
-    pagination.applyTo(t)
   }
 }

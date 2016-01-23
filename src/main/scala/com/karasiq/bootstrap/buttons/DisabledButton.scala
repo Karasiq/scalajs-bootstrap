@@ -1,32 +1,22 @@
 package com.karasiq.bootstrap.buttons
 
-import com.karasiq.bootstrap.Bootstrap
+import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
 import org.scalajs.dom
 import rx._
 
 import scalatags.JsDom.all._
 
-final class DisabledButton(btn: ConcreteHtmlTag[dom.html.Button]) extends ButtonWrapper {
+final class DisabledButton(btn: ConcreteHtmlTag[dom.html.Button]) extends BootstrapHtmlComponent[dom.html.Button] {
   val state: Var[Boolean] = Var(false)
 
-  val button: dom.html.Button = btn(
-    onclick := Bootstrap.jsClick { _ ⇒
-      if (!state()) {
-        // Disables button
-        state.update(true)
-      }
-    }
-  ).render
-
-  private val obs = Obs(state, "disabled-button-state-changer") {
-    if (state()) {
-      button.classList.add("disabled")
-    } else {
-      button.classList.remove("disabled")
-    }
-  }
-
-  def destroy(): Unit = {
-    obs.kill()
+  override def renderTag(md: Modifier*): RenderedTag = {
+    btn(
+      "disabled".classIf(state),
+      onclick := Bootstrap.jsClick { _ ⇒
+        if (!state.now) state.update(true)
+      },
+      md
+    )
   }
 }

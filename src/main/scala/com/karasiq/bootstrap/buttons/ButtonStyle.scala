@@ -1,7 +1,14 @@
 package com.karasiq.bootstrap.buttons
 
-sealed trait ButtonStyle {
+import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.ClassModifier
+
+import scalatags.JsDom.all
+
+sealed trait ButtonStyle extends ClassModifier {
   def styleClass: Option[String]
+
+  override def classMod: all.Modifier = styleClass.classOpt
 }
 
 /**

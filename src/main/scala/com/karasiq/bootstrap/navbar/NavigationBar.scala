@@ -87,8 +87,8 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
     navigationTabs.update(tabs)
   }
 
-  def navbar(brand: String, classes: Seq[String] = Seq("navbar-fixed-top")): Tag = {
-    nav(`class` := (Seq("navbar", "navbar-default") ++ classes).mkString(" "))(
+  def navbar(brand: Modifier): Tag = {
+    nav(`class` := "navbar navbar-default navbar-fixed-top")(
       div(`class` := "container")(
         // Header
         div(`class` := "navbar-header")(

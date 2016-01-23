@@ -1,10 +1,27 @@
 package com.karasiq.bootstrap.buttons
 
+import com.karasiq.bootstrap.BootstrapHtmlComponent
+import com.karasiq.bootstrap.BootstrapImplicits._
 import org.scalajs.dom
+import org.scalajs.dom.html.Div
 
-case class ButtonGroup(size: ButtonGroupSize, buttons: dom.html.Button*)
+import scalatags.JsDom.all._
 
-case class ButtonToolbar(buttonGroups: ButtonGroup*)
+case class ButtonGroup(size: ButtonGroupSize, buttons: Modifier*) extends BootstrapHtmlComponent[dom.html.Div] {
+  override def renderTag(md: Modifier*): ConcreteHtmlTag[Div] = {
+    div((Seq("btn-group") ++ size.sizeClass).map(_.addClass), role := "group", aria.label := "Button group", md)(
+      buttons
+    )
+  }
+}
+
+case class ButtonToolbar(buttonGroups: ButtonGroup*) extends BootstrapHtmlComponent[dom.html.Div] {
+  override def renderTag(md: Modifier*): RenderedTag = {
+    div(`class` := "btn-toolbar", role := "toolbar", aria.label := "Button toolbar", md)(
+      buttonGroups.map(_.renderTag())
+    )
+  }
+}
 
 sealed trait ButtonGroupSize {
   def sizeClass: Option[String]

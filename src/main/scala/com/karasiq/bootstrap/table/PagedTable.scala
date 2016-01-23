@@ -1,5 +1,6 @@
 package com.karasiq.bootstrap.table
 
+import com.karasiq.bootstrap.BootstrapImplicits._
 import rx._
 
 import scalatags.JsDom.all._
@@ -9,11 +10,10 @@ trait PagedTable extends Table {
 
   def pages: Rx[Int]
 
-  private lazy val pagination = new Pagination(pages, currentPage)
+  private def pagination = new Pagination(pages, currentPage)
 
-  override def withStyles(style: String*): Tag = {
-    val table = super.withStyles(style:_*)
-    div(div(textAlign.center, pagination), table)
+  override def renderTag(md: Modifier*): RenderedTag = {
+    div(div(textAlign.center, pagination), super.renderTag(md))
   }
 }
 
