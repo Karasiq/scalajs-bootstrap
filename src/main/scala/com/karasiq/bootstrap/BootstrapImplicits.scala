@@ -2,6 +2,8 @@ package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.buttons._
 import org.scalajs.dom
+import org.scalajs.dom.Element
+import rx.{Obs, Rx, Var}
 
 import scala.language.implicitConversions
 import scalatags.JsDom.all._
@@ -32,5 +34,40 @@ object BootstrapImplicits {
 
   implicit def btnWrapperToButtonTag[B](btnWrapper: B)(implicit ev: B <:< ButtonWrapper): dom.html.Button = {
     btnWrapper.button
+  }
+
+  implicit def bindRxAttr[T](implicit ev: AttrValue[T]): AttrValue[Rx[T]] = new AttrValue[Rx[T]] {
+    override def apply(t: Element, a: Attr, v: Rx[T]): Unit = {
+      Obs(v, "rx-attr-updater") {
+        ev.apply(t, a, v())
+      }
+    }
+  }
+
+  implicit class RxElementNode(rx: Rx[Element]) extends Modifier {
+    override def applyTo(t: Element): Unit = {
+      val container = Var(rx.now)
+      Obs(rx, "rx-dom-updater", skipInitial = true) {
+        val element = container()
+        val newElement = rx()
+        container.updateSilent(newElement)
+        element.parentNode.replaceChild(newElement, element)
+      }
+      container.now.applyTo(t)
+    }
+  }
+
+  implicit class RxTagNode(rx: Rx[Tag]) extends Modifier {
+    override def applyTo(t: Element): Unit = {
+      new RxElementNode(Rx(rx().render)).applyTo(t)
+    }
+  }
+
+  implicit class RxModifier[A](rx: Rx[A])(implicit ev: A ⇒ Modifier) extends Modifier {
+    override def applyTo(t: Element): Unit = {
+      Obs(rx, "rx-modifier-apply") {
+        rx().applyTo(t)
+      }
+    }
   }
 }

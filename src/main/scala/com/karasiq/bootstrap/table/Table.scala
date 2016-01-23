@@ -1,34 +1,38 @@
 package com.karasiq.bootstrap.table
 
-import org.scalajs.dom
+import com.karasiq.bootstrap.BootstrapImplicits._
+import org.scalajs.dom.Element
+import rx._
 
 import scalatags.JsDom.all._
 
-class Table {
-  private val head: dom.Element = thead().render
+trait Table extends Modifier {
+  def heading: Rx[Seq[String]]
 
-  private val body: dom.Element = tbody().render
+  def content: Rx[Seq[TableRow]]
 
-  def setHeading(heading: Seq[String]): Unit = {
-    head.innerHTML = ""
-    head.appendChild(tr(for (h <- heading) yield th(h)).render)
+  private lazy val head: Rx[Tag] = Rx {
+    thead(tr(for (h <- heading()) yield th(h)))
   }
 
-  def setContent(content: Seq[TableRow]): Unit = {
-    body.innerHTML = ""
-    for (TableRow(data, modifiers @ _*) <- content) {
-      body.appendChild(tr(
+  private lazy val body: Rx[Tag] = Rx {
+    tbody(for (TableRow(data, modifiers @ _*) <- content()) yield {
+      tr(
         modifiers,
         for (col <- data) yield td(col)
-      ).render)
-    }
+      )
+    })
   }
 
-  def render(style: String*): Tag = {
+  def withStyles(style: String*): Tag = {
     val cls = (Seq("table") ++ style).mkString(" ")
     table(`class` := cls)(
       head,
       body
     )
+  }
+
+  override def applyTo(t: Element): Unit = {
+    withStyles().applyTo(t)
   }
 }
