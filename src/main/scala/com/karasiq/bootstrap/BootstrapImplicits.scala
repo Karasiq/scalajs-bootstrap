@@ -44,7 +44,7 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxElementNode(rx: Rx[Element]) extends Modifier {
+  implicit class RxNode(rx: Rx[dom.Node]) extends Modifier {
     override def applyTo(t: Element): Unit = {
       val container = Var(rx.now)
       Obs(rx, "rx-dom-updater", skipInitial = true) {
@@ -57,17 +57,9 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxTagNode(rx: Rx[Tag]) extends Modifier {
+  implicit class RxFragNode[T](value: Rx[T])(implicit ev: T ⇒ Frag) extends Modifier {
     override def applyTo(t: Element): Unit = {
-      new RxElementNode(Rx(rx().render)).applyTo(t)
-    }
-  }
-
-  implicit class RxModifier[A](rx: Rx[A])(implicit ev: A ⇒ Modifier) extends Modifier {
-    override def applyTo(t: Element): Unit = {
-      Obs(rx, "rx-modifier-apply") {
-        rx().applyTo(t)
-      }
+      new RxNode(Rx(value().render)).applyTo(t)
     }
   }
 }

@@ -48,9 +48,11 @@ object BootstrapTestApp extends JSApp {
   }
 
   private def testPagedTable: dom.Element = {
+    val reactiveColumn = Var(2)
     val container = div(`class` := "table-responsive").render
     def testRow(i: Int): TableRow = {
-      TableRow(Seq(i, i + 1, i + 2), onclick := js.ThisFunction.fromFunction1[dom.Element, Unit] { (th: dom.Element) ⇒
+      TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := js.ThisFunction.fromFunction1[dom.Element, Unit] { (th: dom.Element) ⇒
+        reactiveColumn.update(reactiveColumn() + 1)
         th.classList.add("success")
       })
     }
@@ -71,8 +73,7 @@ object BootstrapTestApp extends JSApp {
       // Create navigation elements
       val navigationBar = new NavigationBar()
       navigationBar.setTabs(
-        NavigationTab("Table", Bootstrap.newId, "briefcase", this.testPagedTable, active = true),
-        NavigationTab("Buttons", Bootstrap.newId, "log-in", this.testButtons)
+        NavigationTab("Table", "bs-test-table", "briefcase", this.testPagedTable, active = true)
       )
 
       // Bootstrap container
@@ -86,6 +87,9 @@ object BootstrapTestApp extends JSApp {
       val body = jQuery(dom.document.body)
       body.append(navigationBar.navbar("Scala.js Bootstrap Test").render)
       body.append(container)
+
+      // Reactive navbar test
+      navigationBar.addTabs(NavigationTab("Buttons", "bs-test-buttons", "log-in", this.testButtons))
     })
   }
 }

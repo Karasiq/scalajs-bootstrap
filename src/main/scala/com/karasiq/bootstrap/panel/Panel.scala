@@ -25,7 +25,7 @@ object Panel {
     a(href := "javascript:void(0);", Bootstrap.icon(icon), modifiers)
   }
 
-  def buttons(buttons: Tag*): Tag = {
+  def buttons(buttons: Modifier*): Tag = {
     div(`class` := "pull-right panel-head-buttons", buttons)
   }
 }

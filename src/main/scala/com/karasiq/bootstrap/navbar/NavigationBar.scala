@@ -1,11 +1,12 @@
 package com.karasiq.bootstrap.navbar
 
 import com.karasiq.bootstrap.Bootstrap
-import org.scalajs.dom
+import com.karasiq.bootstrap.BootstrapImplicits._
+import rx._
 
 import scalatags.JsDom.all._
 
-case class NavigationTab(name: String, id: String, icon: String, content: dom.Element, active: Boolean = false)
+case class NavigationTab(name: String, id: String, icon: String, content: Modifier, active: Boolean = false)
 
 /**
   * Simple bootstrap navigation bar
@@ -16,41 +17,53 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
   private val `data-toggle` = "data-toggle".attr
   private val `data-target` = "data-target".attr
 
-  private val tabContainer: dom.Element = ul(`class` := "nav navbar-nav").render
-  private val tabContentContainer: dom.Element = div(id := s"$barId-tabcontent", `class` := "tab-content").render
+  val navigationTabs: Var[Seq[NavigationTab]] = Var(Nil)
+
+  private def renderTab(tab: NavigationTab): Tag = {
+    li(
+      `class` := (if (tab.active) "active" else ""),
+      a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
+        span(`class` := s"glyphicon glyphicon-${tab.icon}"),
+        raw("&nbsp;"),
+        tab.name
+      )
+    )
+  }
+
+  private val tabContainer = Rx {
+    ul(`class` := "nav navbar-nav")(
+      for (tab <- navigationTabs()) yield {
+        renderTab(tab)
+      }
+    )
+  }
+
+  private val tabContentContainer = Rx {
+    div(id := s"$barId-tabcontent", `class` := "tab-content")(
+      for (NavigationTab(_, tabId, _, content, active) <- navigationTabs()) yield {
+        div(id := s"$barId-$tabId-tab", role := "tabpanel", `class` := (if (active) "tab-pane active fade in" else "tab-pane fade"))(
+          content
+        )
+      }
+    )
+  }
 
   /**
     * Appends provided tabs to tab list
+    *
     * @param tabs Navbar tabs
     */
   def addTabs(tabs: NavigationTab*): Unit = {
-    def renderTab(tab: NavigationTab): Tag = {
-      li(
-        `class` := (if (tab.active) "active" else ""),
-        a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
-          span(`class` := s"glyphicon glyphicon-${tab.icon}"),
-          raw("&nbsp;"),
-          tab.name
-        )
-      )
-    }
-
-    for (tab @ NavigationTab(name, tabId, _, content, active) <- tabs) {
-      tabContainer.appendChild(renderTab(tab).render)
-      tabContentContainer.appendChild(div(id := s"$barId-$tabId-tab", role := "tabpanel", `class` := (if (active) "tab-pane active fade in" else "tab-pane fade"))(
-        content
-      ).render)
-    }
+    navigationTabs.update(navigationTabs() ++ tabs)
   }
 
   /**
     * Updates tab list
+    *
     * @param tabs Navbar tabs
     */
   def setTabs(tabs: NavigationTab*): Unit = {
-    tabContainer.innerHTML = ""
-    tabContentContainer.innerHTML = ""
-    this.addTabs(tabs:_*)
+    navigationTabs.update(tabs)
   }
 
   def navbar(brand: String, classes: Seq[String] = Seq("navbar-fixed-top")): Tag = {
@@ -73,5 +86,7 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
     )
   }
 
-  def content: dom.Element = tabContentContainer
+  def content: Modifier = {
+    tabContentContainer
+  }
 }
