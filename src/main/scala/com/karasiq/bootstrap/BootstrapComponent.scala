@@ -6,7 +6,7 @@ import org.scalajs.dom.Element
 import scalatags.JsDom.all._
 
 trait BootstrapComponent {
-  def render: Modifier
+  def render(md: Modifier*): Modifier
 }
 
 trait BootstrapHtmlComponent[T <: dom.Element] extends BootstrapComponent {
@@ -14,8 +14,8 @@ trait BootstrapHtmlComponent[T <: dom.Element] extends BootstrapComponent {
 
   def renderTag(md: Modifier*): RenderedTag
 
-  override final def render: Modifier = {
-    this.renderTag()
+  override final def render(md: Modifier*): Modifier = {
+    this.renderTag(md:_*)
   }
 }
 

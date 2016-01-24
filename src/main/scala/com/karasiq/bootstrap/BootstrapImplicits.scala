@@ -34,7 +34,7 @@ object BootstrapImplicits {
   }
 
   implicit def renderBootstrapComponent(bc: BootstrapComponent): Modifier = {
-    bc.render
+    bc.render()
   }
 
   implicit class RxValueOps[T](state: Rx[T]) {

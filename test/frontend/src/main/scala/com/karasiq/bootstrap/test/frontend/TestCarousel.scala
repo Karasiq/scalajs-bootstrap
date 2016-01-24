@@ -7,7 +7,7 @@ import com.karasiq.bootstrap.carousel.Carousel
 import scalatags.JsDom.all._
 
 final class TestCarousel(imgSrc: String) extends BootstrapComponent {
-  override def render: Modifier = {
+  override def render(md: Modifier*): Modifier = {
     Carousel(
       Carousel.slide(
         imgSrc,
@@ -18,7 +18,8 @@ final class TestCarousel(imgSrc: String) extends BootstrapComponent {
         imgSrc,
         h3("Second slide label"),
         p("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-      )
+      ),
+      md
     )
   }
 }

@@ -11,10 +11,10 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scalatags.JsDom.all._
 
 final class TestProgressBar(style: ProgressBarStyle, updateInterval: FiniteDuration) extends BootstrapComponent {
-  override def render: Modifier = {
+  override def render(md: Modifier*): Modifier = {
     val progressBarValue = Var(0)
 
-    val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(style, ProgressBarStyle.striped, ProgressBarStyle.animated).render
+    val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(style, ProgressBarStyle.striped, ProgressBarStyle.animated, md).render
 
     implicit val scheduler = new DomScheduler
     val timer = Timer(updateInterval)
