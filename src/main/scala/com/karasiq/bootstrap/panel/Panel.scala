@@ -27,4 +27,11 @@ object Panel {
   def buttons(buttons: Modifier*): Tag = {
     div(`class` := "pull-right panel-head-buttons", buttons)
   }
+
+  /**
+    * Shortcut to PanelBuilder()
+    */
+  def apply(panelId: String = Bootstrap.newId, style: PanelStyle = PanelStyle.default, header: Option[Modifier] = None, footer: Option[Modifier] = None): PanelBuilder = {
+    PanelBuilder(panelId, style, header, footer)
+  }
 }

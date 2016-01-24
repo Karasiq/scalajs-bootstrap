@@ -7,7 +7,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-trait Table extends BootstrapHtmlComponent[dom.html.Element] {
+trait Table extends BootstrapHtmlComponent[dom.html.Div] {
   def heading: Rx[Seq[Modifier]]
 
   def content: Rx[Seq[TableRow]]
@@ -26,6 +26,8 @@ trait Table extends BootstrapHtmlComponent[dom.html.Element] {
   }
 
   override def renderTag(md: Modifier*): RenderedTag = {
-    table("table".addClass, tableHead, tableBody, md)
+    div("table-responsive".addClass)(
+      table("table".addClass, tableHead, tableBody, md)
+    )
   }
 }
