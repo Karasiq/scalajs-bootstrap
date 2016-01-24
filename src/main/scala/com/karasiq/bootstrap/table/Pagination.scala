@@ -7,7 +7,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends BootstrapHtmlComponent[dom.html.Element] {
+class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends BootstrapHtmlComponent[dom.html.UList] {
   private def previousPageButton: Tag = {
     li(
       a(href := "#", aria.label := "Previous", onclick := Bootstrap.jsClick { _ ⇒

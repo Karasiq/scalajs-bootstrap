@@ -1,11 +1,12 @@
 package com.karasiq.bootstrap.panel
 
-import com.karasiq.bootstrap.Bootstrap
+import com.karasiq.bootstrap.BootstrapHtmlComponent
 import com.karasiq.bootstrap.BootstrapImplicits._
+import org.scalajs.dom
 
 import scalatags.JsDom.all._
 
-case class PanelBuilder(panelId: String = Bootstrap.newId, style: PanelStyle = PanelStyle.default, header: Option[Modifier] = None, footer: Option[Modifier] = None) {
+case class PanelBuilder(panelId: String, style: PanelStyle = PanelStyle.default, header: Option[Modifier] = None, footer: Option[Modifier] = None) extends BootstrapHtmlComponent[dom.html.Div] {
   def withId(newId: String): PanelBuilder = {
     copy(panelId = newId)
   }
@@ -22,7 +23,7 @@ case class PanelBuilder(panelId: String = Bootstrap.newId, style: PanelStyle = P
     copy(footer = Some(modifiers))
   }
 
-  def build(content: Modifier*): Tag = {
+  def renderTag(content: Modifier*): RenderedTag = {
     div((Seq("panel") ++ style.styleClass).map(_.addClass), id := panelId)(
       for (h <- header) yield div(`class` := "panel-heading", id := s"$panelId-panel-header", h),
       div(`class` := "panel-body collapse in", id := s"$panelId-panel-body", content),
