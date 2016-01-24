@@ -7,7 +7,6 @@ import org.scalajs.dom
 import org.scalajs.jquery.jQuery
 import rx._
 
-import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
 trait Navigation extends BootstrapHtmlComponent[dom.html.Element] {
@@ -66,7 +65,7 @@ trait Navigation extends BootstrapHtmlComponent[dom.html.Element] {
     this.selectTab(tabs(i).id)
   }
 
-  override def renderTag(md: all.Modifier*): RenderedTag = {
+  override def renderTag(md: Modifier*): RenderedTag = {
     div(tabContainer, tabContentContainer, md)
   }
 }
