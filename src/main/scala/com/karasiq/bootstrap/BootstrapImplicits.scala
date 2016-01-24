@@ -37,8 +37,39 @@ object BootstrapImplicits {
     bc.render()
   }
 
+  implicit class RxVariableOps[T](value: Var[T]) {
+    def reactiveRead(event: String, f: Element ⇒ T): Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        t.asInstanceOf[js.Dynamic].addEventListener(event, js.ThisFunction.fromFunction1 { (e: Element) ⇒
+          val nv = f(e)
+          if (value.now != nv) {
+            value.update(nv)
+          }
+        })
+      }
+    }
+
+    def reactiveReadWrite(event: String, read: Element ⇒ T, write: (Element, T) ⇒ Unit): Modifier = new Modifier {
+      override def applyTo(t: Element): Unit = {
+        val observer = Obs(value) {
+          write(t, value.now)
+        }
+
+        val updateValue = js.ThisFunction.fromFunction1 { (e: Element) ⇒
+          val nv = read(e)
+          if (value.now != nv) {
+            value.unlinkChild(observer)
+            value.update(nv)
+            value.linkChild(observer)
+          }
+        }
+        t.asInstanceOf[js.Dynamic].addEventListener(event, updateValue)
+      }
+    }
+  }
+
   implicit class RxValueOps[T](state: Rx[T]) {
-    def rxModifier(f: (dom.Element, T) ⇒ Unit): Modifier = new Modifier {
+    def reactiveWrite(f: (dom.Element, T) ⇒ Unit): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         Obs(state) {
           f(t, state.now)
@@ -47,10 +78,34 @@ object BootstrapImplicits {
     }
   }
 
+  implicit class RxInputOps[T](value: Var[String]) {
+    def reactiveInput: Modifier = {
+      value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].value, (e, v) ⇒ e.asInstanceOf[dom.html.Input].value = v)
+    }
+  }
+
+  implicit class RxIntInputOps[T](value: Var[Int]) {
+    def reactiveInput: Modifier = {
+      value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].value.toInt, (e, v) ⇒ e.asInstanceOf[dom.html.Input].value = v.toString)
+    }
+  }
+
+  implicit class RxDoubleInputOps[T](value: Var[Double]) {
+    def reactiveInput: Modifier = {
+      value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].value.toDouble, (e, v) ⇒ e.asInstanceOf[dom.html.Input].value = v.toString)
+    }
+  }
+
+  implicit class RxBooleanInputOps[T](value: Var[Boolean]) {
+    def reactiveInput: Modifier = {
+      value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].checked, (e, v) ⇒ e.asInstanceOf[dom.html.Input].checked = v)
+    }
+  }
+
   implicit class RxStateOps(val state: Rx[Boolean]) extends AnyVal {
     def rxShow: Modifier = {
       val oldDisplay = Var("block")
-      state.rxModifier { (e, state) ⇒
+      state.reactiveWrite { (e, state) ⇒
         if (!state) {
           oldDisplay.updateSilent(e.asInstanceOf[dom.html.Element].style.display)
           e.asInstanceOf[dom.html.Element].style.display = "none"
@@ -124,7 +179,7 @@ object BootstrapImplicits {
       }
     }
 
-    def classIf(state: Rx[Boolean]): Modifier = state.rxModifier { (e, state) ⇒
+    def classIf(state: Rx[Boolean]): Modifier = state.reactiveWrite { (e, state) ⇒
       classIf(state).applyTo(e)
     }
   }

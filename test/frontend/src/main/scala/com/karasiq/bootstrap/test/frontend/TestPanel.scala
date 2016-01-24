@@ -5,7 +5,6 @@ import com.karasiq.bootstrap.buttons._
 import com.karasiq.bootstrap.collapse.Collapse
 import com.karasiq.bootstrap.dropdown.Dropdown
 import com.karasiq.bootstrap.grid.GridSystem
-import com.karasiq.bootstrap.modal.Modal
 import com.karasiq.bootstrap.navbar.{Navigation, NavigationTab}
 import com.karasiq.bootstrap.panel.{Panel, PanelStyle}
 import com.karasiq.bootstrap.progressbar.ProgressBarStyle
@@ -19,11 +18,7 @@ import scalatags.JsDom.all._
 
 final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
-    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick { _ ⇒
-      Modal("Lottery", "You won 10000000$")
-        .withButtons(Modal.closeButton(), Modal.button("Take", Modal.dismiss))
-        .show()
-    }).render
+    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show())).render
     val dangerButton = ButtonBuilder(ButtonStyle.danger)("Format C:\\", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Boom"))).render
 
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
