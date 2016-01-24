@@ -18,8 +18,7 @@ final class TestCarousel(imgSrc: String) extends BootstrapComponent {
         imgSrc,
         h3("Second slide label"),
         p("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-      ),
-      md
-    )
+      )
+    ).render(md)
   }
 }
