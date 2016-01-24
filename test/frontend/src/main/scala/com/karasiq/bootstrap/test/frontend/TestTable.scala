@@ -8,7 +8,7 @@ import rx._
 import scalatags.JsDom.all._
 
 final class TestTable extends BootstrapComponent {
-  override def render: Modifier = {
+  override def render(md: Modifier*): Modifier = {
     // Table content
     val reactiveColumn = Var(2)
     val heading = Var(Seq[Modifier]("First", "Second", "Third"))
@@ -19,7 +19,7 @@ final class TestTable extends BootstrapComponent {
 
     // Render table
     val pagedTable = PagedTable(heading, content, 10)
-    val renderedTable = pagedTable.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped).render
+    val renderedTable = pagedTable.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, md).render
 
     // Test reactive components
     pagedTable.currentPage.update(2)

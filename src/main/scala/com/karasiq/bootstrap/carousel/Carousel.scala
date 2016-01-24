@@ -8,7 +8,6 @@ import org.scalajs.jquery.jQuery
 import rx._
 
 import scala.scalajs.js
-import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
 /**
@@ -40,7 +39,7 @@ sealed trait Carousel extends BootstrapComponent {
   }
 
   private def carousel: Tag = {
-    div(id := s"$carouselId-carousel", `class` := "carousel slide"/*, `data-ride` := "carousel"*/)(
+    div(id := s"$carouselId-carousel", Seq("carousel", "slide").map(_.addClass))(
       indicators,
       slides,
       a(`class` := "left carousel-control", href := s"#$carouselId-carousel", role := "button", `data-slide` := "prev")(
@@ -54,14 +53,14 @@ sealed trait Carousel extends BootstrapComponent {
     )
   }
 
-  def create(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true): Element = {
-    val e = carousel.render
+  def create(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true, modifiers: Modifier = ()): Element = {
+    val e = carousel(modifiers).render
     jQuery(e).carousel(js.Dynamic.literal(interval = interval, pause = pause, wrap = wrap, keyboard = keyboard))
     e
   }
 
-  override def render: all.Modifier = {
-    this.create() // With default settings
+  override def render(md: Modifier*): Modifier = {
+    this.create(modifiers = md) // With default settings
   }
 }
 
