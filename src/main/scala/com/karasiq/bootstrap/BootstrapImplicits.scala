@@ -103,7 +103,7 @@ object BootstrapImplicits {
   }
 
   implicit class RxStateOps(val state: Rx[Boolean]) extends AnyVal {
-    def rxShow: Modifier = {
+    def reactiveShow: Modifier = {
       val oldDisplay = Var("block")
       state.reactiveWrite { (e, state) ⇒
         if (!state) {
@@ -115,8 +115,8 @@ object BootstrapImplicits {
       }
     }
 
-    def rxHide: Modifier = {
-      Rx(!state()).rxShow
+    def reactiveHide: Modifier = {
+      Rx(!state()).reactiveShow
     }
   }
 
