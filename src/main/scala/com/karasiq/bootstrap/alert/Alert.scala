@@ -10,7 +10,7 @@ import scalatags.JsDom.all._
 
 final class Alert(style: AlertStyle) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: all.Modifier*): RenderedTag = {
-    div("alert".addClass, "alert-dismissible".addClass, style, role := "alert")(
+    div(Seq("alert", "alert-dismissible", "fade", "in").map(_.addClass), style, role := "alert")(
       button(`type` := "button", "close".addClass, `data-dismiss` := "alert", aria.label := "Close")(
         span(aria.hidden := true, raw("&times;"))
       ),

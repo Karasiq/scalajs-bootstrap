@@ -13,8 +13,6 @@ import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
 
-
-
 @JSExport
 object BootstrapTestApp extends JSApp {
   @JSExport
