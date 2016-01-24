@@ -11,6 +11,7 @@ import com.karasiq.bootstrap.grid.GridSystem.{col, row}
 import com.karasiq.bootstrap.modal.Modal
 import com.karasiq.bootstrap.navbar.{Navigation, NavigationBar, NavigationTab}
 import com.karasiq.bootstrap.panel.{Panel, PanelBuilder, PanelStyle}
+import com.karasiq.bootstrap.progressbar.{ProgressBar, ProgressBarStyles}
 import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableStyles}
 import org.scalajs.dom
 import org.scalajs.jquery._
@@ -42,6 +43,20 @@ object BootstrapTestApp extends JSApp {
       }
     }
 
+    // Progress bar
+    val progressBarValue = Var(0)
+    val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(ProgressBarStyles.success).render
+    def updater(): Unit = {
+      if (progressBarValue.now < 100) {
+        progressBarValue.update(progressBarValue.now + 1)
+        dom.setTimeout(() ⇒ updater(), 300)
+      } else {
+        progressBar.parentNode.removeChild(progressBar)
+        progressBarValue.killAll()
+      }
+    }
+    updater()
+
     // Render panel
     import Panel._
     val panelId = Bootstrap.newId
@@ -51,6 +66,7 @@ object BootstrapTestApp extends JSApp {
         button("minus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel remove")))
       )))
       .build(
+        progressBar,
         Navigation.tabs(
           NavigationTab("Simple buttons", Bootstrap.newId, "remove", Bootstrap.well(
             ButtonGroup(ButtonGroupSize.default, successButton, dangerButton),
