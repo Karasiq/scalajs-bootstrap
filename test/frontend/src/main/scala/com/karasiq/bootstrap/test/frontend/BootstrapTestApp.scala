@@ -45,7 +45,7 @@ object BootstrapTestApp extends JSApp {
 
     // Progress bar
     val progressBarValue = Var(0)
-    val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(ProgressBarStyles.success).render
+    val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(ProgressBarStyles.success, ProgressBarStyles.striped, ProgressBarStyles.animated).render
     def updater(): Unit = {
       if (progressBarValue.now < 100) {
         progressBarValue.update(progressBarValue.now + 1)
