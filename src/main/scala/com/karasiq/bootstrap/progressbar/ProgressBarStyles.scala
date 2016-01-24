@@ -14,4 +14,9 @@ object ProgressBarStyles {
   def info: ClassModifier = style("info")
   def warning: ClassModifier = style("warning")
   def danger: ClassModifier = style("danger")
+
+  def striped: ClassModifier = style("striped")
+  def animated: ClassModifier = new ClassModifier {
+    override def classMod: Modifier = "active".addClass
+  }
 }
