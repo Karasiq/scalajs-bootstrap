@@ -1,7 +1,9 @@
 package com.karasiq.bootstrap.modal
+
+import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapAttrs._
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.buttons.{ButtonBuilder, ButtonStyle}
+import com.karasiq.bootstrap.buttons.{Button, ButtonStyle}
 import org.scalajs.dom
 import org.scalajs.jquery.jQuery
 
@@ -65,11 +67,11 @@ object Modal {
   }
 
   def closeButton(title: String = "Close"): ConcreteHtmlTag[dom.html.Button] = {
-    ButtonBuilder()(this.dismiss, title)
+    Bootstrap.button(this.dismiss, title)
   }
 
   def button(md: Modifier*): ConcreteHtmlTag[dom.html.Button] = {
-    ButtonBuilder(ButtonStyle.primary)(md)
+    Button(ButtonStyle.primary)(md)
   }
 
   def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = Modal.closeButton()): ModalBuilder = {

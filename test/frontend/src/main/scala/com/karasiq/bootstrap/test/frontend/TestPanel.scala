@@ -18,8 +18,8 @@ import scalatags.JsDom.all._
 
 final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
-    val successButton = ButtonBuilder(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show())).render
-    val dangerButton = ButtonBuilder(ButtonStyle.danger)("Format C:\\", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Boom"))).render
+    val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show())).render
+    val dangerButton = Button(ButtonStyle.danger)("Format C:\\", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Boom"))).render
 
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
     val disabledButton = Bootstrap.button("Heavy computation").disabledButton

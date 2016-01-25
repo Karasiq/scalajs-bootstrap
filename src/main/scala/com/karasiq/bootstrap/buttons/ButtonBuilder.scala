@@ -6,7 +6,10 @@ import org.scalajs.dom
 
 import scalatags.JsDom.all._
 
-case class ButtonBuilder(style: ButtonStyle = ButtonStyle.default, size: ButtonSize = ButtonSize.default, block: Boolean = false, active: Boolean = false, disabled: Boolean = false, classes: Seq[String] = Nil) extends BootstrapHtmlComponent[dom.html.Button] {
+case class ButtonBuilder(style: ButtonStyle = ButtonStyle.default, size: ButtonSize = ButtonSize.default, block: Boolean = false, active: Boolean = false, disabled: Boolean = false) extends BootstrapHtmlComponent[dom.html.Button] {
+  def withStyle(style: ButtonStyle): ButtonBuilder = copy(style = style)
+  def withSize(size: ButtonSize): ButtonBuilder = copy(size = size)
+
   @inline
   private def optionalClass(flag: Boolean, className: String): Option[String] = {
     if (flag) Some(className) else None
@@ -14,6 +17,6 @@ case class ButtonBuilder(style: ButtonStyle = ButtonStyle.default, size: ButtonS
 
   override def renderTag(md: Modifier*): RenderedTag = {
     val classList = Seq(style.styleClass, size.sizeClass, optionalClass(block, "btn-block"), optionalClass(active, "active"), optionalClass(disabled, "disabled"))
-    button(`type` := "button", (Seq("btn") ++ classList.flatten ++ classes).map(_.addClass), md)
+    button(`type` := "button", (Seq("btn") ++ classList.flatten).map(_.addClass), md)
   }
 }

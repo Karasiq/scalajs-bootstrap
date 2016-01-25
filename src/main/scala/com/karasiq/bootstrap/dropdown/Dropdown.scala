@@ -2,14 +2,14 @@ package com.karasiq.bootstrap.dropdown
 
 import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapAttrs._
-import com.karasiq.bootstrap.buttons.ButtonBuilder
+import com.karasiq.bootstrap.BootstrapImplicits._
 
 import scalatags.JsDom.all._
 
 private[dropdown] final class Dropdown(title: Modifier, dropdownId: String, items: Modifier) {
   def dropdown: Tag = {
     div(`class` := "dropdown")(
-      ButtonBuilder(classes = Seq("dropdown-toggle")).renderTag(id := dropdownId, `data-toggle` := "dropdown", aria.haspopup := true, aria.expanded := false)(
+      Bootstrap.button("dropdown-toggle".addClass, id := dropdownId, `data-toggle` := "dropdown", aria.haspopup := true, aria.expanded := false)(
         title,
         raw("&nbsp"),
         span(`class` := "caret")
