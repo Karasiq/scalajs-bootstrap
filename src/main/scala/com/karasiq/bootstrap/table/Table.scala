@@ -7,7 +7,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-trait Table extends BootstrapHtmlComponent[dom.html.Div] {
+abstract class Table(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
   def heading: Rx[Seq[Modifier]]
 
   def content: Rx[Seq[TableRow]]
@@ -17,10 +17,10 @@ trait Table extends BootstrapHtmlComponent[dom.html.Div] {
   }
 
   private def tableBody: Rx[Tag] = Rx {
-    tbody(for (TableRow(data, modifiers) <- content()) yield {
+    tbody(for (row <- content()) yield {
       tr(
-        modifiers,
-        for (col <- data) yield td(col)
+        row.modifiers,
+        for (col <- row.columns) yield td(col)
       )
     })
   }

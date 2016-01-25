@@ -34,8 +34,8 @@ lazy val commonSettings = Seq(
 lazy val librarySettings = Seq(
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.8.1",
-    "com.lihaoyi" %%% "scalatags" % "0.5.3",
-    "com.lihaoyi" %%% "scalarx" % "0.2.8"
+    "com.lihaoyi" %%% "scalatags" % "0.5.4",
+    "com.lihaoyi" %%% "scalarx" % "0.3.0"
   ),
   name := "scalajs-bootstrap"
 )
@@ -85,10 +85,7 @@ lazy val libraryTestSettings = Seq(
 
 lazy val libraryTestFrontendSettings = Seq(
   persistLauncher in Compile := true,
-  name := "scalajs-bootstrap-test-frontend",
-  libraryDependencies ++= Seq(
-    "com.lihaoyi" %%% "scalatags" % "0.5.3"
-  )
+  name := "scalajs-bootstrap-test-frontend"
 )
 
 // Projects

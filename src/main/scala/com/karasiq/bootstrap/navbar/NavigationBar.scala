@@ -13,7 +13,7 @@ import scalatags.JsDom.all._
   * Simple bootstrap navigation bar
   * @param barId Navbar id
   */
-final class NavigationBar(barId: String = Bootstrap.newId) {
+final class NavigationBar(barId: String = Bootstrap.newId)(implicit ctx: Ctx.Owner) {
   private val nav = "nav".tag
   private val `data-toggle` = "data-toggle".attr
   private val `data-target` = "data-target".attr
@@ -67,7 +67,7 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
     * @param i Tab index, starting from `0`
     */
   def selectTab(i: Int): Unit = {
-    val tabs = navigationTabs()
+    val tabs = navigationTabs.now
     require(i >= 0 && tabs.length > i, s"Invalid tab index: $i")
     this.selectTab(tabs(i).id)
   }
@@ -77,7 +77,7 @@ final class NavigationBar(barId: String = Bootstrap.newId) {
     * @param tabs Navbar tabs
     */
   def addTabs(tabs: NavigationTab*): Unit = {
-    navigationTabs.update(navigationTabs() ++ tabs)
+    navigationTabs.update(navigationTabs.now ++ tabs)
   }
 
   /**

@@ -41,7 +41,7 @@ case class FormRadio(title: String, radioName: String, radioValue: String, radio
   }
 }
 
-class FormRadioGroup(final val radioList: Rx[Seq[FormRadio]]) extends BootstrapComponent {
+class FormRadioGroup(final val radioList: Rx[Seq[FormRadio]])(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   final val value: Var[String] = Var(radioList.now.head.radioValue)
 
   private def valueWriter(r: FormRadio) = value.reactiveReadWrite("change", e ⇒ {
@@ -63,7 +63,7 @@ class FormRadioGroup(final val radioList: Rx[Seq[FormRadio]]) extends BootstrapC
   }
 }
 
-class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val options: Rx[Seq[String]], val inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
+class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val options: Rx[Seq[String]], val inputId: String = Bootstrap.newId)(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
   final val selected: Var[Seq[String]] = Var(Seq(options.now.head))
 
   override def renderTag(md: all.Modifier*): RenderedTag = {
@@ -127,15 +127,15 @@ object FormInput {
     new FormRadio(title, radioName, radioValue, radioId)
   }
 
-  def radioGroup(radios: FormRadio*): FormRadioGroup = {
+  def radioGroup(radios: FormRadio*)(implicit ctx: Ctx.Owner): FormRadioGroup = {
     new FormRadioGroup(Rx(radios))
   }
 
-  def select(title: Modifier, options: String*): FormSelect = {
+  def select(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
     new FormSelect(title, false, Rx(options))
   }
 
-  def multipleSelect(title: Modifier, options: String*): FormSelect = {
+  def multipleSelect(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
     new FormSelect(title, true, Rx(options))
   }
 

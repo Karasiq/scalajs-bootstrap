@@ -24,10 +24,6 @@ object TableRow {
     override def columns: Seq[Modifier] = data
   }
 
-  def unapply(tr: TableRow): Option[(Seq[Modifier], Modifier)] = {
-    Some(tr.columns → tr.modifiers)
-  }
-
   private def style(s: String): TableRowStyle = new TableRowStyle {
     override def styleClass: Option[String] = Some(s)
   }

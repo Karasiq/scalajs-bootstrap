@@ -10,7 +10,6 @@ import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableRowStyle, TableSt
 import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
 import org.scalajs.dom
 import rx._
-import rx.ops._
 
 import scala.language.postfixOps
 import scalatags.JsDom.all._
@@ -58,7 +57,7 @@ object TodoListItem {
   }
 }
 
-final class TodoList extends BootstrapHtmlComponent[dom.html.Div] {
+final class TodoList(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
   val items: Var[Seq[TodoListItem]] = Var(Nil)
 
   private def todoItemDialog(title: String, priority: ItemPriority)(f: (String, ItemPriority) ⇒ Unit): Unit = {
@@ -105,7 +104,9 @@ final class TodoList extends BootstrapHtmlComponent[dom.html.Div] {
         Seq[Modifier](todoTitle, GridSystem.col(9), onclick := Bootstrap.jsClick(_ ⇒ i.completed.update(!i.completed.now))),
         Seq[Modifier](buttons, GridSystem.col(2), textAlign.center)
       ),
-      `class` := Rx(i.priority().style.styleClass.getOrElse(""))
+      Rx[AutoModifier](`class` := {
+        if (i.completed()) "" else i.priority().style.styleClass.getOrElse("")
+      })
     )
   }
 

@@ -18,7 +18,7 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scalatags.JsDom.all._
 
-final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHtmlComponent[dom.html.Div] {
+final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
     val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show()), Tooltip("Press me", TooltipPlacement.left)).render
     val dangerButton = Button(ButtonStyle.danger)("Format C:\\", Popover("Boom", "Popover test", TooltipPlacement.top)).render
@@ -26,8 +26,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHt
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
     val disabledButton = Bootstrap.button("Heavy computation").disabledButton
 
-    Obs(disabledButton.state, "disabled-button-click-handler") {
-      if (disabledButton.state.now) {
+    disabledButton.state.foreach { pressed ⇒
+      if (pressed) {
         dom.setTimeout(() ⇒ {
           dom.alert(s"Answer: ${if (toggleButton.state.now) 321 else 123}")
           disabledButton.state.update(false)

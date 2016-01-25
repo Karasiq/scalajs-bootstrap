@@ -5,7 +5,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-trait PagedTable extends Table {
+abstract class PagedTable(implicit ctx: Ctx.Owner) extends Table {
   def currentPage: Var[Int]
 
   def pages: Rx[Int]
@@ -18,7 +18,7 @@ trait PagedTable extends Table {
 }
 
 object PagedTable {
-  final class StaticPagedTable(val heading: Rx[Seq[Modifier]], contentProvider: Rx[Seq[TableRow]], perPage: Int) extends PagedTable {
+  final class StaticPagedTable(val heading: Rx[Seq[Modifier]], contentProvider: Rx[Seq[TableRow]], perPage: Int)(implicit ctx: Ctx.Owner) extends PagedTable {
     override val currentPage: Var[Int] = Var(1)
 
     override val content: Rx[Seq[TableRow]] = Rx {
@@ -43,11 +43,11 @@ object PagedTable {
     }
   }
 
-  def apply(heading: Rx[Seq[Modifier]], content: Rx[Seq[TableRow]], perPage: Int = 20): StaticPagedTable = {
+  def apply(heading: Rx[Seq[Modifier]], content: Rx[Seq[TableRow]], perPage: Int = 20)(implicit ctx: Ctx.Owner): StaticPagedTable = {
     new StaticPagedTable(heading, content, perPage)
   }
 
-  def static(heading: Seq[Modifier], content: Seq[TableRow], perPage: Int = 20): StaticPagedTable = {
+  def static(heading: Seq[Modifier], content: Seq[TableRow], perPage: Int = 20)(implicit ctx: Ctx.Owner): StaticPagedTable = {
     this.apply(Rx(heading), Rx(content), perPage)
   }
 }

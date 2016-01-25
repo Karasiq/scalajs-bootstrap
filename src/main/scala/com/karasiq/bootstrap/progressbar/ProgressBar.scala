@@ -7,20 +7,20 @@ import rx._
 
 import scalatags.JsDom.all._
 
-sealed trait ProgressBar extends BootstrapHtmlComponent[dom.html.Div] {
+sealed abstract class ProgressBar(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
   protected def content: Modifier
 
   def progress: Rx[Int]
 
   override def renderTag(md: Modifier*): RenderedTag = {
     div("progress".addClass)(
-      div("progress-bar".addClass, role := "progressbar", aria.valuenow := progress, aria.valuemin := 0, aria.valuemax := 100, style := Rx(s"width: ${progress()}%;"), content, md)
+      div("progress-bar".addClass, role := "progressbar", Rx[AutoModifier](aria.valuenow := progress()), aria.valuemin := 0, aria.valuemax := 100, Rx[AutoModifier](width := progress().pct), content, md)
     )
   }
 }
 
 object ProgressBar {
-  def basic(value: Rx[Int]): ProgressBar = new ProgressBar {
+  def basic(value: Rx[Int])(implicit ctx: Ctx.Owner): ProgressBar = new ProgressBar {
     override val progress: Rx[Int] = value
 
     override protected val content: Modifier = Rx {
@@ -28,7 +28,7 @@ object ProgressBar {
     }
   }
 
-  def withLabel(value: Rx[Int]): ProgressBar = new ProgressBar {
+  def withLabel(value: Rx[Int])(implicit ctx: Ctx.Owner): ProgressBar = new ProgressBar {
     override val progress: Rx[Int] = value
 
     override protected val content: Modifier = Rx {
