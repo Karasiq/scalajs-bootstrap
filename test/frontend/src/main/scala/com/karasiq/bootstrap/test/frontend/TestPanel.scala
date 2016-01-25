@@ -7,7 +7,9 @@ import com.karasiq.bootstrap.dropdown.Dropdown
 import com.karasiq.bootstrap.grid.GridSystem
 import com.karasiq.bootstrap.navbar.{Navigation, NavigationTab}
 import com.karasiq.bootstrap.panel.{Panel, PanelStyle}
+import com.karasiq.bootstrap.popover.Popover
 import com.karasiq.bootstrap.progressbar.ProgressBarStyle
+import com.karasiq.bootstrap.tooltip.{Tooltip, TooltipPlacement}
 import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
 import org.scalajs.dom
 import rx._
@@ -18,8 +20,8 @@ import scalatags.JsDom.all._
 
 final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
-    val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show())).render
-    val dangerButton = Button(ButtonStyle.danger)("Format C:\\", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Boom"))).render
+    val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show()), Tooltip("Press me", TooltipPlacement.left)).render
+    val dangerButton = Button(ButtonStyle.danger)("Format C:\\", Popover("Boom", "Popover test", TooltipPlacement.top)).render
 
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
     val disabledButton = Bootstrap.button("Heavy computation").disabledButton

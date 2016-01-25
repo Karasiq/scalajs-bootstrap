@@ -55,7 +55,12 @@ sealed trait Carousel extends BootstrapComponent {
 
   def create(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true, modifiers: Modifier = ()): Element = {
     val e = carousel(modifiers).render
-    jQuery(e).carousel(js.Dynamic.literal(interval = interval, pause = pause, wrap = wrap, keyboard = keyboard))
+    val options = js.Object().asInstanceOf[CarouselOptions]
+    options.interval = interval
+    options.pause = pause
+    options.wrap = wrap
+    options.keyboard = keyboard
+    jQuery(e).carousel(options)
     e
   }
 

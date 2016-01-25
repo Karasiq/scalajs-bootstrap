@@ -49,7 +49,11 @@ sealed trait Modal {
 
   def show(backdrop: Boolean | String = true, keyboard: Boolean = true, show: Boolean = true): Unit = {
     val dialog = jQuery(this.modal.render)
-    dialog.modal(js.Dynamic.literal(backdrop = backdrop.asInstanceOf[js.Any], keyboard = keyboard, show = show))
+    val options = js.Object().asInstanceOf[ModalOptions]
+    options.backdrop = backdrop
+    options.keyboard = keyboard
+    options.show = show
+    dialog.modal(options)
     dialog.on("hidden.bs.modal", () ⇒ {
       // Remove from DOM
       dialog.remove()
