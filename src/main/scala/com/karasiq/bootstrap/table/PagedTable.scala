@@ -10,7 +10,7 @@ trait PagedTable extends Table {
 
   def pages: Rx[Int]
 
-  private def pagination = new Pagination(pages, currentPage)
+  protected def pagination = new Pagination(pages, currentPage)
 
   override def renderTag(md: Modifier*): RenderedTag = {
     div(div(textAlign.center, pagination), super.renderTag(md))
@@ -29,13 +29,17 @@ object PagedTable {
 
     override val pages: Rx[Int] = Rx {
       val data = contentProvider()
-      if (data.isEmpty) {
+      val result = if (data.isEmpty) {
         1
       } else if (data.length % perPage == 0) {
         data.length / perPage
       } else {
         data.length / perPage + 1
       }
+      if (currentPage.now > result) {
+        currentPage.update(result)
+      }
+      result
     }
   }
 

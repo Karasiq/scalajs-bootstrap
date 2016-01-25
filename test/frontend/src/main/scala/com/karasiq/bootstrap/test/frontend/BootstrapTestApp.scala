@@ -26,7 +26,8 @@ object BootstrapTestApp extends JSApp {
       dom.setTimeout(() ⇒ { tableVisible.update(true) }, 4000)
       navigationBar.setTabs(
         NavigationTab("Table", "table", "briefcase", new TestTable, tableVisible.reactiveShow),
-        NavigationTab("Carousel", "carousel", "picture", new TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG"))
+        NavigationTab("Carousel", "carousel", "picture", new TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
+        NavigationTab("ToDo list", "todo", "th-list", new TodoList)
       )
 
       // Render page

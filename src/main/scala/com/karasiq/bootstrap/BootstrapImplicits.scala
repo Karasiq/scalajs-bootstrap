@@ -100,7 +100,7 @@ object BootstrapImplicits {
 
   implicit class RxBooleanInputOps[T](value: Var[Boolean]) {
     def reactiveInput: Modifier = {
-      value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].checked, (e, v) ⇒ e.asInstanceOf[dom.html.Input].checked = v)
+      value.reactiveReadWrite("change", _.asInstanceOf[dom.html.Input].checked, (e, v) ⇒ e.asInstanceOf[dom.html.Input].checked = v)
     }
   }
 
