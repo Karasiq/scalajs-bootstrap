@@ -131,11 +131,17 @@ object BootstrapImplicits {
   implicit class RxNode(rx: Rx[dom.Node]) extends Modifier {
     override def applyTo(t: Element): Unit = {
       val container = Var(rx.now)
-      Obs(rx, "rx-dom-updater", skipInitial = true) {
+      val obs: Obs = Obs(rx, "rx-dom-updater", skipInitial = true) {
         val element = container.now
         val newElement = rx.now
         container.updateSilent(newElement)
-        element.parentNode.replaceChild(newElement, element)
+        element.parentNode match {
+          case node if node != null && !js.isUndefined(node) ⇒
+            node.replaceChild(newElement, element)
+
+          case _ ⇒
+            // Skip
+        }
       }
       container.now.applyTo(t)
     }

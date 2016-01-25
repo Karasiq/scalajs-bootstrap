@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.buttons.ButtonBuilder
+import com.karasiq.bootstrap.buttons.Button
 import org.scalajs.dom
 import org.scalajs.dom.raw.MouseEvent
 
@@ -30,7 +30,7 @@ object Bootstrap {
   /**
     * Default button
     */
-  def button: ConcreteHtmlTag[dom.html.Button] = ButtonBuilder()
+  def button: ConcreteHtmlTag[dom.html.Button] = Button()
 
   /**
     * Glyphicon

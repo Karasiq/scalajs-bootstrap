@@ -5,9 +5,10 @@ import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent, BootstrapHtmlCompon
 import org.scalajs.dom
 import rx._
 
+import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
-class FormGenericInput(formLabel: Modifier, inputType: String = "text", inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
+final class FormGenericInput(formLabel: Modifier, inputType: String = "text", inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
     val controlId = s"$inputId-form-$inputType-input"
     div("form-group".addClass)(
@@ -17,7 +18,7 @@ class FormGenericInput(formLabel: Modifier, inputType: String = "text", inputId:
   }
 }
 
-class FormCheckbox(checkboxLabel: Modifier) extends BootstrapHtmlComponent[dom.html.Div] {
+final class FormCheckbox(checkboxLabel: Modifier) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
     div("checkbox".addClass)(
       label(
@@ -29,7 +30,7 @@ class FormCheckbox(checkboxLabel: Modifier) extends BootstrapHtmlComponent[dom.h
   }
 }
 
-class FormRadio(val title: String, val radioName: String, val radioValue: String, val radioId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
+case class FormRadio(title: String, radioName: String, radioValue: String, radioId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
     div("radio".addClass)(
       label(
@@ -40,10 +41,8 @@ class FormRadio(val title: String, val radioName: String, val radioValue: String
   }
 }
 
-class FormRadioGroup(values: FormRadio*) extends BootstrapComponent {
-  require(values.forall(_.radioName == values.head.radioName), "Invalid radio group")
-
-  final val value: Var[String] = Var(values.head.radioValue)
+class FormRadioGroup(final val radioList: Rx[Seq[FormRadio]]) extends BootstrapComponent {
+  final val value: Var[String] = Var(radioList.now.head.radioValue)
 
   private def valueWriter(r: FormRadio) = value.reactiveReadWrite("change", e ⇒ {
     val input = e.asInstanceOf[dom.html.Input]
@@ -57,10 +56,35 @@ class FormRadioGroup(values: FormRadio*) extends BootstrapComponent {
     input.checked = v == r.radioValue
   })
 
-  override def render(md: Modifier*): Modifier = {
-    Seq[Modifier](
-      values.head.renderTag(md, checked, valueWriter(values.head)),
+  override def render(md: Modifier*): Modifier = Rx {
+    val values = radioList()
+    Seq(values.head.renderTag(md, checked, valueWriter(values.head))) ++
       values.tail.map(v ⇒ v.renderTag(md, valueWriter(v)))
+  }
+}
+
+class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val options: Rx[Seq[String]], val inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
+  final val selected: Var[Seq[String]] = Var(Seq(options.now.head))
+
+  override def renderTag(md: all.Modifier*): RenderedTag = {
+    val controlId = s"$inputId-form-select-input"
+    div("form-group".addClass)(
+      label(`for` := controlId, selectLabel),
+      select("form-control".addClass, if (allowMultiple) multiple else (), id := controlId, md)(
+        Rx(options().map(v ⇒ option(v))),
+        selected.reactiveReadWrite("change", e ⇒ {
+          val select = e.asInstanceOf[dom.html.Select]
+          select.options.collect {
+            case opt if opt.selected ⇒
+              opt.value
+          }
+        }, (e, v) ⇒ {
+          val select = e.asInstanceOf[dom.html.Select]
+          select.options.foreach { opt ⇒
+            opt.selected = v.contains(opt.value)
+          }
+        })
+      )
     )
   }
 }
@@ -89,7 +113,15 @@ object FormInput {
   }
 
   def radioGroup(radios: FormRadio*): FormRadioGroup = {
-    new FormRadioGroup(radios:_*)
+    new FormRadioGroup(Rx(radios))
+  }
+
+  def select(title: Modifier, options: String*): FormSelect = {
+    new FormSelect(title, false, Rx(options))
+  }
+
+  def multipleSelect(title: Modifier, options: String*): FormSelect = {
+    new FormSelect(title, true, Rx(options))
   }
 
   // Default
