@@ -4,12 +4,11 @@ import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.form.{Form, FormInput}
 import com.karasiq.bootstrap.modal.Modal
 import rx._
-import rx.ops._
 
 import scalatags.JsDom.all._
 
 object TestModal {
-  def apply(): Modal = {
+  def apply()(implicit ctx: Ctx.Owner): Modal = {
     val modalInputValue = Var("10000000") // Better use string
     val radioGroup = FormInput.radioGroup(FormInput.radio("Test1", "modal-title", "First radio"), FormInput.radio("Test2", "modal-title", "Second radio"))
     val select = FormInput.select("Plain select", "Option 1", "Option 2", "Option 3")

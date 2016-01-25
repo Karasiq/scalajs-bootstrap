@@ -7,34 +7,34 @@ import rx._
 import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
-class Pagination(pages: Rx[Int], currentPage: Var[Int]) extends BootstrapComponent {
+class Pagination(pages: Rx[Int], currentPage: Var[Int])(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   private def previousPageButton: Tag = {
     li(
       a(href := "#", aria.label := "Previous", onclick := Bootstrap.jsClick { _ ⇒
         if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
       }, span(aria.hidden := true, raw("&laquo;"))),
-      `class` := Rx(if (currentPage() == 1) "disabled" else "")
+      "disabled".classIf(Rx(currentPage() == 1))
     )
   }
 
   private def nextPageButton: Tag = {
     li(
       a(href := "#", aria.label := "Next", onclick := Bootstrap.jsClick { _ ⇒
-        if (currentPage.now < pages()) currentPage.update(currentPage.now + 1)
+        if (currentPage.now < pages.now) currentPage.update(currentPage.now + 1)
       }, span(aria.hidden := true, raw("&raquo;"))),
-      `class` := Rx(if (currentPage() == pages()) "disabled" else "")
+      "disabled".classIf(Rx(currentPage() == pages()))
     )
   }
 
   private def pageButton(page: Int): Tag = {
     li(
-      `class` := Rx(if (page == currentPage()) "active" else ""),
+      "active".classIf(Rx(page == currentPage())),
       a(href := "#", onclick := Bootstrap.jsClick(_ ⇒ currentPage.update(page)), page)
     )
   }
 
   override def render(md: all.Modifier*): Modifier = Rx {
-    ul(`class` := "pagination", style := Rx(if (pages() == 1) "display:none;" else ""), md)(
+    ul(`class` := "pagination", Rx(pages() == 1).reactiveHide, md)(
       previousPageButton,
       for(page <- 1 to pages()) yield pageButton(page),
       nextPageButton

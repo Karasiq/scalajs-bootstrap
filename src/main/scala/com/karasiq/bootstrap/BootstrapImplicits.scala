@@ -4,7 +4,7 @@ import com.karasiq.bootstrap.buttons._
 import org.scalajs.dom
 import org.scalajs.dom.Element
 import org.scalajs.jquery.JQuery
-import rx.{Obs, Rx, Var}
+import rx._
 
 import scala.language.implicitConversions
 import scala.scalajs.js
@@ -53,16 +53,14 @@ object BootstrapImplicits {
 
     def reactiveReadWrite(event: String, read: Element ⇒ T, write: (Element, T) ⇒ Unit): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
-        val observer = Obs(value) {
-          write(t, value.now)
+        val observer = value.foreach { v ⇒
+          write(t, v)
         }
 
         val updateValue = js.ThisFunction.fromFunction1 { (e: Element) ⇒
           val nv = read(e)
           if (value.now != nv) {
-            value.unlinkChild(observer)
             value.update(nv)
-            value.linkChild(observer)
           }
         }
         t.asInstanceOf[js.Dynamic].addEventListener(event, updateValue)
@@ -73,8 +71,8 @@ object BootstrapImplicits {
   implicit class RxValueOps[T](state: Rx[T]) {
     def reactiveWrite(f: (dom.Element, T) ⇒ Unit): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
-        Obs(state) {
-          f(t, state.now)
+        state.foreach { st ⇒
+          f(t, st)
         }
       }
     }
@@ -104,12 +102,12 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxStateOps(val state: Rx[Boolean]) extends AnyVal {
+  implicit class RxStateOps(val state: Rx[Boolean])(implicit ctx: Ctx.Owner) {
     def reactiveShow: Modifier = {
       val oldDisplay = Var("block")
       state.reactiveWrite { (e, state) ⇒
         if (!state) {
-          oldDisplay.updateSilent(e.asInstanceOf[dom.html.Element].style.display)
+          oldDisplay.update(e.asInstanceOf[dom.html.Element].style.display)
           e.asInstanceOf[dom.html.Element].style.display = "none"
         } else if (e.asInstanceOf[dom.html.Element].style.display == "none") {
           e.asInstanceOf[dom.html.Element].style.display = oldDisplay.now
@@ -122,21 +120,13 @@ object BootstrapImplicits {
     }
   }
 
-  implicit def bindRxAttr[T](implicit ev: AttrValue[T]): AttrValue[Rx[T]] = new AttrValue[Rx[T]] {
-    override def apply(t: Element, a: Attr, v: Rx[T]): Unit = {
-      Obs(v, "rx-attr-updater") {
-        ev.apply(t, a, v.now)
-      }
-    }
-  }
-
-  implicit class RxNode(rx: Rx[dom.Node]) extends Modifier {
+  implicit class RxNode(rx: Rx[dom.Node])(implicit ctx: Ctx.Owner) extends Modifier {
     override def applyTo(t: Element): Unit = {
       val container = Var(rx.now)
-      val obs: Obs = Obs(rx, "rx-dom-updater", skipInitial = true) {
+      val obs: Obs = rx.triggerLater {
         val element = container.now
         val newElement = rx.now
-        container.updateSilent(newElement)
+        container.update(newElement)
         element.parentNode match {
           case node if node != null && !js.isUndefined(node) ⇒
             node.replaceChild(newElement, element)
@@ -149,7 +139,7 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxFragNode[T](value: Rx[T])(implicit ev: T ⇒ Frag) extends Modifier {
+  implicit class RxFragNode[T](value: Rx[T])(implicit ev: T ⇒ Frag, ctx: Ctx.Owner) extends Modifier {
     override def applyTo(t: Element): Unit = {
       new RxNode(Rx(value().render)).applyTo(t)
     }
@@ -189,6 +179,19 @@ object BootstrapImplicits {
 
     def classIf(state: Rx[Boolean]): Modifier = state.reactiveWrite { (e, state) ⇒
       classIf(state).applyTo(e)
+    }
+  }
+
+  // Reactive modifier
+  final class AutoModifier(val mod: Modifier) extends AnyVal
+
+  implicit def modifierToRxModifier(mod: Modifier): AutoModifier = {
+    new AutoModifier(mod)
+  }
+
+  implicit class AutoModifierOps(rx: Rx[AutoModifier])(implicit ctx: Ctx.Owner) extends Modifier {
+    override def applyTo(t: Element): Unit = {
+      rx.foreach(_.mod.applyTo(t))
     }
   }
 }

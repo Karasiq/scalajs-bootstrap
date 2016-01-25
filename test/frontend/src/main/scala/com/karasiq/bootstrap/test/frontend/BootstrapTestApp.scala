@@ -15,6 +15,8 @@ import scalatags.JsDom.all._
 
 @JSExport
 object BootstrapTestApp extends JSApp {
+  private implicit val context = implicitly[Ctx.Owner] // Stops working if moved to main(), macro magic
+
   @JSExport
   override def main(): Unit = {
     jQuery(() ⇒ {

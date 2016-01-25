@@ -13,7 +13,7 @@ import scalatags.JsDom.all._
 /**
   * @see [[https://getbootstrap.com/javascript/#carousel]]
   */
-sealed trait Carousel extends BootstrapComponent {
+sealed abstract class Carousel(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   def carouselId: String
 
   def content: Rx[Seq[Modifier]]
@@ -70,13 +70,13 @@ sealed trait Carousel extends BootstrapComponent {
 }
 
 object Carousel {
-  def reactive(data: Rx[Seq[Modifier]], id: String = Bootstrap.newId): Carousel = new Carousel {
+  def reactive(data: Rx[Seq[Modifier]], id: String = Bootstrap.newId)(implicit ctx: Ctx.Owner): Carousel = new Carousel {
     override val carouselId: String = id
 
     override val content: Rx[Seq[Modifier]] = data
   }
 
-  def apply(content: Modifier*): Carousel = {
+  def apply(content: Modifier*)(implicit ctx: Ctx.Owner): Carousel = {
     this.reactive(Rx(content))
   }
 

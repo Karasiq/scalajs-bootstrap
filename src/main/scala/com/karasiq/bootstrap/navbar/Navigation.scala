@@ -9,7 +9,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-trait Navigation extends BootstrapHtmlComponent[dom.html.Element] {
+abstract class Navigation(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Element] {
   def navId: String
 
   def navType: String
@@ -60,7 +60,7 @@ trait Navigation extends BootstrapHtmlComponent[dom.html.Element] {
     * @param i Tab index, starting from `0`
     */
   def selectTab(i: Int): Unit = {
-    val tabs = content()
+    val tabs = content.now
     require(i >= 0 && tabs.length > i, s"Invalid tab index: $i")
     this.selectTab(tabs(i).id)
   }
@@ -71,7 +71,7 @@ trait Navigation extends BootstrapHtmlComponent[dom.html.Element] {
 }
 
 object Navigation {
-  def tabs(tabs: NavigationTab*): Navigation = {
+  def tabs(tabs: NavigationTab*)(implicit ctx: Ctx.Owner): Navigation = {
     new Navigation {
       override val navId: String = Bootstrap.newId
 
@@ -81,7 +81,7 @@ object Navigation {
     }
   }
 
-  def pills(tabs: NavigationTab*): Navigation = {
+  def pills(tabs: NavigationTab*)(implicit ctx: Ctx.Owner): Navigation = {
     new Navigation {
       override val navId: String = Bootstrap.newId
 
