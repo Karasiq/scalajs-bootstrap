@@ -15,50 +15,31 @@ import scala.language.postfixOps
 import scalatags.JsDom.all._
 
 sealed trait ItemPriority {
+  def index: Int
   def style: TableRowStyle
 }
 
 object ItemPriority {
   case object Low extends ItemPriority {
+    override def index: Int = 3
     override def style: TableRowStyle = TableRow.success
   }
   case object Normal extends ItemPriority {
-    override def style: TableRowStyle = TableRow.default
+    override def index: Int = 2
+    override def style: TableRowStyle = TableRow.info
   }
   case object High extends ItemPriority {
+    override def index: Int = 1
     override def style: TableRowStyle = TableRow.danger
   }
 
-  def fromString(s: String): ItemPriority = s match {
-    case "Low" ⇒
-      Low
-
-    case "Normal" ⇒
-      Normal
-
-    case "High" ⇒
-      High
-  }
+  def fromString(s: String): ItemPriority = Seq(Low, Normal, High).find(_.toString == s).get
 }
 
-sealed trait TodoListItem {
-  val title: Var[String]
-  val priority: Var[ItemPriority]
-  val completed: Var[Boolean]
-}
-
-object TodoListItem {
-  def apply(t: String, p: ItemPriority = ItemPriority.Normal, c: Boolean = false): TodoListItem = {
-    new TodoListItem {
-      override val title: Var[String] = Var(t)
-      override val priority: Var[ItemPriority] = Var(p)
-      override val completed: Var[Boolean] = Var(c)
-    }
-  }
-}
+case class TodoListItem(title: String, priority: ItemPriority = ItemPriority.Normal, completed: Boolean = false)
 
 final class TodoList(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
-  val items: Var[Seq[TodoListItem]] = Var(Nil)
+  val items: Var[Seq[Var[TodoListItem]]] = Var(Nil)
 
   private def todoItemDialog(title: String, priority: ItemPriority)(f: (String, ItemPriority) ⇒ Unit): Unit = {
     val titleText = Var(title)
@@ -72,48 +53,52 @@ final class TodoList(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom
       .show(backdrop = false)
   }
 
-  private def editItemDialog(i: TodoListItem): Unit = {
-    todoItemDialog(i.title.now, i.priority.now) { (title, priority) ⇒
-      i.title.update(title)
-      i.priority.update(priority)
+  private def editItemDialog(i: Var[TodoListItem]): Unit = {
+    todoItemDialog(i.now.title, i.now.priority) { (title, priority) ⇒
+      i.update(i.now.copy(title, priority))
     }
   }
 
   private def addItemDialog(): Unit = {
     todoItemDialog("", ItemPriority.Normal) { (title, priority) ⇒
-      items.update(items.now :+ TodoListItem(title, priority))
+      items.update(items.now :+ Var(TodoListItem(title, priority)))
     }
   }
 
   private def removeCompleted(): Unit = {
-    items.update(items.now.filterNot(_.completed.now))
+    items.update(items.now.filterNot(_.now.completed))
   }
 
   private def addTestData(): Unit = {
-    items.update(items.now ++ (for (i <- 1 to 20) yield TodoListItem(s"Test $i", ItemPriority.Low)))
+    items.update(items.now ++ (for (i <- 1 to 20) yield Var(TodoListItem(s"Test $i", ItemPriority.Low))))
   }
 
-  private def renderItem(i: TodoListItem): TableRow = {
-    def todoTitle = Rx(if (i.completed()) s(i.title()) else b(i.title()))
+  private def renderItem(i: Var[TodoListItem]): TableRow = {
+    def todoTitle = Rx(if (i().completed) s(i().title, color.gray) else b(i().title))
     def buttons = ButtonGroup(ButtonGroupSize.small,
       Button(ButtonStyle.primary).renderTag("Edit", onclick := Bootstrap.jsClick(_ ⇒ editItemDialog(i))),
       Button(ButtonStyle.danger).renderTag("Remove", onclick := Bootstrap.jsClick(_ ⇒ items.update(items.now.filter(_.ne(i)))))
     )
     TableRow(
       Seq(
-        Seq[Modifier](todoTitle, GridSystem.col(9), onclick := Bootstrap.jsClick(_ ⇒ i.completed.update(!i.completed.now))),
+        Seq[Modifier](todoTitle, GridSystem.col(10), onclick := Bootstrap.jsClick(_ ⇒ i.update(i.now.copy(completed = !i.now.completed)))),
         Seq[Modifier](buttons, GridSystem.col(2), textAlign.center)
       ),
       Rx[AutoModifier](`class` := {
-        if (i.completed()) "" else i.priority().style.styleClass.getOrElse("")
+        if (i().completed) "" else i().priority.style.styleClass.getOrElse("")
       })
     )
   }
 
   override def renderTag(md: Modifier*): RenderedTag = {
-    val table = PagedTable(Rx(Seq[Modifier]("Description", "Actions")), items.map(_.map(renderItem)), 5)
+    val heading = Rx(Seq[Modifier](
+      Seq[Modifier]("Description", GridSystem.col(10)),
+      Seq[Modifier]("Actions", GridSystem.col(2)))
+    )
+    val table = PagedTable(heading, items.map(_.map(renderItem)), 5)
+
     Panel(style = PanelStyle.success)
-      .withHeader(Panel.title("th-list", span("Scala.js Bootstrap ToDo list", raw("&nbsp;"), Rx(Bootstrap.badge(items().count(i ⇒ !i.completed())))), Panel.buttons(
+      .withHeader(Panel.title("th-list", span("Scala.js Todo", raw("&nbsp;"), Rx(Bootstrap.badge(items().count(i ⇒ !i().completed)))), Panel.buttons(
         Panel.button("plus", onclick := Bootstrap.jsClick(_ ⇒ addItemDialog())),
         Panel.button("trash", onclick := Bootstrap.jsClick(_ ⇒ removeCompleted())),
         Panel.button("flash", onclick := Bootstrap.jsClick(_ ⇒ addTestData()))
