@@ -18,7 +18,8 @@ object TestModal {
       FormInput.number("Money", modalInputValue.reactiveInput),
       radioGroup,
       select,
-      multipleSelect
+      multipleSelect,
+      FormInput.textArea("Money text area", rows := 1, modalInputValue.reactiveInput)
     )
 
     Modal()

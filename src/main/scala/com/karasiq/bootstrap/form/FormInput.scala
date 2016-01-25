@@ -89,6 +89,17 @@ class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val option
   }
 }
 
+
+class FormTextArea(val textAreaLabel: Modifier, val inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
+  override def renderTag(md: all.Modifier*): RenderedTag = {
+    val controlId = s"$inputId-form-textarea-input"
+    div("form-group".addClass)(
+      label(`for` := controlId, textAreaLabel),
+      textarea("form-control".addClass, id := controlId, md)
+    )
+  }
+}
+
 object FormInput {
   def ofType(tpe: String, label: Modifier, md: Modifier*): Tag = {
     new FormGenericInput(label, tpe).renderTag(md:_*)
@@ -103,6 +114,10 @@ object FormInput {
   def password(label: Modifier, md: Modifier*): Tag = this.ofType("password", label, md:_*)
 
   def file(label: Modifier, md: Modifier*): Tag = this.ofType("file", label, md:_*)
+
+  def textArea(title: Modifier, md: Modifier*): Tag = {
+    new FormTextArea(title).renderTag(md:_*)
+  }
 
   def checkbox(label: Modifier, md: Modifier*): Tag = {
     new FormCheckbox(label).renderTag(md:_*)
