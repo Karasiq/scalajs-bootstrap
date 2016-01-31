@@ -3,6 +3,7 @@ package com.karasiq.bootstrap
 import com.karasiq.bootstrap.buttons._
 import org.scalajs.dom
 import org.scalajs.dom.Element
+import org.scalajs.dom.raw.{File, FileList}
 import org.scalajs.jquery.JQuery
 import rx._
 
@@ -193,5 +194,9 @@ object BootstrapImplicits {
     override def applyTo(t: Element): Unit = {
       rx.foreach(_.mod.applyTo(t))
     }
+  }
+
+  implicit def fileListToSeq(fl: FileList): Seq[File] = {
+    for (i <- 0 until fl.length) yield fl(i)
   }
 }
