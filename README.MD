@@ -8,9 +8,9 @@ libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "1.0.1"
 ```
 
 # Examples
-## [Project test page](https://github.com/Karasiq/scalajs-bootstrap/tree/master/test/frontend/src/main/scala/com/karasiq/bootstrap/test/frontend) 
-* Use https://karasiq.github.io/scalajs-bootstrap/
-* Or run server with `sbt scalajs-bootstrap-test/run`, then open http://127.0.0.1:9000 in your browser
+* [Project test page](https://github.com/Karasiq/scalajs-bootstrap/tree/master/test/frontend/src/main/scala/com/karasiq/bootstrap/test/frontend) 
+  * Use https://karasiq.github.io/scalajs-bootstrap/
+  * Or run server with `sbt scalajs-bootstrap-test/run`, then open http://127.0.0.1:9000 in your browser
 
 # License
 The MIT License (MIT)
