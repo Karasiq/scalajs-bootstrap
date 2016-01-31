@@ -1,8 +1,10 @@
 package com.karasiq.bootstrap.test.frontend
 
+import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.form.{Form, FormInput}
 import com.karasiq.bootstrap.modal.Modal
+import org.scalajs.dom
 import rx._
 
 import scalatags.JsDom.all._
@@ -18,7 +20,11 @@ object TestModal {
       radioGroup,
       select,
       multipleSelect,
-      FormInput.textArea("Money text area", rows := 1, modalInputValue.reactiveInput)
+      FormInput.textArea("Money text area", rows := 1, modalInputValue.reactiveInput),
+      FormInput.file("Test file", onchange := Bootstrap.jsInput { input ⇒
+        val file = input.files.head
+        dom.alert(s"File selected: ${file.name}")
+      })
     )
 
     Modal()

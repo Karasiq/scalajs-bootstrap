@@ -3,7 +3,7 @@ package com.karasiq.bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons.Button
 import org.scalajs.dom
-import org.scalajs.dom.raw.MouseEvent
+import org.scalajs.dom.raw.{Event, MouseEvent}
 
 import scala.scalajs.js
 import scalatags.JsDom.all._
@@ -53,6 +53,20 @@ object Bootstrap {
 
   def jsClick(f: dom.Element ⇒ Unit): js.Function = {
     js.ThisFunction.fromFunction2 { (element: dom.Element, ev: MouseEvent) ⇒
+      ev.preventDefault()
+      f(element)
+    }
+  }
+
+  def jsInput(f: dom.html.Input ⇒ Unit): js.Function = {
+    js.ThisFunction.fromFunction2 { (element: dom.html.Input, ev: Event) ⇒
+      // ev.preventDefault()
+      f(element)
+    }
+  }
+
+  def jsSubmit(f: dom.html.Form ⇒ Unit): js.Function = {
+    js.ThisFunction.fromFunction2 { (element: dom.html.Form, ev: Event) ⇒
       ev.preventDefault()
       f(element)
     }

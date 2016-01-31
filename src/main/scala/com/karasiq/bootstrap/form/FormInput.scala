@@ -113,7 +113,7 @@ object FormInput {
 
   def password(label: Modifier, md: Modifier*): Tag = this.ofType("password", label, md:_*)
 
-  def file(label: Modifier, md: Modifier*): Tag = this.ofType("file", label, md:_*)
+  def file(label: Modifier, md: Modifier*): Tag = this.ofType("file", label, "form-control".removeClass +: md:_*)
 
   def textArea(title: Modifier, md: Modifier*): Tag = {
     new FormTextArea(title).renderTag(md:_*)
