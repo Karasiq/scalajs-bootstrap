@@ -7,8 +7,6 @@ import rx._
 
 import scalatags.JsDom.all._
 
-
-
 /**
   * Simple bootstrap navigation bar
   * @param barId Navbar id
@@ -110,5 +108,13 @@ final class NavigationBar(barId: String = Bootstrap.newId)(implicit ctx: Ctx.Own
 
   def content: Modifier = {
     tabContentContainer
+  }
+}
+
+object NavigationBar {
+  def apply(tabs: NavigationTab*)(implicit ctx: Ctx.Owner): NavigationBar = {
+    val navbar = new NavigationBar()
+    navbar.addTabs(tabs:_*)
+    navbar
   }
 }
