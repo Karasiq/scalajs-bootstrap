@@ -15,4 +15,8 @@ object Form {
   def apply(md: Modifier*): ConcreteHtmlTag[dom.html.Form] = {
     form(md)
   }
+
+  def inline(md: Modifier*): ConcreteHtmlTag[dom.html.Form] = {
+    form("form-inline".addClass, md)
+  }
 }

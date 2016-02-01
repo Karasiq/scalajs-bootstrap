@@ -2,7 +2,8 @@ package com.karasiq.bootstrap.test.frontend
 
 import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.form.{Form, FormInput}
+import com.karasiq.bootstrap.form.{Form, FormInput, FormInputGroup}
+import com.karasiq.bootstrap.icons.FontAwesome
 import com.karasiq.bootstrap.modal.Modal
 import org.scalajs.dom
 import rx._
@@ -16,7 +17,7 @@ object TestModal {
     val select = FormInput.select("Plain select", "Option 1", "Option 2", "Option 3")
     val multipleSelect = FormInput.multipleSelect("Multiple select", "Option 1", "Option 2", "Option 3")
     val form = Form(
-      FormInput.number("Money", modalInputValue.reactiveInput),
+      FormInputGroup(FormInputGroup.label("Money"), FormInputGroup.addon("usd".fontAwesome(FontAwesome.fixedWidth)), FormInputGroup.number(modalInputValue.reactiveInput)),
       radioGroup,
       select,
       multipleSelect,
