@@ -24,7 +24,7 @@ final class NavigationBar(barId: String = Bootstrap.newId)(implicit ctx: Ctx.Own
         tab.modifiers,
         "active".classIf(active),
         a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
-          span(`class` := s"glyphicon glyphicon-${tab.icon}"),
+          tab.icon,
           raw("&nbsp;"),
           tab.name
         )

@@ -1,6 +1,7 @@
 package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.buttons._
+import com.karasiq.bootstrap.icons.{BootstrapGlyphicon, FontAwesome, FontAwesomeIcon, IconModifier}
 import org.scalajs.dom
 import org.scalajs.dom.Element
 import org.scalajs.dom.raw.{File, FileList}
@@ -153,6 +154,13 @@ object BootstrapImplicits {
       }
     }
   }
+
+  implicit class BootstrapIconsOps(val iconName: String) extends AnyVal {
+    def glyphicon: BootstrapGlyphicon = BootstrapGlyphicon(iconName)
+    def fontAwesome(styles: Modifier*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
+  }
+
+  implicit def stringToBootstrapIcons(str: String): IconModifier = str.glyphicon
 
   //noinspection MutatorLikeMethodIsParameterless
   implicit class HtmlClassOps(val className: String) extends AnyVal {

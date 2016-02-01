@@ -2,6 +2,7 @@ package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons.Button
+import com.karasiq.bootstrap.icons.BootstrapGlyphicon
 import org.scalajs.dom
 import org.scalajs.dom.raw.{Event, MouseEvent}
 
@@ -11,18 +12,21 @@ import scalatags.JsDom.all._
 object Bootstrap {
   /**
     * Jumbotron
+    *
     * @see [[https://getbootstrap.com/components/#jumbotron]]
     */
   def jumbotron: ConcreteHtmlTag[dom.html.Div] = div("jumbotron".addClass)
 
   /**
     * Well
+    *
     * @see [[https://getbootstrap.com/components/#wells]]
     */
   def well: ConcreteHtmlTag[dom.html.Div] = div("well".addClass)
 
   /**
     * Badge
+    *
     * @see [[https://getbootstrap.com/components/#badges]]
     */
   def badge: ConcreteHtmlTag[dom.html.Span] = span("badge".addClass)
@@ -37,8 +41,8 @@ object Bootstrap {
     * @param name Icon name
     * @see [[https://getbootstrap.com/components/#glyphicons]]
     */
-  def icon(name: String): ConcreteHtmlTag[dom.html.Span] = {
-    span(`class` := s"glyphicon glyphicon-$name", aria.hidden := true)
+  def icon(name: String): BootstrapGlyphicon = {
+    new BootstrapGlyphicon(name)
   }
 
   private var idCounter: Int = 0

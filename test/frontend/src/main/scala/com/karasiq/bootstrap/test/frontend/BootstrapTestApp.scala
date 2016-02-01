@@ -2,6 +2,7 @@ package com.karasiq.bootstrap.test.frontend
 
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.grid.GridSystem
+import com.karasiq.bootstrap.icons.FontAwesome
 import com.karasiq.bootstrap.navbar.{NavigationBar, NavigationTab}
 import com.karasiq.bootstrap.panel.PanelStyle
 import org.scalajs.dom
@@ -24,9 +25,9 @@ object BootstrapTestApp extends JSApp {
       val tableVisible = Var(false)
       dom.setTimeout(() ⇒ { tableVisible.update(true) }, 3000)
       val navigationBar = NavigationBar(
-        NavigationTab("Table", "table", "briefcase", new TestTable, tableVisible.reactiveShow),
+        NavigationTab("Table", "table", "table".fontAwesome(FontAwesome.fixedWidth), new TestTable, tableVisible.reactiveShow),
         NavigationTab("Carousel", "carousel", "picture", new TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
-        NavigationTab("ToDo list", "todo", "th-list", new TodoList)
+        NavigationTab("ToDo list", "todo", "fort-awesome".fontAwesome(FontAwesome.fixedWidth), new TodoList)
       )
 
       // Render page
