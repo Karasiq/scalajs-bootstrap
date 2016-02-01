@@ -2,8 +2,9 @@ package com.karasiq.bootstrap.test.frontend
 
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons._
-import com.karasiq.bootstrap.form.{Form, FormInput}
+import com.karasiq.bootstrap.form.{Form, FormInput, FormInputGroup}
 import com.karasiq.bootstrap.grid.GridSystem
+import com.karasiq.bootstrap.icons.FontAwesome
 import com.karasiq.bootstrap.modal.Modal
 import com.karasiq.bootstrap.panel.{Panel, PanelStyle}
 import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableRowStyle, TableStyle}
@@ -46,7 +47,10 @@ final class TodoList(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom
     val prioritySelect = FormInput.select("Priority", "Low", "Normal", "High")
     prioritySelect.selected.update(Seq(priority.toString))
     Modal("Add/edit item")
-      .withBody(Form(FormInput.text("Title", placeholder := "Write description", titleText.reactiveInput), prioritySelect))
+      .withBody(Form(
+        FormInputGroup(FormInputGroup.label("Title"), FormInputGroup.addon("file-text-o".fontAwesome(FontAwesome.fixedWidth)), FormInputGroup.text(placeholder := "Write description", titleText.reactiveInput)),
+        prioritySelect
+      ))
       .withButtons(Modal.closeButton("Cancel"), Modal.button("Apply", Modal.dismiss, onclick := Bootstrap.jsClick { _ ⇒
         f(titleText.now, ItemPriority.fromString(prioritySelect.selected.now.head))
       }))
