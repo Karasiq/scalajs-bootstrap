@@ -15,25 +15,12 @@ import rx._
 import scala.language.postfixOps
 import scalatags.JsDom.all._
 
-sealed trait ItemPriority {
-  def index: Int
-  def style: TableRowStyle
-}
+sealed abstract class ItemPriority(val style: TableRowStyle)
 
 object ItemPriority {
-  case object Low extends ItemPriority {
-    override def index: Int = 3
-    override def style: TableRowStyle = TableRow.success
-  }
-  case object Normal extends ItemPriority {
-    override def index: Int = 2
-    override def style: TableRowStyle = TableRow.info
-  }
-  case object High extends ItemPriority {
-    override def index: Int = 1
-    override def style: TableRowStyle = TableRow.danger
-  }
-
+  case object Low extends ItemPriority(TableRow.success)
+  case object Normal extends ItemPriority(TableRow.info)
+  case object High extends ItemPriority(TableRow.danger)
   def fromString(s: String): ItemPriority = Seq(Low, Normal, High).find(_.toString == s).get
 }
 
