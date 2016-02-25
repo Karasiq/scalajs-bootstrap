@@ -67,8 +67,8 @@ final class TodoList(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom
   private def renderItem(i: Var[TodoListItem]): TableRow = {
     def todoTitle = Rx(if (i().completed) s(i().title, color.gray) else b(i().title))
     def buttons = ButtonGroup(ButtonGroupSize.small,
-      Button(ButtonStyle.primary).renderTag("Edit", onclick := Bootstrap.jsClick(_ ⇒ editItemDialog(i))),
-      Button(ButtonStyle.danger).renderTag("Remove", onclick := Bootstrap.jsClick(_ ⇒ items.update(items.now.filter(_.ne(i)))))
+      Button(ButtonStyle.primary)("Edit", onclick := Bootstrap.jsClick(_ ⇒ editItemDialog(i))),
+      Button(ButtonStyle.danger)("Remove", onclick := Bootstrap.jsClick(_ ⇒ items.update(items.now.filter(_.ne(i)))))
     )
     TableRow(
       Seq(
