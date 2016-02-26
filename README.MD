@@ -1,4 +1,4 @@
-# scalajs-bootstrap [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.5.svg)](http://scala-js.org) [![Dependencies](https://app.updateimpact.com/badge/692686982173822976/scalajs-bootstrap.svg?config=compile)](https://app.updateimpact.com/latest/692686982173822976/scalajs-bootstrap)
+# scalajs-bootstrap [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.5.svg)](http://scala-js.org)
 Reactive [Scala.js](http://www.scala-js.org/) [bootstrap](https://getbootstrap.com/) components
 
 # How to use
