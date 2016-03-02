@@ -7,7 +7,7 @@ import rx._
 
 import scalatags.JsDom.all._
 
-final class ToggleButton(btn: ConcreteHtmlTag[dom.html.Button]) extends BootstrapHtmlComponent[dom.html.Button] {
+final class ToggleButton(btn: ConcreteHtmlTag[dom.html.Button])(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Button] {
   val state: Var[Boolean] = Var(false)
 
   override def renderTag(md: Modifier*): RenderedTag = {

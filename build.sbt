@@ -3,8 +3,8 @@ import sbt.Keys._
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  isSnapshot := false,
-  version := "1.0.2",
+  isSnapshot := true,
+  version := "1.0.3-SNAPSHOT",
   scalaVersion := "2.11.7",
   publishMavenStyle := true,
   publishTo := {
@@ -35,7 +35,7 @@ lazy val librarySettings = Seq(
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.8.1",
     "com.lihaoyi" %%% "scalatags" % "0.5.4",
-    "com.lihaoyi" %%% "scalarx" % "0.3.0"
+    "com.lihaoyi" %%% "scalarx" % "0.3.1"
   ),
   name := "scalajs-bootstrap"
 )
