@@ -29,8 +29,8 @@ object BootstrapImplicits {
   }
 
   implicit class ButtonOps(val button: HtmlButton) extends AnyVal {
-    def toggleButton: ToggleButton = new ToggleButton(button)
-    def disabledButton: DisabledButton = new DisabledButton(button)
+    def toggleButton(implicit ctx: Ctx.Owner): ToggleButton = new ToggleButton(button)
+    def disabledButton(implicit ctx: Ctx.Owner): DisabledButton = new DisabledButton(button)
   }
 
   implicit def bootstrapHtmlComponentToTag[T <: dom.Element](bc: BootstrapHtmlComponent[T]): ConcreteHtmlTag[T] = {
@@ -41,7 +41,7 @@ object BootstrapImplicits {
     bc.render()
   }
 
-  implicit class RxVariableOps[T](value: Var[T]) {
+  implicit class RxVariableOps[T](value: Var[T])(implicit ctx: Ctx.Owner) {
     def reactiveRead(event: String, f: Element ⇒ T): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         t.asInstanceOf[js.Dynamic].addEventListener(event, js.ThisFunction.fromFunction1 { (e: Element) ⇒
@@ -70,7 +70,7 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxValueOps[T](state: Rx[T]) {
+  implicit class RxValueOps[T](state: Rx[T])(implicit ctx: Ctx.Owner) {
     def reactiveWrite(f: (dom.Element, T) ⇒ Unit): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         state.foreach { st ⇒
@@ -80,25 +80,25 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxInputOps[T](value: Var[String]) {
+  implicit class RxInputOps[T](value: Var[String])(implicit ctx: Ctx.Owner) {
     def reactiveInput: Modifier = {
       value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].value, (e, v) ⇒ e.asInstanceOf[dom.html.Input].value = v)
     }
   }
 
-  implicit class RxIntInputOps[T](value: Var[Int]) {
+  implicit class RxIntInputOps[T](value: Var[Int])(implicit ctx: Ctx.Owner) {
     def reactiveInput: Modifier = {
       value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].value.toInt, (e, v) ⇒ e.asInstanceOf[dom.html.Input].value = v.toString)
     }
   }
 
-  implicit class RxDoubleInputOps[T](value: Var[Double]) {
+  implicit class RxDoubleInputOps[T](value: Var[Double])(implicit ctx: Ctx.Owner) {
     def reactiveInput: Modifier = {
       value.reactiveReadWrite("input", _.asInstanceOf[dom.html.Input].value.toDouble, (e, v) ⇒ e.asInstanceOf[dom.html.Input].value = v.toString)
     }
   }
 
-  implicit class RxBooleanInputOps[T](value: Var[Boolean]) {
+  implicit class RxBooleanInputOps[T](value: Var[Boolean])(implicit ctx: Ctx.Owner) {
     def reactiveInput: Modifier = {
       value.reactiveReadWrite("change", _.asInstanceOf[dom.html.Input].checked, (e, v) ⇒ e.asInstanceOf[dom.html.Input].checked = v)
     }
@@ -124,11 +124,11 @@ object BootstrapImplicits {
 
   implicit class RxNode(rx: Rx[dom.Node])(implicit ctx: Ctx.Owner) extends Modifier {
     override def applyTo(t: Element): Unit = {
-      val container = Var(rx.now)
+      var oldElement = rx.now
       val obs: Obs = rx.triggerLater {
-        val element = container.now
+        val element = oldElement
         val newElement = rx.now
-        container.update(newElement)
+        oldElement = newElement
         element.parentNode match {
           case node if node != null && !js.isUndefined(node) ⇒
             node.replaceChild(newElement, element)
@@ -137,7 +137,7 @@ object BootstrapImplicits {
             // Skip
         }
       }
-      container.now.applyTo(t)
+      oldElement.applyTo(t)
     }
   }
 
@@ -186,7 +186,7 @@ object BootstrapImplicits {
       }
     }
 
-    def classIf(state: Rx[Boolean]): Modifier = state.reactiveWrite { (e, state) ⇒
+    def classIf(state: Rx[Boolean])(implicit ctx: Ctx.Owner): Modifier = state.reactiveWrite { (e, state) ⇒
       classIf(state).applyTo(e)
     }
   }
