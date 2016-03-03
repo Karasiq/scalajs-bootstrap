@@ -12,6 +12,7 @@ import com.karasiq.bootstrap.progressbar.ProgressBarStyle
 import com.karasiq.bootstrap.tooltip.{Tooltip, TooltipPlacement}
 import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
 import org.scalajs.dom
+import org.scalajs.dom.window
 import rx._
 
 import scala.concurrent.duration._
@@ -28,8 +29,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
 
     disabledButton.state.foreach { pressed ⇒
       if (pressed) {
-        dom.setTimeout(() ⇒ {
-          dom.alert(s"Answer: ${if (toggleButton.state.now) 321 else 123}")
+        window.setTimeout(() ⇒ {
+          window.alert(s"Answer: ${if (toggleButton.state.now) 321 else 123}")
           disabledButton.state.update(false)
         }, 1000)
       }
@@ -40,8 +41,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
     val panelId = Bootstrap.newId
     Panel(panelId, style)
       .withHeader(title("euro", collapse(panelId, panelTitle, raw("&nbsp"), Bootstrap.badge("42")), buttons(
-        button("plus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel add"))),
-        button("minus", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Panel remove")))
+        button("plus", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Panel add"))),
+        button("minus", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Panel remove")))
       )))
       .renderTag(
         new TestProgressBar(ProgressBarStyle.success, 300 millis),
@@ -55,8 +56,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
             ),
             GridSystem.mkRow(Collapse("Dropdowns")(
               GridSystem.row(
-                GridSystem.col(6).asDiv(Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 1"))), Dropdown.item("Test 2"))),
-                GridSystem.col(6).asDiv(Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ dom.alert("Test 3"))), Dropdown.item("Test 4")))
+                GridSystem.col(6).asDiv(Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Test 1"))), Dropdown.item("Test 2"))),
+                GridSystem.col(6).asDiv(Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Test 3"))), Dropdown.item("Test 4")))
               )
             ))
           )),

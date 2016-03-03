@@ -6,6 +6,7 @@ import com.karasiq.bootstrap.form.{Form, FormInput, FormInputGroup}
 import com.karasiq.bootstrap.icons.FontAwesome
 import com.karasiq.bootstrap.modal.Modal
 import org.scalajs.dom
+import org.scalajs.dom.window
 import rx._
 
 import scalatags.JsDom.all._
@@ -24,7 +25,7 @@ object TestModal {
       FormInput.textArea("Money text area", rows := 1, modalInputValue.reactiveInput),
       FormInput.file("Test file", onchange := Bootstrap.jsInput { input ⇒
         val file = input.files.head
-        dom.alert(s"File selected: ${file.name}")
+        window.alert(s"File selected: ${file.name}")
       })
     )
 
