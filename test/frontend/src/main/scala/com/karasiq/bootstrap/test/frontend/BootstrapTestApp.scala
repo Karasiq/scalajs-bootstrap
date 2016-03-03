@@ -6,6 +6,7 @@ import com.karasiq.bootstrap.icons.FontAwesome
 import com.karasiq.bootstrap.navbar.{NavigationBar, NavigationTab}
 import com.karasiq.bootstrap.panel.PanelStyle
 import org.scalajs.dom
+import org.scalajs.dom.window
 import org.scalajs.jquery._
 import rx._
 
@@ -23,7 +24,7 @@ object BootstrapTestApp extends JSApp {
     jQuery(() ⇒ {
       // Table tab will appear after 3 seconds
       val tableVisible = Var(false)
-      dom.setTimeout(() ⇒ { tableVisible.update(true) }, 3000)
+      window.setTimeout(() ⇒ { tableVisible.update(true) }, 3000)
       val navigationBar = NavigationBar(
         NavigationTab("Table", "table", "table".fontAwesome(FontAwesome.fixedWidth), new TestTable, tableVisible.reactiveShow),
         NavigationTab("Carousel", "carousel", "picture", new TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
