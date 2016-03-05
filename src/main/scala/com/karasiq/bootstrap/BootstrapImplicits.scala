@@ -1,10 +1,10 @@
 package com.karasiq.bootstrap
 
+import com.karasiq.bootstrap.BootstrapImplicits.RxNode
 import com.karasiq.bootstrap.buttons._
 import com.karasiq.bootstrap.icons.{BootstrapGlyphicon, FontAwesome, FontAwesomeIcon, IconModifier}
 import org.scalajs.dom
-import org.scalajs.dom.Element
-import org.scalajs.dom.raw.{File, FileList}
+import org.scalajs.dom.{DOMList, Element, html}
 import org.scalajs.jquery.JQuery
 import rx._
 
@@ -46,17 +46,20 @@ object BootstrapImplicits {
       override def applyTo(t: Element): Unit = {
         t.asInstanceOf[js.Dynamic].addEventListener(event, js.ThisFunction.fromFunction1 { (e: Element) ⇒
           val nv = f(e)
-          if (value.now != nv) {
-            value.update(nv)
-          }
+          value() = nv
         })
       }
     }
 
     def reactiveReadWrite(event: String, read: Element ⇒ T, write: (Element, T) ⇒ Unit): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
-        val observer = value.foreach { v ⇒
-          write(t, v)
+        val elRx = value.map(identity)
+        elRx.foreach { v ⇒
+          if (isElementAvailable(t)) {
+            write(t, v)
+          } else {
+            elRx.kill()
+          }
         }
 
         val updateValue = js.ThisFunction.fromFunction1 { (e: Element) ⇒
@@ -71,10 +74,15 @@ object BootstrapImplicits {
   }
 
   implicit class RxValueOps[T](state: Rx[T])(implicit ctx: Ctx.Owner) {
-    def reactiveWrite(f: (dom.Element, T) ⇒ Unit): Modifier = new Modifier {
+    def reactiveWrite(f: (Element, T) ⇒ Unit): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
-        state.foreach { st ⇒
-          f(t, st)
+        val elRx = state.map(identity)
+        elRx.foreach { st ⇒
+          if (isElementAvailable(t)) {
+            f(t, st)
+          } else {
+            elRx.kill()
+          }
         }
       }
     }
@@ -106,13 +114,14 @@ object BootstrapImplicits {
 
   implicit class RxStateOps(val state: Rx[Boolean])(implicit ctx: Ctx.Owner) {
     def reactiveShow: Modifier = {
-      val oldDisplay = Var("block")
+      var oldDisplay = "block"
       state.reactiveWrite { (e, state) ⇒
+        val htmlElement = e.asInstanceOf[html.Element]
         if (!state) {
-          oldDisplay.update(e.asInstanceOf[dom.html.Element].style.display)
-          e.asInstanceOf[dom.html.Element].style.display = "none"
-        } else if (e.asInstanceOf[dom.html.Element].style.display == "none") {
-          e.asInstanceOf[dom.html.Element].style.display = oldDisplay.now
+          oldDisplay = htmlElement.style.display
+          htmlElement.style.display = "none"
+        } else if (htmlElement.style.display == "none") {
+          htmlElement.style.display = oldDisplay
         }
       }
     }
@@ -124,17 +133,16 @@ object BootstrapImplicits {
 
   implicit class RxNode(rx: Rx[dom.Node])(implicit ctx: Ctx.Owner) extends Modifier {
     override def applyTo(t: Element): Unit = {
+      val elRx = rx.map(identity)
       var oldElement = rx.now
-      val obs: Obs = rx.triggerLater {
+      elRx.triggerLater {
         val element = oldElement
-        val newElement = rx.now
-        oldElement = newElement
-        element.parentNode match {
-          case node if node != null && !js.isUndefined(node) ⇒
-            node.replaceChild(newElement, element)
-
-          case _ ⇒
-            // Skip
+        if (isElementAvailable(element) && isElementAvailable(element.parentNode)) {
+          val newElement = elRx.now
+          oldElement = newElement
+          element.parentNode.replaceChild(newElement, element)
+        } else {
+          elRx.kill()
         }
       }
       oldElement.applyTo(t)
@@ -191,20 +199,35 @@ object BootstrapImplicits {
     }
   }
 
-  // Reactive modifier
+  // Reactive modifier wrapper
   final class AutoModifier(val mod: Modifier) extends AnyVal
 
-  implicit def modifierToRxModifier(mod: Modifier): AutoModifier = {
-    new AutoModifier(mod)
+  implicit object AutoModifier extends (Modifier ⇒ AutoModifier) {
+    override def apply(mod: Modifier): AutoModifier = {
+      new AutoModifier(mod)
+    }
   }
 
   implicit class AutoModifierOps(rx: Rx[AutoModifier])(implicit ctx: Ctx.Owner) extends Modifier {
     override def applyTo(t: Element): Unit = {
-      rx.foreach(_.mod.applyTo(t))
+      val elRx = rx.map(identity)
+      elRx.foreach { am ⇒
+        if (isElementAvailable(t)) {
+          am.mod.applyTo(t)
+        } else {
+          elRx.kill()
+        }
+      }
     }
   }
 
-  implicit def fileListToSeq(fl: FileList): Seq[File] = {
-    for (i <- 0 until fl.length) yield fl(i)
+  implicit class DOMListIndexedSeq[T](dl: DOMList[T]) extends IndexedSeq[T] {
+    override def length: Int = dl.length
+    override def apply(idx: Int): T = dl.apply(idx)
+  }
+
+  @inline
+  private def isElementAvailable(e: dom.Node): Boolean = {
+    !js.isUndefined(e) && e.ne(null)
   }
 }
