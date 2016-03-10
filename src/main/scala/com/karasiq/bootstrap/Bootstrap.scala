@@ -57,8 +57,10 @@ object Bootstrap {
 
   def jsClick(f: dom.Element ⇒ Unit): js.Function = {
     js.ThisFunction.fromFunction2 { (element: dom.Element, ev: MouseEvent) ⇒
-      ev.preventDefault()
-      f(element)
+      if (ev.button == 0 && !(ev.shiftKey || ev.altKey || ev.metaKey || ev.ctrlKey)) {
+        ev.preventDefault()
+        f(element)
+      }
     }
   }
 
