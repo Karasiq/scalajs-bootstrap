@@ -32,7 +32,7 @@ object BootstrapTestApp extends JSApp {
           NavigationTab("Carousel", "carousel", "picture", new TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
           NavigationTab("ToDo list", "todo", "fort-awesome".fontAwesome(FontAwesome.fixedWidth), new TodoList)
         )
-        .withContentContainer(GridSystem.container(id := "main-container"))
+        .withContentContainer(content ⇒ GridSystem.container(id := "main-container", GridSystem.mkRow(content)))
         .withStyles(NavigationBarStyle.inverse, NavigationBarStyle.fixedTop)
         .build()
 
