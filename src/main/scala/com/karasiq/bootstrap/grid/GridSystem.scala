@@ -11,6 +11,7 @@ import scalatags.JsDom.all._
   */
 object GridSystem {
   def container: Tag = div("container".addClass)
+  def containerFluid: Tag = div("container-fluid".addClass)
   def row: Tag = div("row".addClass)
 
   def mkRow(md: Modifier*): Tag = {

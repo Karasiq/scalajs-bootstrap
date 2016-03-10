@@ -1,7 +1,8 @@
 package com.karasiq.bootstrap.navbar
 
-import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.grid.GridSystem
+import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent}
 import org.scalajs.jquery.jQuery
 import rx._
 
@@ -9,9 +10,8 @@ import scalatags.JsDom.all._
 
 /**
   * Simple bootstrap navigation bar
-  * @param barId Navbar id
   */
-final class NavigationBar(barId: String = Bootstrap.newId)(implicit ctx: Ctx.Owner) {
+final class NavigationBar(barId: String, brand: Modifier, styles: Seq[NavigationBarStyle], container: Tag, contentContainer: Tag)(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   private val nav = "nav".tag
   private val `data-toggle` = "data-toggle".attr
   private val `data-target` = "data-target".attr
@@ -86,9 +86,9 @@ final class NavigationBar(barId: String = Bootstrap.newId)(implicit ctx: Ctx.Own
     navigationTabs.update(tabs)
   }
 
-  def navbar(brand: Modifier): Tag = {
-    nav(`class` := "navbar navbar-default navbar-fixed-top")(
-      div(`class` := "container")(
+  def navbar: Tag = {
+    nav("navbar".addClass, styles)(
+      container(
         // Header
         div(`class` := "navbar-header")(
           button(`type` := "button", `data-toggle` := "collapse", `data-target` := s"#$barId", `class` := "navbar-toggle collapsed")(
@@ -109,12 +109,16 @@ final class NavigationBar(barId: String = Bootstrap.newId)(implicit ctx: Ctx.Own
   def content: Modifier = {
     tabContentContainer
   }
+
+  def render(md: Modifier*) = {
+    Seq(navbar, contentContainer(GridSystem.mkRow(content)))
+  }
 }
 
 object NavigationBar {
-  def apply(tabs: NavigationTab*)(implicit ctx: Ctx.Owner): NavigationBar = {
-    val navbar = new NavigationBar()
-    navbar.addTabs(tabs:_*)
-    navbar
+
+
+  def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation", styles: Seq[NavigationBarStyle] = Seq(NavigationBarStyle.default, NavigationBarStyle.fixedTop), container: Tag = GridSystem.container, contentContainer: Tag = GridSystem.container)(implicit ctx: Ctx.Owner) = {
+    NavigationBarBuilder(tabs, barId, brand, styles, container, contentContainer)
   }
 }
