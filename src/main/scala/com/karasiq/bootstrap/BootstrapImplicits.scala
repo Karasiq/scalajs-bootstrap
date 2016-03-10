@@ -56,7 +56,7 @@ object BootstrapImplicits {
         val elRx = value.map(identity)
         elRx.foreach { v ⇒
           if (isElementAvailable(t)) {
-            write(t, v)
+            if (read(t) != v) write(t, v)
           } else {
             elRx.kill()
           }
@@ -202,10 +202,8 @@ object BootstrapImplicits {
   // Reactive modifier wrapper
   final class AutoModifier(val mod: Modifier) extends AnyVal
 
-  implicit object AutoModifier extends (Modifier ⇒ AutoModifier) {
-    override def apply(mod: Modifier): AutoModifier = {
-      new AutoModifier(mod)
-    }
+  implicit def modifierToAutoModifier(mod: Modifier): AutoModifier = {
+    new AutoModifier(mod)
   }
 
   implicit class AutoModifierOps(rx: Rx[AutoModifier])(implicit ctx: Ctx.Owner) extends Modifier {
