@@ -1,4 +1,4 @@
-# scalajs-bootstrap [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.6.svg)](http://scala-js.org)
+# scalajs-bootstrap [![Build Status](https://travis-ci.org/Karasiq/scalajs-bootstrap.svg?branch=master)](https://travis-ci.org/Karasiq/scalajs-bootstrap) [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.6.svg)](http://scala-js.org)
 Reactive [Scala.js](http://www.scala-js.org/) [bootstrap](https://getbootstrap.com/) components
 
 # How to use
