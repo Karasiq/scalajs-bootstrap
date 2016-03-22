@@ -32,12 +32,16 @@ lazy val commonSettings = Seq(
 )
 
 lazy val librarySettings = Seq(
+  name := "scalajs-bootstrap",
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.9.0",
     "com.lihaoyi" %%% "scalatags" % "0.5.4",
     "com.lihaoyi" %%% "scalarx" % "0.3.1"
   ),
-  name := "scalajs-bootstrap"
+  scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
+    val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
+    s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
+  }))
 )
 
 lazy val libraryTestSettings = Seq(
