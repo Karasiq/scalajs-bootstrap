@@ -56,10 +56,11 @@ class FormRadioGroup(final val radioList: Rx[Seq[FormRadio]])(implicit ctx: Ctx.
     input.checked = v == r.radioValue
   })
 
-  override def render(md: Modifier*): Modifier = Rx {
-    val values = radioList()
-    Seq(values.head.renderTag(md, checked, valueWriter(values.head))) ++
-      values.tail.map(v ⇒ v.renderTag(md, valueWriter(v)))
+  override def render(md: Modifier*): Modifier = {
+    Rx {
+      val values = radioList()
+      div(values.head.renderTag(md, checked, valueWriter(values.head)), values.tail.map(v ⇒ v.renderTag(md, valueWriter(v))))
+    }
   }
 }
 
@@ -70,21 +71,23 @@ class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val option
     val controlId = s"$inputId-form-select-input"
     div("form-group".addClass)(
       label(`for` := controlId, selectLabel),
-      select("form-control".addClass, if (allowMultiple) multiple else (), id := controlId, md)(
-        Rx(options().map(v ⇒ option(v))),
-        selected.reactiveReadWrite("change", e ⇒ {
-          val select = e.asInstanceOf[dom.html.Select]
-          select.options.collect {
-            case opt if opt.selected ⇒
-              opt.value
-          }
-        }, (e, v) ⇒ {
-          val select = e.asInstanceOf[dom.html.Select]
-          select.options.foreach { opt ⇒
-            opt.selected = v.contains(opt.value)
-          }
-        })
-      )
+      Rx {
+        select("form-control".addClass, if (allowMultiple) multiple else (), id := controlId, md)(
+          for (o ← options()) yield option(o),
+          selected.reactiveReadWrite("change", e ⇒ {
+            val select = e.asInstanceOf[dom.html.Select]
+            select.options.collect {
+              case opt if opt.selected ⇒
+                opt.value
+            }
+          }, (e, v) ⇒ {
+            val select = e.asInstanceOf[dom.html.Select]
+            select.options.foreach { opt ⇒
+              opt.selected = v.contains(opt.value)
+            }
+          })
+        )
+      }
     )
   }
 }
@@ -131,12 +134,24 @@ object FormInput {
     new FormRadioGroup(Rx(radios))
   }
 
+  def radioGroup(radios: Rx[Seq[FormRadio]])(implicit ctx: Ctx.Owner): FormRadioGroup = {
+    new FormRadioGroup(radios)
+  }
+
   def select(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
     new FormSelect(title, false, Rx(options))
   }
 
+  def select(title: Modifier, options: Rx[Seq[String]])(implicit ctx: Ctx.Owner): FormSelect = {
+    new FormSelect(title, false, options)
+  }
+
   def multipleSelect(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
     new FormSelect(title, true, Rx(options))
+  }
+
+  def multipleSelect(title: Modifier, options: Rx[Seq[String]])(implicit ctx: Ctx.Owner): FormSelect = {
+    new FormSelect(title, true, options)
   }
 
   // Default
