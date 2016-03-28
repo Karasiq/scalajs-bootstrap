@@ -3,9 +3,9 @@ import sbt.Keys._
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.0.4",
+  version := "1.0.5",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -61,13 +61,7 @@ lazy val libraryTestSettings = Seq(
   scalaJsBundlerInline in Compile := true,
   scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in libraryTestFrontend),
   scalaJsBundlerAssets in Compile += {
-    import com.karasiq.scalajsbundler.ScalaJSBundler.PageContent
-    import com.karasiq.scalajsbundler.dsl._
-    def fontPackage(name: String, baseUrl: String): Seq[PageContent] = {
-      Seq("eot", "svg", "ttf", "woff", "woff2").map { ext ⇒
-        Static(s"fonts/$name.$ext") from url(s"$baseUrl.$ext")
-      }
-    }
+    import com.karasiq.scalajsbundler.dsl.{Script, _}
 
     val jsDeps = Seq(
       // jQuery
@@ -81,20 +75,10 @@ lazy val libraryTestSettings = Seq(
       Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")
     )
 
-    val appFiles = Seq(
-      // Static
-      Html from TestPageAssets.index,
-      Style from TestPageAssets.style,
-
-      // Scala.js app
-      Script from file("test") / "frontend" / "target" / "scala-2.11" / "scalajs-bootstrap-test-frontend-opt.js",
-      Script from file("test") / "frontend" / "target" / "scala-2.11" / "scalajs-bootstrap-test-frontend-launcher.js"
-    )
-
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
-    Bundle("index", jsDeps ++ appFiles ++ fonts:_*)
+    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(libraryTestFrontend).value)
   }
 )
 
