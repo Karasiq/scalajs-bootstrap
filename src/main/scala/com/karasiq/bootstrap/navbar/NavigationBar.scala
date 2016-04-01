@@ -2,6 +2,7 @@ package com.karasiq.bootstrap.navbar
 
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.grid.GridSystem
+import com.karasiq.bootstrap.icons.IconModifier.NoIcon
 import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent}
 import org.scalajs.jquery.jQuery
 import rx._
@@ -20,12 +21,12 @@ final class NavigationBar(barId: String, brand: Modifier, styles: Seq[Navigation
 
   private val tabContainer = Rx {
     def renderTab(active: Boolean, tab: NavigationTab): Tag = {
+      val idLink = s"$barId-${tab.id}-tab"
       li(
         tab.modifiers,
         "active".classIf(active),
-        a(href := s"#$barId-${tab.id}-tab", role := "tab", `data-toggle` := "tab")(
-          tab.icon,
-          raw("&nbsp;"),
+        a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
+          if (tab.icon != NoIcon) Seq[Modifier](tab.icon, raw("&nbsp;")) else (),
           tab.name
         )
       )
@@ -57,7 +58,7 @@ final class NavigationBar(barId: String, brand: Modifier, styles: Seq[Navigation
     * @param id Tab ID
     */
   def selectTab(id: String): Unit = {
-    jQuery(s"a[href='#$barId-$id-tab']").tab("show")
+    jQuery(s"a[data-target='#$barId-$id-tab']").tab("show")
   }
 
   /**

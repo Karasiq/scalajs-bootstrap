@@ -2,6 +2,7 @@ package com.karasiq.bootstrap.navbar
 
 import com.karasiq.bootstrap.BootstrapAttrs._
 import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.icons.IconModifier.NoIcon
 import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
 import org.scalajs.dom
 import org.scalajs.jquery.jQuery
@@ -20,7 +21,8 @@ abstract class Navigation(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponen
     def renderTab(tab: NavigationTab): Tag = {
       val idLink = s"$navId-${tab.id}-tab"
       li(role := "presentation", tab.modifiers)(
-        a(aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
+        a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
+          if (tab.icon != NoIcon) Seq[Modifier](tab.icon, raw("&nbsp;")) else (),
           tab.name
         )
       )
@@ -52,7 +54,7 @@ abstract class Navigation(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponen
     * @param id Tab ID
     */
   def selectTab(id: String): Unit = {
-    jQuery(s"a[href='#$navId-$id-tab']").tab("show")
+    jQuery(s"a[data-target='#$navId-$id-tab']").tab("show")
   }
 
   /**
