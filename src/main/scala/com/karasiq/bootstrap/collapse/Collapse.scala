@@ -20,6 +20,6 @@ class Collapse(collapseId: String = Bootstrap.newId) {
 object Collapse {
   def apply(btnTitle: String)(content: Modifier*): Modifier = {
     val c = new Collapse()
-    Seq(c.button(Bootstrap.button(btnTitle)), c.container(Bootstrap.well(content)))
+    Seq(c.button(Bootstrap.button(btnTitle)), c.container(div(content)))
   }
 }

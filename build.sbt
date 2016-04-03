@@ -3,7 +3,7 @@ import sbt.Keys._
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.0.5",
+  version := "1.1.0-SNAPSHOT",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
   publishMavenStyle := true,
@@ -63,22 +63,25 @@ lazy val libraryTestSettings = Seq(
   scalaJsBundlerAssets in Compile += {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
+    val bootstrap = "org.webjars" % "bootstrap" % "4.0.0-alpha.2"
+    val tether = "org.webjars.bower" % "tether" % "1.1.1"
     val jsDeps = Seq(
       // jQuery
       Script from url("https://code.jquery.com/jquery-1.12.0.js"),
 
       // Bootstrap
-      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/css/bootstrap.css"),
-      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/js/bootstrap.js"),
+      Style from tether / "dist/css/tether.css",
+      Style from tether / "dist/css/tether-theme-basic.css",
+      Script from tether / "dist/js/tether.js",
+      Style from bootstrap / "css/bootstrap.css",
+      Script from bootstrap / "js/bootstrap.js",
 
       // Font Awesome
       Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")
     )
 
-    val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
-      fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
-
-    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(libraryTestFrontend).value)
+    val fonts = fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
+    Bundle("index", jsDeps, Html from TestPageAssets.index, fonts, scalaJsApplication(libraryTestFrontend).value)
   }
 )
 

@@ -15,15 +15,20 @@ sealed trait ButtonStyle extends ClassModifier {
   * @see [[https://getbootstrap.com/css/#buttons-options]]
   */
 object ButtonStyle {
-  private final class BasicButtonStyle(name: String) extends ButtonStyle {
+  final class BasicButtonStyle(val name: String) extends ButtonStyle {
     override def styleClass: Option[String] = Some(s"btn-$name")
   }
 
-  def default: ButtonStyle = new BasicButtonStyle("default")
-  def primary: ButtonStyle = new BasicButtonStyle("primary")
-  def success: ButtonStyle = new BasicButtonStyle("success")
-  def info: ButtonStyle = new BasicButtonStyle("info")
-  def warning: ButtonStyle = new BasicButtonStyle("warning")
-  def danger: ButtonStyle = new BasicButtonStyle("danger")
+  final class OutlineButtonStyle(val name: String) extends ButtonStyle {
+    override def styleClass: Option[String] = Some(s"btn-$name-outline")
+  }
+
+  def primary = new BasicButtonStyle("primary")
+  def secondary = new BasicButtonStyle("secondary")
+  def success = new BasicButtonStyle("success")
+  def info = new BasicButtonStyle("info")
+  def warning = new BasicButtonStyle("warning")
+  def danger = new BasicButtonStyle("danger")
   def link: ButtonStyle = new BasicButtonStyle("link")
+  def outline(basic: BasicButtonStyle) = new OutlineButtonStyle(basic.name)
 }

@@ -2,9 +2,9 @@ package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.BootstrapImplicits.RxNode
 import com.karasiq.bootstrap.buttons._
-import com.karasiq.bootstrap.icons.{BootstrapGlyphicon, FontAwesome, FontAwesomeIcon, IconModifier}
+import com.karasiq.bootstrap.icons.{FontAwesome, FontAwesomeIcon, IconModifier}
 import org.scalajs.dom
-import org.scalajs.dom.{DOMList, Element, html}
+import org.scalajs.dom.{DOMList, Element}
 import org.scalajs.jquery.JQuery
 import rx._
 
@@ -114,16 +114,12 @@ object BootstrapImplicits {
 
   implicit class RxStateOps(val state: Rx[Boolean])(implicit ctx: Ctx.Owner) {
     def reactiveShow: Modifier = {
-      var oldDisplay = "block"
-      state.reactiveWrite { (e, state) ⇒
-        val htmlElement = e.asInstanceOf[html.Element]
-        if (!state) {
-          oldDisplay = htmlElement.style.display
-          htmlElement.style.display = "none"
-        } else if (htmlElement.style.display == "none") {
-          htmlElement.style.display = oldDisplay
-        }
-      }
+      state.reactiveWrite((e, state) ⇒ {
+        if (state)
+          e.removeAttribute("hidden")
+        else
+          e.setAttribute("hidden", "hidden")
+      })
     }
 
     def reactiveHide: Modifier = {
@@ -164,11 +160,12 @@ object BootstrapImplicits {
   }
 
   implicit class BootstrapIconsOps(val iconName: String) extends AnyVal {
-    def glyphicon: BootstrapGlyphicon = BootstrapGlyphicon(iconName)
     def fontAwesome(styles: Modifier*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
   }
 
-  implicit def stringToBootstrapIcons(str: String): IconModifier = str.glyphicon
+  implicit def stringToBootstrapIcon(str: String): IconModifier = {
+    Bootstrap.icon(str)
+  }
 
   //noinspection MutatorLikeMethodIsParameterless
   implicit class HtmlClassOps(val className: String) extends AnyVal {

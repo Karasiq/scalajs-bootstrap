@@ -2,7 +2,7 @@ package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.buttons.Button
-import com.karasiq.bootstrap.icons.BootstrapGlyphicon
+import com.karasiq.bootstrap.icons.{FontAwesome, IconModifier}
 import org.scalajs.dom
 import org.scalajs.dom.raw.{Event, MouseEvent}
 
@@ -12,24 +12,9 @@ import scalatags.JsDom.all._
 object Bootstrap {
   /**
     * Jumbotron
-    *
     * @see [[https://getbootstrap.com/components/#jumbotron]]
     */
   def jumbotron: ConcreteHtmlTag[dom.html.Div] = div("jumbotron".addClass)
-
-  /**
-    * Well
-    *
-    * @see [[https://getbootstrap.com/components/#wells]]
-    */
-  def well: ConcreteHtmlTag[dom.html.Div] = div("well".addClass)
-
-  /**
-    * Badge
-    *
-    * @see [[https://getbootstrap.com/components/#badges]]
-    */
-  def badge: ConcreteHtmlTag[dom.html.Span] = span("badge".addClass)
 
   /**
     * Default button
@@ -37,12 +22,19 @@ object Bootstrap {
   def button: ConcreteHtmlTag[dom.html.Button] = Button()
 
   /**
-    * Glyphicon
-    * @param name Icon name
-    * @see [[https://getbootstrap.com/components/#glyphicons]]
+    * Blockquote
     */
-  def icon(name: String): BootstrapGlyphicon = {
-    new BootstrapGlyphicon(name)
+  def blockquote(inverse: Boolean = false): Tag = {
+    val tag = "blockquote".tag
+    tag(if (inverse) "blockquote-inverse".addClass else "blockquote".addClass)
+  }
+
+  /**
+    * Font awesome icon with fixed width
+    * @param name Icon name
+    */
+  def icon(name: String): IconModifier = {
+    name.fontAwesome(FontAwesome.fixedWidth)
   }
 
   private var idCounter: Int = 0

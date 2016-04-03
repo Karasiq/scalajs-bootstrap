@@ -12,8 +12,10 @@ object TableStyle {
     override def classMod: Modifier = s"table-$st".addClass
   }
 
-  def striped: TableStyle = style("striped")
-  def hover: TableStyle = style("hover")
-  def bordered: TableStyle = style("bordered")
-  def condensed: TableStyle = style("condensed")
+  def striped = style("striped")
+  def hover = style("hover")
+  def bordered = style("bordered")
+  def small = style("sm")
+  def inverse = style("inverse")
+  def reflow = style("reflow")
 }

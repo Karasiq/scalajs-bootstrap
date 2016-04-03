@@ -13,8 +13,13 @@ sealed abstract class ProgressBar(implicit ctx: Ctx.Owner) extends BootstrapHtml
   def progress: Rx[Int]
 
   override def renderTag(md: Modifier*): RenderedTag = {
-    div("progress".addClass)(
-      div("progress-bar".addClass, role := "progressbar", Rx[AutoModifier](aria.valuenow := progress()), aria.valuemin := 0, aria.valuemax := 100, Rx[AutoModifier](width := progress().pct), content, md)
+    val progressTag = "progress".tag
+    progressTag(
+      `class` := "progress",
+      Rx[AutoModifier](value := progress()),
+      max := 100,
+      Rx(s"${progress()}%"),
+      md
     )
   }
 }

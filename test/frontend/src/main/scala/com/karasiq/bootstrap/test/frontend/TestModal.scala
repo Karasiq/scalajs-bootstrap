@@ -5,7 +5,6 @@ import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.form.{Form, FormInput, FormInputGroup}
 import com.karasiq.bootstrap.icons.FontAwesome
 import com.karasiq.bootstrap.modal.Modal
-import org.scalajs.dom
 import org.scalajs.dom.window
 import rx._
 

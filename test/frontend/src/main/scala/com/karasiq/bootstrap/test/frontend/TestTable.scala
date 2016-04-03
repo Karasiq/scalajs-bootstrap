@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap.test.frontend
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableStyle}
+import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableRowStyle, TableStyle}
 import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent}
 import rx._
 
@@ -14,7 +14,7 @@ final class TestTable(implicit ctx: Ctx.Owner) extends BootstrapComponent {
     val heading = Var(Seq[Modifier]("First", "Second", "Third"))
     val content = Var(for (i <- 1 to 45) yield TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := Bootstrap.jsClick { row ⇒
       reactiveColumn.update(reactiveColumn.now + 1)
-      row.classList.add("success")
+      TableRowStyle.success.applyTo(row)
     }))
 
     // Render table

@@ -10,7 +10,8 @@ import scalatags.JsDom.all._
 class Pagination(pages: Rx[Int], currentPage: Var[Int])(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   private def previousPageButton: Tag = {
     li(
-      a(href := "#", aria.label := "Previous", onclick := Bootstrap.jsClick { _ ⇒
+      "page-item".addClass,
+      a("page-link".addClass, href := "#", aria.label := "Previous", onclick := Bootstrap.jsClick { _ ⇒
         if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
       }, span(aria.hidden := true, raw("&laquo;"))),
       "disabled".classIf(Rx(currentPage() == 1))
@@ -19,7 +20,8 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int])(implicit ctx: Ctx.Owner)
 
   private def nextPageButton: Tag = {
     li(
-      a(href := "#", aria.label := "Next", onclick := Bootstrap.jsClick { _ ⇒
+      "page-item".addClass,
+      a("page-link".addClass, href := "#", aria.label := "Next", onclick := Bootstrap.jsClick { _ ⇒
         if (currentPage.now < pages.now) currentPage.update(currentPage.now + 1)
       }, span(aria.hidden := true, raw("&raquo;"))),
       "disabled".classIf(Rx(currentPage() == pages()))
@@ -28,8 +30,9 @@ class Pagination(pages: Rx[Int], currentPage: Var[Int])(implicit ctx: Ctx.Owner)
 
   private def pageButton(page: Int): Tag = {
     li(
-      "active".classIf(Rx(page == currentPage())),
-      a(href := "#", onclick := Bootstrap.jsClick(_ ⇒ currentPage.update(page)), page)
+      "page-item".addClass,
+      a("page-link".addClass, href := "#", onclick := Bootstrap.jsClick(_ ⇒ currentPage.update(page)), page),
+      "active".classIf(Rx(page == currentPage()))
     )
   }
 

@@ -2,7 +2,9 @@ package com.karasiq.bootstrap.navbar
 
 import com.karasiq.bootstrap.BootstrapAttrs._
 import com.karasiq.bootstrap.BootstrapImplicits._
+import com.karasiq.bootstrap.icons.IconModifier
 import com.karasiq.bootstrap.icons.IconModifier.NoIcon
+import com.karasiq.bootstrap.navbar.Navigation.Tab
 import com.karasiq.bootstrap.{Bootstrap, BootstrapHtmlComponent}
 import org.scalajs.dom
 import org.scalajs.jquery.jQuery
@@ -15,13 +17,13 @@ abstract class Navigation(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponen
 
   def navType: String
 
-  def content: Rx[Seq[NavigationTab]]
+  def content: Rx[Seq[Tab]]
 
   private def tabContainer = Rx {
-    def renderTab(tab: NavigationTab): Tag = {
+    def renderTab(tab: Tab): Tag = {
       val idLink = s"$navId-${tab.id}-tab"
-      li(role := "presentation", tab.modifiers)(
-        a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
+      li("nav-item".addClass, role := "presentation", tab.modifiers)(
+        a("nav-link".addClass, href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
           if (tab.icon != NoIcon) Seq[Modifier](tab.icon, raw("&nbsp;")) else (),
           tab.name
         )
@@ -36,7 +38,7 @@ abstract class Navigation(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponen
   }
 
   private def tabContentContainer = Rx {
-    def renderPanel(t: NavigationTab): Tag = {
+    def renderPanel(t: Tab): Tag = {
       div(role := "tabpanel", "tab-pane".addClass, "fade".addClass, id := s"$navId-${t.id}-tab")(
         t.content
       )
@@ -73,23 +75,25 @@ abstract class Navigation(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponen
 }
 
 object Navigation {
-  def tabs(tabs: NavigationTab*)(implicit ctx: Ctx.Owner): Navigation = {
+  case class Tab(name: String, id: String, icon: IconModifier, content: Modifier, modifiers: Modifier*)
+
+  def tabs(tabs: Tab*)(implicit ctx: Ctx.Owner): Navigation = {
     new Navigation {
       override val navId: String = Bootstrap.newId
 
       override val navType: String = "tabs"
 
-      override val content: Rx[Seq[NavigationTab]] = Rx(tabs)
+      override val content: Rx[Seq[Tab]] = Rx(tabs)
     }
   }
 
-  def pills(tabs: NavigationTab*)(implicit ctx: Ctx.Owner): Navigation = {
+  def pills(tabs: Tab*)(implicit ctx: Ctx.Owner): Navigation = {
     new Navigation {
       override val navId: String = Bootstrap.newId
 
       override val navType: String = "pills"
 
-      override val content: Rx[Seq[NavigationTab]] = Rx(tabs)
+      override val content: Rx[Seq[Tab]] = Rx(tabs)
     }
   }
 }

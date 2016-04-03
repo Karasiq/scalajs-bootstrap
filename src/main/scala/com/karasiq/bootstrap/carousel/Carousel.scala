@@ -33,8 +33,8 @@ sealed abstract class Carousel(implicit ctx: Ctx.Owner) extends BootstrapCompone
   private def slides = Rx {
     val data = content()
     div(`class` := "carousel-inner", role := "listbox")(
-      div(`class` := "item active", data.head),
-      for (slide <- data.tail) yield div(`class` := "item", slide)
+      div("carousel-item".addClass, "active".addClass, data.head),
+      for (slide <- data.tail) yield div("carousel-item".addClass, slide)
     )
   }
 
@@ -43,11 +43,11 @@ sealed abstract class Carousel(implicit ctx: Ctx.Owner) extends BootstrapCompone
       indicators,
       slides,
       a(`class` := "left carousel-control", href := s"#$carouselId-carousel", role := "button", `data-slide` := "prev")(
-        Bootstrap.icon("chevron-left"),
+        "chevron-left".fontAwesome(),
         span(`class` := "sr-only", "Previous")
       ),
       a(`class` := "right carousel-control", href := s"#$carouselId-carousel", role := "button", `data-slide` := "next")(
-        Bootstrap.icon("chevron-right"),
+        "chevron-right".fontAwesome(),
         span(`class` := "sr-only", "Next")
       )
     )

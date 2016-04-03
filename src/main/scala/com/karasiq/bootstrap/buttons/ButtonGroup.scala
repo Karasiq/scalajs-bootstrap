@@ -40,5 +40,4 @@ object ButtonGroupSize {
 
   def large: ButtonGroupSize = new BasicButtonGroupSize("lg")
   def small: ButtonGroupSize = new BasicButtonGroupSize("sm")
-  def extraSmall: ButtonGroupSize = new BasicButtonGroupSize("xs")
 }

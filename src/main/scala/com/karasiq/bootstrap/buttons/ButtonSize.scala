@@ -25,5 +25,4 @@ object ButtonSize {
 
   def large: ButtonSize = new BasicButtonSize("lg")
   def small: ButtonSize = new BasicButtonSize("sm")
-  def extraSmall: ButtonSize = new BasicButtonSize("xs")
 }

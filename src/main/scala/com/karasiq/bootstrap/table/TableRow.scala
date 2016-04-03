@@ -7,25 +7,24 @@ import scalatags.JsDom.all._
 
 trait TableRow {
   def columns: Seq[Modifier]
-
   def modifiers: Modifier
-}
-
-sealed trait TableRowStyle extends ClassModifier {
-  def styleClass: Option[String]
-
-  override final def classMod: Modifier = styleClass.map(_.addClass)
 }
 
 object TableRow {
   def apply(data: Seq[Modifier], ms: Modifier*): TableRow = new TableRow {
     override def modifiers: Modifier = ms
-
     override def columns: Seq[Modifier] = data
   }
+}
 
-  private def style(s: String): TableRowStyle = new TableRowStyle {
-    override def styleClass: Option[String] = Some(s)
+sealed trait TableRowStyle extends ClassModifier {
+  def styleClass: Option[String]
+  override final def classMod: Modifier = styleClass.map(_.addClass)
+}
+
+object TableRowStyle {
+  private def style(name: String): TableRowStyle = new TableRowStyle {
+    override def styleClass: Option[String] = Some(s"table-$name")
   }
 
   def default = new TableRowStyle {

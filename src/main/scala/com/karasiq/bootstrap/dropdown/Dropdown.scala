@@ -14,7 +14,7 @@ private[dropdown] final class Dropdown(title: Modifier, dropdownId: String, item
         raw("&nbsp"),
         span(`class` := "caret")
       ),
-      ul(`class` := "dropdown-menu", aria.labelledby := dropdownId)(
+      div("dropdown-menu".addClass, aria.labelledby := dropdownId)(
         items
       )
     )
@@ -29,7 +29,7 @@ object Dropdown {
   }
 
   def link(target: String, md: Modifier*): Tag = {
-    li(a(href := target, md))
+    a(`class` := "dropdown-item", href := target, md)
   }
 
   def apply(title: Modifier, items: Modifier*): Tag = {

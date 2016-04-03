@@ -12,6 +12,7 @@ final class ToggleButton(btn: ConcreteHtmlTag[dom.html.Button])(implicit ctx: Ct
 
   override def renderTag(md: Modifier*): RenderedTag = {
     btn(
+      state.reactiveWrite((e, state) ⇒ e.setAttribute("aria-pressed", state.toString)),
       "active".classIf(state),
       onclick := Bootstrap.jsClick { _ ⇒
         state.update(!state.now)
