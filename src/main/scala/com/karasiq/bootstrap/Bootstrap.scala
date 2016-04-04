@@ -30,6 +30,16 @@ object Bootstrap {
   }
 
   /**
+    * Breadcrumb
+    */
+  def breadcrumb(content: Modifier*): Tag = {
+    ol(`class` := "breadcrumb",
+      for (c ← content.dropRight(1)) yield li(c),
+      for (c ← content.takeRight(1)) yield li(`class` := "active", c)
+    )
+  }
+
+  /**
     * Font awesome icon with fixed width
     * @param name Icon name
     */
