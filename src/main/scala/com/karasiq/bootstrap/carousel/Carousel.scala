@@ -43,25 +43,25 @@ sealed abstract class Carousel(implicit ctx: Ctx.Owner) extends BootstrapCompone
       indicators,
       slides,
       a(`class` := "left carousel-control", href := s"#$carouselId-carousel", role := "button", `data-slide` := "prev")(
-        "chevron-left".fontAwesome(),
+        span(`class` := "icon-prev", aria.hidden := true),
         span(`class` := "sr-only", "Previous")
       ),
       a(`class` := "right carousel-control", href := s"#$carouselId-carousel", role := "button", `data-slide` := "next")(
-        "chevron-right".fontAwesome(),
+        span(`class` := "icon-next", aria.hidden := true),
         span(`class` := "sr-only", "Next")
       )
     )
   }
 
   def create(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true, modifiers: Modifier = ()): Element = {
-    val e = carousel(modifiers).render
+    val element = carousel(modifiers).render
     val options = js.Object().asInstanceOf[CarouselOptions]
     options.interval = interval
     options.pause = pause
     options.wrap = wrap
     options.keyboard = keyboard
-    jQuery(e).carousel(options)
-    e
+    jQuery(element).carousel(options)
+    element
   }
 
   override def render(md: Modifier*): Modifier = {
