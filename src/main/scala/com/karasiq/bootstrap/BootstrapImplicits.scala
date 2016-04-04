@@ -2,7 +2,7 @@ package com.karasiq.bootstrap
 
 import com.karasiq.bootstrap.BootstrapImplicits.RxNode
 import com.karasiq.bootstrap.buttons._
-import com.karasiq.bootstrap.icons.{BootstrapGlyphicon, FontAwesome, FontAwesomeIcon, IconModifier}
+import com.karasiq.bootstrap.icons._
 import org.scalajs.dom
 import org.scalajs.dom.{DOMList, Element, html}
 import org.scalajs.jquery.JQuery
@@ -165,7 +165,7 @@ object BootstrapImplicits {
 
   implicit class BootstrapIconsOps(val iconName: String) extends AnyVal {
     def glyphicon: BootstrapGlyphicon = BootstrapGlyphicon(iconName)
-    def fontAwesome(styles: Modifier*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
+    def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
   }
 
   implicit def stringToBootstrapIcons(str: String): IconModifier = str.glyphicon
