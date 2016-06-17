@@ -15,7 +15,7 @@ class Popover(title: String, content: Modifier, placement: TooltipPlacement) ext
       val options = js.Object().asInstanceOf[PopoverOptions]
       options.html = true
       options.title = title
-      options.content = div(content).render.innerHTML
+      options.content = div(content).render
       jQuery(t).popover(options)
     }
   }
