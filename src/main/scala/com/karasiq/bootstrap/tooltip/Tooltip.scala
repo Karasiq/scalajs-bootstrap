@@ -8,20 +8,21 @@ import org.scalajs.jquery.jQuery
 import scala.scalajs.js
 import scalatags.JsDom.all._
 
-class Tooltip(content: Modifier, placement: TooltipPlacement) extends BootstrapComponent {
+final class Tooltip(options: TooltipOptions) extends BootstrapComponent {
   override def render(md: Modifier*): Modifier = new Modifier {
     override def applyTo(t: Element): Unit = {
-      val options = js.Object().asInstanceOf[TooltipOptions]
-      options.html = true
-      options.title = div(content).render
-      options.placement = placement.asString
       jQuery(t).tooltip(options)
+      md.foreach(_.applyTo(t))
     }
   }
 }
 
 object Tooltip {
-  def apply(content: Modifier, placement: TooltipPlacement = TooltipPlacement.auto): Tooltip = {
-    new Tooltip(content, placement)
+  def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Tooltip = {
+    val options = js.Object().asInstanceOf[TooltipOptions]
+    options.html = true
+    options.title = content.render
+    options.placement = placement.asString
+    new Tooltip(options)
   }
 }

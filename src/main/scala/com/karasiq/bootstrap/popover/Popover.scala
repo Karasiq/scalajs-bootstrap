@@ -9,21 +9,22 @@ import org.scalajs.jquery.jQuery
 import scala.scalajs.js
 import scalatags.JsDom.all._
 
-class Popover(title: String, content: Modifier, placement: TooltipPlacement) extends BootstrapComponent {
+final class Popover(options: PopoverOptions) extends BootstrapComponent {
   override def render(md: Modifier*): Modifier = new Modifier {
     override def applyTo(t: Element): Unit = {
-      val options = js.Object().asInstanceOf[PopoverOptions]
-      options.html = true
-      options.title = title
-      options.content = div(content).render
-      options.placement = placement.asString
       jQuery(t).popover(options)
+      md.foreach(_.applyTo(t))
     }
   }
 }
 
 object Popover {
-  def apply(title: String, content: Modifier, placement: TooltipPlacement = TooltipPlacement.auto): Popover = {
-    new Popover(title, content, placement)
+  def apply(title: String, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Popover = {
+    val options = js.Object().asInstanceOf[PopoverOptions]
+    options.html = true
+    options.title = title
+    options.content = content.render
+    options.placement = placement.asString
+    new Popover(options)
   }
 }
