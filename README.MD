@@ -4,7 +4,7 @@ Reactive [Scala.js](http://www.scala-js.org/) [bootstrap](https://getbootstrap.c
 # How to use
 Add line to your `build.sbt` (also requires `bootstrap.css` and `bootstrap.js` at runtime):
 ```scala
-libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "1.0.6"
+libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "1.0.7"
 ```
 
 # Examples
