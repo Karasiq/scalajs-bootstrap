@@ -16,6 +16,7 @@ class Popover(title: String, content: Modifier, placement: TooltipPlacement) ext
       options.html = true
       options.title = title
       options.content = div(content).render
+      options.placement = placement.asString
       jQuery(t).popover(options)
     }
   }
