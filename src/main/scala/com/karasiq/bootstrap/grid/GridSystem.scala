@@ -27,15 +27,46 @@ object GridSystem {
       require(modifier.nonEmpty && size <= 12 && size > 0, "Invalid grid column properties")
       override def classMod: Modifier = s"col-$modifier-$size".addClass
     }
-    def xs(size: Int): GridColSize = colModifier("xs", size)
-    def sm(size: Int): GridColSize = colModifier("sm", size)
-    def md(size: Int): GridColSize = colModifier("md", size)
-    def lg(size: Int): GridColSize = colModifier("lg", size)
+    def xs(size: Int) = colModifier("xs", size)
+    def sm(size: Int) = colModifier("sm", size)
+    def md(size: Int) = colModifier("md", size)
+    def lg(size: Int) = colModifier("lg", size)
 
     def responsive(xsSize: Int, smSize: Int, mdSize: Int, lgSize: Int): GridColSize = new GridColSize {
       override def classMod: Modifier = Seq(xs(xsSize), sm(smSize), md(mdSize), lg(lgSize))
     }
 
     def apply(size: Int): GridColSize = this.responsive(size, size, size, size)
+  }
+
+  object hidden {
+    sealed trait GridHiddenModifier extends ClassModifier
+    private implicit def gridHidden(size: String): GridHiddenModifier = new GridHiddenModifier {
+      def classMod = s"hidden-$size".addClass
+    }
+
+    val xs: GridHiddenModifier = "xs"
+    val sm: GridHiddenModifier = "sm"
+    val md: GridHiddenModifier = "md"
+    val lg: GridHiddenModifier = "lg"
+  }
+
+  object visible {
+    sealed trait GridVisibleModifier extends ClassModifier
+    private def gridVisibleOn(size: String, as: String): GridVisibleModifier = new GridVisibleModifier {
+      def classMod = s"visible-$size-$as"
+    }
+
+    sealed class GridVisibility(size: String) {
+      def block = gridVisibleOn(size, "block")
+      def inline = gridVisibleOn(size, "inline")
+      def `inline-block` = gridVisibleOn(size, "inline-block")
+      def apply() = block // Default
+    }
+
+    val xs = new GridVisibility("xs")
+    val sm = new GridVisibility("sm")
+    val md = new GridVisibility("md")
+    val lg = new GridVisibility("lg")
   }
 }
