@@ -54,7 +54,7 @@ object GridSystem {
   object visible {
     sealed trait GridVisibleModifier extends ClassModifier
     private def gridVisibleOn(size: String, as: String): GridVisibleModifier = new GridVisibleModifier {
-      def classMod = s"visible-$size-$as"
+      def classMod = s"visible-$size-$as".addClass
     }
 
     sealed class GridVisibility(size: String) {
