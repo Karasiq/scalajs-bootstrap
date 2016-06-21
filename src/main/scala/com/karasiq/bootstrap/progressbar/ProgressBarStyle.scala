@@ -1,15 +1,15 @@
 package com.karasiq.bootstrap.progressbar
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
-sealed trait ProgressBarStyle extends ClassModifier
+sealed trait ProgressBarStyle extends ModifierFactory
 
 object ProgressBarStyle {
   private def style(s: String): ProgressBarStyle = new ProgressBarStyle {
-    override def classMod: Modifier = s"progress-bar-$s".addClass
+    override def createModifier: Modifier = s"progress-bar-$s".addClass
   }
 
   def success: ProgressBarStyle = style("success")
@@ -19,6 +19,6 @@ object ProgressBarStyle {
 
   def striped: ProgressBarStyle = style("striped")
   def animated: ProgressBarStyle = new ProgressBarStyle {
-    override def classMod: Modifier = "active".addClass
+    override def createModifier: Modifier = "active".addClass
   }
 }

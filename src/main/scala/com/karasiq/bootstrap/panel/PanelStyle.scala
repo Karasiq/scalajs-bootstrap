@@ -1,14 +1,14 @@
 package com.karasiq.bootstrap.panel
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
-sealed trait PanelStyle extends ClassModifier {
+sealed trait PanelStyle extends ModifierFactory {
   def styleClass: Option[String]
 
-  override def classMod: Modifier = styleClass.classOpt
+  override def createModifier: Modifier = styleClass.classOpt
 }
 
 object PanelStyle {

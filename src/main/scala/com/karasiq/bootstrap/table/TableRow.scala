@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap.table
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
@@ -11,10 +11,10 @@ trait TableRow {
   def modifiers: Modifier
 }
 
-sealed trait TableRowStyle extends ClassModifier {
+sealed trait TableRowStyle extends ModifierFactory {
   def styleClass: Option[String]
 
-  override final def classMod: Modifier = styleClass.map(_.addClass)
+  override final def createModifier: Modifier = styleClass.map(_.addClass)
 }
 
 object TableRow {

@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap.buttons
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.{BootstrapHtmlComponent, ClassModifier}
+import com.karasiq.bootstrap.{BootstrapHtmlComponent, ModifierFactory}
 import org.scalajs.dom
 import org.scalajs.dom.html.Div
 
@@ -23,10 +23,10 @@ case class ButtonToolbar(buttonGroups: ButtonGroup*) extends BootstrapHtmlCompon
   }
 }
 
-sealed trait ButtonGroupSize extends ClassModifier {
+sealed trait ButtonGroupSize extends ModifierFactory {
   def sizeClass: Option[String]
 
-  override def classMod: Modifier = sizeClass.classOpt
+  override def createModifier: Modifier = sizeClass.classOpt
 }
 
 object ButtonGroupSize {

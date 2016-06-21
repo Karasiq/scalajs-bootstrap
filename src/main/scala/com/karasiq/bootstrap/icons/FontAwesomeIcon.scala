@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap.icons
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.{BootstrapHtmlComponent, ClassModifier}
+import com.karasiq.bootstrap.{BootstrapHtmlComponent, ModifierFactory}
 import org.scalajs.dom
 
 import scala.language.implicitConversions
@@ -13,7 +13,9 @@ final class FontAwesomeIcon(name: String, styles: Seq[FontAwesomeStyle]) extends
   }
 }
 
-sealed trait FontAwesomeStyle extends ClassModifier
+final class FontAwesomeStyle private[icons] (style: String) extends ModifierFactory {
+  override def createModifier: Modifier = s"fa-$style".addClass
+}
 
 /**
   * @see [[https://fortawesome.github.io/Font-Awesome/examples]]
@@ -23,8 +25,8 @@ object FontAwesome {
     new FontAwesomeIcon(name, styles)
   }
 
-  private implicit def style(str: String): FontAwesomeStyle = new FontAwesomeStyle {
-    override def classMod: Modifier = s"fa-$str".addClass
+  private implicit def style(str: String): FontAwesomeStyle = {
+    new FontAwesomeStyle(str)
   }
 
   def inverse: FontAwesomeStyle = "inverse"
