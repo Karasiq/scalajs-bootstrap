@@ -57,11 +57,11 @@ object GridSystem {
       def createModifier = s"visible-$size-$as".addClass
     }
 
-    final class GridVisibility private[grid](size: String) {
+    final class GridVisibility private[grid](size: String) extends ModifierFactory {
       def block = new GridVisibleModifier(size, "block")
       def inline = new GridVisibleModifier(size, "inline")
       def `inline-block` = new GridVisibleModifier(size, "inline-block")
-      def apply() = block // Default
+      def createModifier = block.createModifier // Default
     }
 
     val xs = new GridVisibility("xs")
