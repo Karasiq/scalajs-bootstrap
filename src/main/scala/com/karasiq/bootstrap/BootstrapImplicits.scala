@@ -28,7 +28,7 @@ object BootstrapImplicits {
     jq.asInstanceOf[BootstrapJQuery]
   }
 
-  implicit class ButtonOps(val button: HtmlButton) extends AnyVal {
+  implicit class ButtonOps(private val button: HtmlButton) extends AnyVal {
     def toggleButton(implicit ctx: Ctx.Owner): ToggleButton = new ToggleButton(button)
     def disabledButton(implicit ctx: Ctx.Owner): DisabledButton = new DisabledButton(button)
   }
@@ -112,7 +112,7 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class RxStateOps(val state: Rx[Boolean])(implicit ctx: Ctx.Owner) {
+  implicit class RxStateOps(private val state: Rx[Boolean])(implicit ctx: Ctx.Owner) {
     def reactiveShow: Modifier = {
       var oldDisplay = "block"
       state.reactiveWrite { (e, state) ⇒
@@ -155,7 +155,7 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class HtmlClassOptOps(val className: Option[String]) extends AnyVal {
+  implicit class HtmlClassOptOps(private val className: Option[String]) extends AnyVal {
     def classOpt: Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         className.foreach(t.classList.add)
@@ -163,7 +163,7 @@ object BootstrapImplicits {
     }
   }
 
-  implicit class BootstrapIconsOps(val iconName: String) extends AnyVal {
+  implicit class BootstrapIconsOps(private val iconName: String) extends AnyVal {
     def glyphicon: BootstrapGlyphicon = BootstrapGlyphicon(iconName)
     def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
   }
@@ -171,7 +171,7 @@ object BootstrapImplicits {
   implicit def stringToBootstrapIcons(str: String): IconModifier = str.glyphicon
 
   //noinspection MutatorLikeMethodIsParameterless
-  implicit class HtmlClassOps(val className: String) extends AnyVal {
+  implicit class HtmlClassOps(private val className: String) extends AnyVal {
     def addClass: Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         t.classList.add(className)

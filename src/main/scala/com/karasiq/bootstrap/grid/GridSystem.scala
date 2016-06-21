@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap.grid
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 import org.scalajs.dom
 
 import scalatags.JsDom.all._
@@ -19,31 +19,32 @@ object GridSystem {
   }
 
   object col {
-    sealed trait GridColSize extends ClassModifier {
-      final def asDiv: ConcreteHtmlTag[dom.html.Div] = div(this.classMod)
+    sealed trait GridColSize extends ModifierFactory {
+      final def asDiv: ConcreteHtmlTag[dom.html.Div] = div(this.createModifier)
     }
 
-    private def colModifier(modifier: String, size: Int): GridColSize = new GridColSize {
+    private def singleColSize(modifier: String, size: Int): GridColSize = new GridColSize {
       require(modifier.nonEmpty && size <= 12 && size > 0, "Invalid grid column properties")
-      override def classMod: Modifier = s"col-$modifier-$size".addClass
+      override def createModifier: Modifier = s"col-$modifier-$size".addClass
     }
-    def xs(size: Int) = colModifier("xs", size)
-    def sm(size: Int) = colModifier("sm", size)
-    def md(size: Int) = colModifier("md", size)
-    def lg(size: Int) = colModifier("lg", size)
+    def xs(size: Int) = singleColSize("xs", size)
+    def sm(size: Int) = singleColSize("sm", size)
+    def md(size: Int) = singleColSize("md", size)
+    def lg(size: Int) = singleColSize("lg", size)
 
     def responsive(xsSize: Int, smSize: Int, mdSize: Int, lgSize: Int): GridColSize = new GridColSize {
-      override def classMod: Modifier = Seq(xs(xsSize), sm(smSize), md(mdSize), lg(lgSize))
+      override def createModifier: Modifier = Seq(xs(xsSize), sm(smSize), md(mdSize), lg(lgSize))
     }
 
     def apply(size: Int): GridColSize = this.responsive(size, size, size, size)
   }
 
   object hidden {
-    sealed trait GridHiddenModifier extends ClassModifier
-    private implicit def gridHidden(size: String): GridHiddenModifier = new GridHiddenModifier {
-      def classMod = s"hidden-$size".addClass
+    final class GridHiddenModifier private[grid] (size: String) extends ModifierFactory {
+      def createModifier = s"hidden-$size".addClass
     }
+
+    private implicit def gridHidden(size: String): GridHiddenModifier = new GridHiddenModifier(size)
 
     val xs: GridHiddenModifier = "xs"
     val sm: GridHiddenModifier = "sm"
@@ -52,15 +53,14 @@ object GridSystem {
   }
 
   object visible {
-    sealed trait GridVisibleModifier extends ClassModifier
-    private def gridVisibleOn(size: String, as: String): GridVisibleModifier = new GridVisibleModifier {
-      def classMod = s"visible-$size-$as".addClass
+    final class GridVisibleModifier private[grid] (size: String, as: String) extends ModifierFactory {
+      def createModifier = s"visible-$size-$as".addClass
     }
 
-    sealed class GridVisibility(size: String) {
-      def block = gridVisibleOn(size, "block")
-      def inline = gridVisibleOn(size, "inline")
-      def `inline-block` = gridVisibleOn(size, "inline-block")
+    final class GridVisibility private[grid](size: String) {
+      def block = new GridVisibleModifier(size, "block")
+      def inline = new GridVisibleModifier(size, "inline")
+      def `inline-block` = new GridVisibleModifier(size, "inline-block")
       def apply() = block // Default
     }
 

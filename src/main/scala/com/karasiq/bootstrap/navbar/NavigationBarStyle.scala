@@ -1,19 +1,19 @@
 package com.karasiq.bootstrap.navbar
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 
-sealed trait NavigationBarStyle extends ClassModifier
+final class NavigationBarStyle private[navbar](style: String) extends ModifierFactory {
+  def createModifier = s"navbar-$style".addClass
+}
 
 object NavigationBarStyle {
-  private def style(className: String): NavigationBarStyle = new NavigationBarStyle {
-    def classMod = s"navbar-$className".addClass
-  }
+  // Style
+  def default = new NavigationBarStyle("default")
+  def inverse = new NavigationBarStyle("inverse")
 
-  def default = style("default")
-  def inverse = style("inverse")
-
-  def fixedTop = style("fixed-top")
-  def fixedBottom = style("fixed-bottom")
-  def staticTop = style("static-top")
+  // Position
+  def fixedTop = new NavigationBarStyle("fixed-top")
+  def fixedBottom = new NavigationBarStyle("fixed-bottom")
+  def staticTop = new NavigationBarStyle("static-top")
 }

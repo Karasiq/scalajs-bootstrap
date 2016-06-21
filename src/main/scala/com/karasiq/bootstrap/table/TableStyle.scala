@@ -1,19 +1,17 @@
 package com.karasiq.bootstrap.table
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
-sealed trait TableStyle extends ClassModifier
+final class TableStyle private[table] (style: String) extends ModifierFactory {
+  override def createModifier: Modifier = s"table-$style".addClass
+}
 
 object TableStyle {
-  private def style(st: String): TableStyle = new TableStyle {
-    override def classMod: Modifier = s"table-$st".addClass
-  }
-
-  def striped: TableStyle = style("striped")
-  def hover: TableStyle = style("hover")
-  def bordered: TableStyle = style("bordered")
-  def condensed: TableStyle = style("condensed")
+  def striped = new TableStyle("striped")
+  def hover = new TableStyle("hover")
+  def bordered = new TableStyle("bordered")
+  def condensed = new TableStyle("condensed")
 }

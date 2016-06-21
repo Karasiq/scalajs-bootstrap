@@ -19,10 +19,10 @@ trait BootstrapHtmlComponent[T <: dom.Element] extends BootstrapComponent {
   }
 }
 
-trait ClassModifier extends Modifier {
-  def classMod: Modifier
+trait ModifierFactory extends Modifier {
+  def createModifier: Modifier
 
   override def applyTo(t: Element): Unit = {
-    classMod.applyTo(t)
+    createModifier.applyTo(t)
   }
 }

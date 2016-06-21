@@ -1,19 +1,17 @@
 package com.karasiq.bootstrap.alert
 
 import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ClassModifier
+import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
-sealed trait AlertStyle extends ClassModifier
+final class AlertStyle private[alert] (name: String) extends ModifierFactory {
+  override def createModifier: Modifier = s"alert-$name".addClass
+}
 
 object AlertStyle {
-  private def style(name: String): AlertStyle = new AlertStyle {
-    override def classMod: Modifier = s"alert-$name".addClass
-  }
-
-  def success: AlertStyle = style("success")
-  def info: AlertStyle = style("info")
-  def warning: AlertStyle = style("warning")
-  def danger: AlertStyle = style("danger")
+  def success = new AlertStyle("success")
+  def info = new AlertStyle("info")
+  def warning = new AlertStyle("warning")
+  def danger = new AlertStyle("danger")
 }
