@@ -9,7 +9,7 @@ import scalatags.JsDom.all._
 
 case class ButtonGroup(size: ButtonGroupSize, buttons: Modifier*) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): ConcreteHtmlTag[Div] = {
-    div((Seq("btn-group") ++ size.sizeClass).map(_.addClass), role := "group", aria.label := "Button group", md)(
+    div("btn-group".addClass, size, role := "group", aria.label := "Button group", md)(
       buttons
     )
   }
@@ -23,22 +23,20 @@ case class ButtonToolbar(buttonGroups: ButtonGroup*) extends BootstrapHtmlCompon
   }
 }
 
-sealed trait ButtonGroupSize extends ModifierFactory {
-  def sizeClass: Option[String]
+sealed trait ButtonGroupSize extends ModifierFactory
 
-  override def createModifier: Modifier = sizeClass.classOpt
+object DefaultButtonGroupSize extends ButtonGroupSize {
+  val createModifier: Modifier = ()
+}
+
+final class ButtonGroupSizeValue private[buttons](size: String) extends ButtonGroupSize {
+  val className = s"btn-group-$size"
+  val createModifier = className.addClass
 }
 
 object ButtonGroupSize {
-  private final class BasicButtonGroupSize(name: String) extends ButtonGroupSize {
-    override def sizeClass: Option[String] = Some(s"btn-group-$name")
-  }
-
-  def default: ButtonGroupSize = new ButtonGroupSize {
-    override def sizeClass: Option[String] = None
-  }
-
-  def large: ButtonGroupSize = new BasicButtonGroupSize("lg")
-  def small: ButtonGroupSize = new BasicButtonGroupSize("sm")
-  def extraSmall: ButtonGroupSize = new BasicButtonGroupSize("xs")
+  def default: ButtonGroupSize = DefaultButtonGroupSize
+  lazy val large: ButtonGroupSize = new ButtonGroupSizeValue("lg")
+  lazy val small: ButtonGroupSize = new ButtonGroupSizeValue("sm")
+  lazy val extraSmall: ButtonGroupSize = new ButtonGroupSizeValue("xs")
 }

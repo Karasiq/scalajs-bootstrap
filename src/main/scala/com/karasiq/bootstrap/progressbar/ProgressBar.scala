@@ -19,6 +19,10 @@ sealed abstract class ProgressBar(implicit ctx: Ctx.Owner) extends BootstrapHtml
   }
 }
 
+/**
+  * Provide up-to-date feedback on the progress of a workflow or action with simple yet flexible progress bars.
+  * @see [[http://getbootstrap.com/components/#progress]]
+  */
 object ProgressBar {
   def basic(value: Rx[Int])(implicit ctx: Ctx.Owner): ProgressBar = new ProgressBar {
     override val progress: Rx[Int] = value

@@ -9,4 +9,6 @@ object IconModifier {
     import scalatags.JsDom.all._
     override def render(md: Modifier*): Modifier = ()
   }
+
+  implicit def unitToIconModifier(u: Unit): IconModifier = NoIcon
 }

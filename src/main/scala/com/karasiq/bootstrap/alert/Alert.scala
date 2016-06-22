@@ -19,6 +19,10 @@ final class Alert(style: AlertStyle) extends BootstrapHtmlComponent[dom.html.Div
   }
 }
 
+/**
+  * Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.
+  * @see [[http://getbootstrap.com/components/#alerts]]
+  */
 object Alert {
   def apply(style: AlertStyle, md: Modifier*): ConcreteHtmlTag[dom.html.Div] = {
     new Alert(style).renderTag(md:_*)

@@ -10,9 +10,6 @@ import rx._
 import scala.scalajs.js
 import scalatags.JsDom.all._
 
-/**
-  * @see [[https://getbootstrap.com/javascript/#carousel]]
-  */
 sealed abstract class Carousel(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   def carouselId: String
 
@@ -69,6 +66,11 @@ sealed abstract class Carousel(implicit ctx: Ctx.Owner) extends BootstrapCompone
   }
 }
 
+/**
+  * A slideshow component for cycling through elements, like a carousel.
+  * @note Nested carousels are not supported.
+  * @see [[http://getbootstrap.com/javascript/#carousel]]
+  */
 object Carousel {
   def reactive(data: Rx[Seq[Modifier]], id: String = Bootstrap.newId)(implicit ctx: Ctx.Owner): Carousel = new Carousel {
     override val carouselId: String = id
