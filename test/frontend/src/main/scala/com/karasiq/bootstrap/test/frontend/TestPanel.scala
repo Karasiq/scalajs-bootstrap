@@ -49,7 +49,7 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
         Navigation.tabs(
           NavigationTab("Simple buttons", Bootstrap.newId, "remove", Bootstrap.well(
             GridSystem.mkRow(
-              small("Hint: press the green button for reactive forms test")
+              small("Hint: press the green button for reactive forms test", Bootstrap.textStyle.info)
             ),
             GridSystem.mkRow(
               ButtonGroup(ButtonGroupSize.default, successButton, dangerButton)

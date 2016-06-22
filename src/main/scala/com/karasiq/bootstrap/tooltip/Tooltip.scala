@@ -17,12 +17,18 @@ final class Tooltip(options: TooltipOptions) extends BootstrapComponent {
   }
 }
 
+/**
+  * Inspired by the excellent jQuery.tipsy plugin written by Jason Frame;
+  * Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage.
+  * Tooltips with zero-length titles are never displayed.
+  * @see [[http://getbootstrap.com/javascript/#tooltips]]
+  */
 object Tooltip {
   def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Tooltip = {
     val options = js.Object().asInstanceOf[TooltipOptions]
     options.html = true
     options.title = content.render
-    options.placement = placement.asString
+    options.placement = placement.toString
     new Tooltip(options)
   }
 }

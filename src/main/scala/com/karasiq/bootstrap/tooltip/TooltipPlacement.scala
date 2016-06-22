@@ -1,17 +1,13 @@
 package com.karasiq.bootstrap.tooltip
 
-sealed trait TooltipPlacement {
-  def asString: String
+final class TooltipPlacement private[tooltip](value: String) {
+  override def toString: String = value
 }
 
 object TooltipPlacement {
-  private def create(str: String): TooltipPlacement = new TooltipPlacement {
-    override def asString: String = str
-  }
-
-  def auto = create("auto")
-  def left = create("left")
-  def right = create("right")
-  def top = create("top")
-  def bottom = create("bottom")
+  lazy val auto = new TooltipPlacement("auto")
+  lazy val left = new TooltipPlacement("left")
+  lazy val right = new TooltipPlacement("right")
+  lazy val top = new TooltipPlacement("top")
+  lazy val bottom = new TooltipPlacement("bottom")
 }

@@ -24,10 +24,10 @@ case class PanelBuilder(panelId: String, style: PanelStyle = PanelStyle.default,
   }
 
   def renderTag(content: Modifier*): RenderedTag = {
-    div((Seq("panel") ++ style.styleClass).map(_.addClass), id := panelId)(
-      for (h <- header) yield div(`class` := "panel-heading", id := s"$panelId-panel-header", h),
+    div("panel".addClass, style, id := panelId)(
+      for (h ← header) yield div(`class` := "panel-heading", id := s"$panelId-panel-header", h),
       div(`class` := "panel-body collapse in", id := s"$panelId-panel-body", content),
-      for (f <- footer) yield div(`class` := "panel-footer", id := s"$panelId-panel-footer", f)
+      for (f ← footer) yield div(`class` := "panel-footer", id := s"$panelId-panel-footer", f)
     )
   }
 }

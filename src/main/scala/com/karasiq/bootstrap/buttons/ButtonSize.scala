@@ -3,27 +3,23 @@ package com.karasiq.bootstrap.buttons
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.ModifierFactory
 
-import scalatags.JsDom.all
+import scalatags.JsDom.all._
 
-sealed trait ButtonSize extends ModifierFactory {
-  def sizeClass: Option[String]
-
-  override def createModifier: all.Modifier = sizeClass.classOpt
+sealed trait ButtonSize extends ModifierFactory
+object DefaultButtonSize extends ButtonSize {
+  val createModifier: Modifier = ()
+}
+final class ButtonSizeValue private[buttons](size: String) extends ButtonSize {
+  val className = s"btn-$size"
+  val createModifier = className.addClass
 }
 
 /**
   * @see [[https://getbootstrap.com/css/#buttons-sizes]]
   */
 object ButtonSize {
-  private final class BasicButtonSize(name: String) extends ButtonSize {
-    override def sizeClass: Option[String] = Some(s"btn-$name")
-  }
-
-  def default: ButtonSize = new ButtonSize {
-    override def sizeClass: Option[String] = None
-  }
-
-  def large: ButtonSize = new BasicButtonSize("lg")
-  def small: ButtonSize = new BasicButtonSize("sm")
-  def extraSmall: ButtonSize = new BasicButtonSize("xs")
+  def default = DefaultButtonSize
+  lazy val large = new ButtonSizeValue("lg")
+  lazy val small = new ButtonSizeValue("sm")
+  lazy val extraSmall = new ButtonSizeValue("xs")
 }

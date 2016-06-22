@@ -17,6 +17,9 @@ abstract class PagedTable(implicit ctx: Ctx.Owner) extends Table {
   }
 }
 
+/**
+  * Table with pagination
+  */
 object PagedTable {
   final class StaticPagedTable(val heading: Rx[Seq[Modifier]], contentProvider: Rx[Seq[TableRow]], perPage: Int)(implicit ctx: Ctx.Owner) extends PagedTable {
     override val currentPage: Var[Int] = Var(1)

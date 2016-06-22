@@ -14,7 +14,7 @@ final class FontAwesomeIcon(name: String, styles: Seq[FontAwesomeStyle]) extends
 }
 
 final class FontAwesomeStyle private[icons] (style: String) extends ModifierFactory {
-  override def createModifier: Modifier = s"fa-$style".addClass
+  override val createModifier: Modifier = s"fa-$style".addClass
 }
 
 /**
@@ -29,43 +29,43 @@ object FontAwesome {
     new FontAwesomeStyle(str)
   }
 
-  def inverse: FontAwesomeStyle = "inverse"
+  lazy val inverse: FontAwesomeStyle = "inverse"
 
   // Size modifiers
-  def large: FontAwesomeStyle = "lg"
-  def x2: FontAwesomeStyle = "2x"
-  def x3: FontAwesomeStyle = "3x"
-  def x4: FontAwesomeStyle = "4x"
-  def x5: FontAwesomeStyle = "5x"
+  lazy val large: FontAwesomeStyle = "lg"
+  lazy val x2: FontAwesomeStyle = "2x"
+  lazy val x3: FontAwesomeStyle = "3x"
+  lazy val x4: FontAwesomeStyle = "4x"
+  lazy val x5: FontAwesomeStyle = "5x"
 
   // Fixed width
-  def fixedWidth: FontAwesomeStyle = "fw"
+  lazy val fixedWidth: FontAwesomeStyle = "fw"
 
   // List icons
-  def list: FontAwesomeStyle = "ul"
-  def line: FontAwesomeStyle = "li"
+  lazy val list: FontAwesomeStyle = "ul"
+  lazy val line: FontAwesomeStyle = "li"
 
   // Bordered & Pulled icons
-  def border: FontAwesomeStyle = "border"
-  def pullRight: FontAwesomeStyle = "pull-right"
-  def pullLeft: FontAwesomeStyle = "pull-left"
+  lazy val border: FontAwesomeStyle = "border"
+  lazy val pullRight: FontAwesomeStyle = "pull-right"
+  lazy val pullLeft: FontAwesomeStyle = "pull-left"
 
   // Animated icons
-  def spin: FontAwesomeStyle = "spin"
-  def pulse: FontAwesomeStyle = "pulse"
+  lazy val spin: FontAwesomeStyle = "spin"
+  lazy val pulse: FontAwesomeStyle = "pulse"
 
   // Rotated & Flipped
-  def rotate90: FontAwesomeStyle = "rotate-90"
-  def rotate180: FontAwesomeStyle = "rotate-90"
-  def rotate270: FontAwesomeStyle = "rotate-90"
-  def flipHorizontal: FontAwesomeStyle = "flip-horizontal"
-  def flipVertical: FontAwesomeStyle = "flip-vertical"
+  lazy val rotate90: FontAwesomeStyle = "rotate-90"
+  lazy val rotate180: FontAwesomeStyle = "rotate-90"
+  lazy val rotate270: FontAwesomeStyle = "rotate-90"
+  lazy val flipHorizontal: FontAwesomeStyle = "flip-horizontal"
+  lazy val flipVertical: FontAwesomeStyle = "flip-vertical"
 
   // Stacked icons
   def stacked(icons: Tag*): Tag = {
     span(style("stack"), icons)
   }
 
-  def stacked1x: FontAwesomeStyle = "stack-1x"
-  def stacked2x: FontAwesomeStyle = "stack-2x"
+  lazy val stacked1x: FontAwesomeStyle = "stack-1x"
+  lazy val stacked2x: FontAwesomeStyle = "stack-2x"
 }

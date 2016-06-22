@@ -5,24 +5,22 @@ import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
-sealed trait PanelStyle extends ModifierFactory {
-  def styleClass: Option[String]
+sealed trait PanelStyle extends ModifierFactory
 
-  override def createModifier: Modifier = styleClass.classOpt
+object DefaultPanelStyle extends PanelStyle {
+  val createModifier: Modifier = ()
+}
+
+final class PanelStyleValue private[panel](style: String) extends PanelStyle {
+  val className = s"panel-$style"
+  val createModifier = className.addClass
 }
 
 object PanelStyle {
-  def default: PanelStyle = new PanelStyle {
-    override def styleClass: Option[String] = None
-  }
-
-  private def style(name: String): PanelStyle = new PanelStyle {
-    override def styleClass: Option[String] = Some(s"panel-$name")
-  }
-
-  def primary: PanelStyle = style("primary")
-  def success: PanelStyle = style("success")
-  def info: PanelStyle = style("info")
-  def warning: PanelStyle = style("warning")
-  def danger: PanelStyle = style("danger")
+  def default = DefaultPanelStyle
+  lazy val primary = new PanelStyleValue("primary")
+  lazy val success = new PanelStyleValue("success")
+  lazy val info = new PanelStyleValue("info")
+  lazy val warning = new PanelStyleValue("warning")
+  lazy val danger = new PanelStyleValue("danger")
 }

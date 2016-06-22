@@ -5,20 +5,23 @@ import com.karasiq.bootstrap.ModifierFactory
 
 import scalatags.JsDom.all._
 
-sealed trait ProgressBarStyle extends ModifierFactory
+sealed trait ProgressBarStyle extends ModifierFactory {
+  val className: String
+  lazy val createModifier: Modifier = className.addClass
+}
 
 object ProgressBarStyle {
-  private def style(s: String): ProgressBarStyle = new ProgressBarStyle {
-    override def createModifier: Modifier = s"progress-bar-$s".addClass
+  private def style(style: String): ProgressBarStyle = new ProgressBarStyle {
+    val className = s"progress-bar-$style"
   }
 
-  def success: ProgressBarStyle = style("success")
-  def info: ProgressBarStyle = style("info")
-  def warning: ProgressBarStyle = style("warning")
-  def danger: ProgressBarStyle = style("danger")
+  lazy val success: ProgressBarStyle = style("success")
+  lazy val info: ProgressBarStyle = style("info")
+  lazy val warning: ProgressBarStyle = style("warning")
+  lazy val danger: ProgressBarStyle = style("danger")
 
-  def striped: ProgressBarStyle = style("striped")
-  def animated: ProgressBarStyle = new ProgressBarStyle {
-    override def createModifier: Modifier = "active".addClass
+  lazy val striped: ProgressBarStyle = style("striped")
+  lazy val animated: ProgressBarStyle = new ProgressBarStyle {
+    val className = "active"
   }
 }

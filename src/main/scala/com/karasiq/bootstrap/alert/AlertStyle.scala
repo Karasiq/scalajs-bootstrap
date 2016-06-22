@@ -6,12 +6,12 @@ import com.karasiq.bootstrap.ModifierFactory
 import scalatags.JsDom.all._
 
 final class AlertStyle private[alert] (name: String) extends ModifierFactory {
-  override def createModifier: Modifier = s"alert-$name".addClass
+  val createModifier: Modifier = s"alert-$name".addClass
 }
 
 object AlertStyle {
-  def success = new AlertStyle("success")
-  def info = new AlertStyle("info")
-  def warning = new AlertStyle("warning")
-  def danger = new AlertStyle("danger")
+  lazy val success = new AlertStyle("success")
+  lazy val info = new AlertStyle("info")
+  lazy val warning = new AlertStyle("warning")
+  lazy val danger = new AlertStyle("danger")
 }

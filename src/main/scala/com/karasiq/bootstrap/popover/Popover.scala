@@ -18,13 +18,18 @@ final class Popover(options: PopoverOptions) extends BootstrapComponent {
   }
 }
 
+/**
+  * Add small overlays of content, like those on the iPad, to any element for housing secondary information.
+  * Popovers whose both title and content are zero-length are never displayed.
+  * @see [[http://getbootstrap.com/javascript/#popovers]]
+  */
 object Popover {
   def apply(title: String, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Popover = {
     val options = js.Object().asInstanceOf[PopoverOptions]
     options.html = true
     options.title = title
     options.content = content.render
-    options.placement = placement.asString
+    options.placement = placement.toString
     new Popover(options)
   }
 }

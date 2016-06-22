@@ -4,16 +4,17 @@ import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.ModifierFactory
 
 final class NavigationBarStyle private[navbar](style: String) extends ModifierFactory {
-  def createModifier = s"navbar-$style".addClass
+  val className = s"navbar-$style"
+  val createModifier = className.addClass
 }
 
 object NavigationBarStyle {
   // Style
-  def default = new NavigationBarStyle("default")
-  def inverse = new NavigationBarStyle("inverse")
+  lazy val default = new NavigationBarStyle("default")
+  lazy val inverse = new NavigationBarStyle("inverse")
 
   // Position
-  def fixedTop = new NavigationBarStyle("fixed-top")
-  def fixedBottom = new NavigationBarStyle("fixed-bottom")
-  def staticTop = new NavigationBarStyle("static-top")
+  lazy val fixedTop = new NavigationBarStyle("fixed-top")
+  lazy val fixedBottom = new NavigationBarStyle("fixed-bottom")
+  lazy val staticTop = new NavigationBarStyle("static-top")
 }
