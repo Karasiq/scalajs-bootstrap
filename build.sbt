@@ -35,7 +35,7 @@ lazy val librarySettings = Seq(
   name := "scalajs-bootstrap",
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.9.0",
-    "com.lihaoyi" %%% "scalatags" % "0.5.4",
+    "com.lihaoyi" %%% "scalatags" % "0.6.0",
     "com.lihaoyi" %%% "scalarx" % "0.3.1"
   ),
   scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
