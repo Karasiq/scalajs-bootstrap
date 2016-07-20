@@ -3,12 +3,12 @@ package com.karasiq.bootstrap
 import scalatags.JsDom.all._
 
 trait BootstrapAttrs {
-  lazy val `data-toggle` = "data-toggle".attr
-  lazy val `data-target` = "data-target".attr
-  lazy val `data-slide-to` = "data-slide-to".attr
-  lazy val `data-ride` = "data-ride".attr
-  lazy val `data-slide` = "data-slide".attr
-  lazy val `data-dismiss` = "data-dismiss".attr
+  lazy val `data-toggle` = attr("data-toggle")
+  lazy val `data-target` = attr("data-target")
+  lazy val `data-slide-to` = attr("data-slide-to")
+  lazy val `data-ride` = attr("data-ride")
+  lazy val `data-slide` = attr("data-slide")
+  lazy val `data-dismiss` = attr("data-dismiss")
 }
 
 object BootstrapAttrs extends BootstrapAttrs

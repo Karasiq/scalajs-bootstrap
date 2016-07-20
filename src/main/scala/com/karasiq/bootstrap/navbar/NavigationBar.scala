@@ -13,9 +13,9 @@ import scalatags.JsDom.all._
   * Simple bootstrap navigation bar
   */
 final class NavigationBar(barId: String, brand: Modifier, styles: Seq[NavigationBarStyle], container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier)(implicit ctx: Ctx.Owner) extends BootstrapComponent {
-  private val nav = "nav".tag
-  private val `data-toggle` = "data-toggle".attr
-  private val `data-target` = "data-target".attr
+  private val nav = tag("nav")
+  private val `data-toggle` = attr("data-toggle")
+  private val `data-target` = attr("data-target")
 
   val navigationTabs: Var[Seq[NavigationTab]] = Var(Nil)
 
