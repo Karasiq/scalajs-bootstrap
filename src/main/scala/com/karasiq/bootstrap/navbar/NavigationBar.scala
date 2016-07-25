@@ -1,5 +1,6 @@
 package com.karasiq.bootstrap.navbar
 
+import com.karasiq.bootstrap.BootstrapAttrs.{`data-target`, `data-toggle`}
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.grid.GridSystem
 import com.karasiq.bootstrap.icons.IconModifier.NoIcon
@@ -14,8 +15,6 @@ import scalatags.JsDom.all._
   */
 final class NavigationBar(barId: String, brand: Modifier, styles: Seq[NavigationBarStyle], container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier)(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   private val nav = tag("nav")
-  private val `data-toggle` = attr("data-toggle")
-  private val `data-target` = attr("data-target")
 
   val navigationTabs: Var[Seq[NavigationTab]] = Var(Nil)
 
