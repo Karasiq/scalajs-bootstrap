@@ -3,7 +3,7 @@ import sbt.Keys._
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.1.2",
+  version := "1.1.1",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
   publishMavenStyle := true,
@@ -44,7 +44,7 @@ lazy val librarySettings = Seq(
   }))
 )
 
-lazy val libraryTestSettings = Seq(
+lazy val testServerSettings = Seq(
   name := "scalajs-bootstrap-test",
   resolvers += Resolver.sonatypeRepo("snapshots"),
   libraryDependencies ++= {
@@ -59,7 +59,7 @@ lazy val libraryTestSettings = Seq(
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
   scalaJsBundlerInline in Compile := true,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in libraryTestFrontend),
+  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage),
   scalaJsBundlerAssets in Compile += {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
@@ -78,25 +78,25 @@ lazy val libraryTestSettings = Seq(
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
-    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(libraryTestFrontend).value)
+    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage).value)
   }
 )
 
-lazy val libraryTestFrontendSettings = Seq(
+lazy val testPageSettings = Seq(
   persistLauncher in Compile := true,
   name := "scalajs-bootstrap-test-frontend"
 )
 
 // Projects
-lazy val library = Project("scalajs-library", file("."))
+lazy val library = (project in file("."))
   .settings(commonSettings, librarySettings)
   .enablePlugins(ScalaJSPlugin)
 
-lazy val libraryTest = Project("scalajs-bootstrap-test", file("test"))
-  .settings(commonSettings, libraryTestSettings)
+lazy val testServer = (project in file("test"))
+  .settings(commonSettings, testServerSettings)
   .enablePlugins(ScalaJSBundlerPlugin)
 
-lazy val libraryTestFrontend = Project("scalajs-bootstrap-test-frontend", file("test") / "frontend")
-  .settings(commonSettings, libraryTestFrontendSettings)
+lazy val testPage = (project in (file("test") / "frontend"))
+  .settings(commonSettings, testPageSettings)
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(library)
