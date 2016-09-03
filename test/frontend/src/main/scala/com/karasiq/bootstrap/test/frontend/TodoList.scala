@@ -31,7 +31,7 @@ final class TodoList(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom
 
   private def todoItemDialog(title: String, priority: ItemPriority)(f: (String, ItemPriority) ⇒ Unit): Unit = {
     val titleText = Var(title)
-    val prioritySelect = FormInput.select("Priority", "Low", "Normal", "High")
+    val prioritySelect = FormInput.simpleSelect("Priority", "Low", "Normal", "High")
     prioritySelect.selected.update(Seq(priority.toString))
     Modal("Add/edit item")
       .withBody(Form(
