@@ -15,14 +15,16 @@ import org.scalajs.dom
 import org.scalajs.dom.window
 import rx._
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.{span => _, _}
 import scala.language.postfixOps
 import scalatags.JsDom.all._
 
 final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
+    val titleVar = Var[Frag]("ERROR")
     val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Bootstrap.jsClick(_ ⇒ TestModal().show()), Tooltip(i("Press me"), TooltipPlacement.left)).render
-    val dangerButton = Button(ButtonStyle.danger)("Format C:\\", Popover("Boom", "Popover test", TooltipPlacement.top)).render
+    val dangerButton = Button(ButtonStyle.danger)("Format C:\\", Popover(span(titleVar), "Popover test", TooltipPlacement.right)).render
+    titleVar() = i("Boom")
 
     val toggleButton = Bootstrap.button("Toggle me").toggleButton
     val disabledButton = Bootstrap.button("Heavy computation").disabledButton
@@ -31,7 +33,7 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
       if (pressed) {
         window.setTimeout(() ⇒ {
           window.alert(s"Answer: ${if (toggleButton.state.now) 321 else 123}")
-          disabledButton.state.update(false)
+          disabledButton.state() = false
         }, 1000)
       }
     }
@@ -39,7 +41,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
     // Render panel
     import Panel._
     val panelId = Bootstrap.newId
-    Panel(panelId, style)
+    val collapseBtnTitle = Var("ERROR")
+    val panel = Panel(panelId, style)
       .withHeader(title("euro", collapse(panelId, panelTitle, raw("&nbsp"), Bootstrap.badge("42")), buttons(
         button("plus", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Panel add"))),
         button("minus", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Panel remove")))
@@ -54,7 +57,7 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
             GridSystem.mkRow(
               ButtonGroup(ButtonGroupSize.default, successButton, dangerButton)
             ),
-            GridSystem.mkRow(Collapse("Dropdowns")(
+            GridSystem.mkRow(Collapse(collapseBtnTitle)(
               GridSystem.row(
                 GridSystem.col(6).asDiv(Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Test 1"))), Dropdown.item("Test 2"))),
                 GridSystem.col(6).asDiv(Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Bootstrap.jsClick(_ ⇒ window.alert("Test 3"))), Dropdown.item("Test 4")))
@@ -66,5 +69,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle)(implicit ctx: Ctx.O
           ))
         )
       )
+
+    collapseBtnTitle() = "Dropdowns"
+    panel
   }
 }

@@ -24,10 +24,10 @@ final class Popover(options: PopoverOptions) extends BootstrapComponent {
   * @see [[http://getbootstrap.com/javascript/#popovers]]
   */
 object Popover {
-  def apply(title: String, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Popover = {
+  def apply(title: Frag, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Popover = {
     val options = js.Object().asInstanceOf[PopoverOptions]
     options.html = true
-    options.title = title
+    options.title = title.render
     options.content = content.render
     options.placement = placement.toString
     new Popover(options)

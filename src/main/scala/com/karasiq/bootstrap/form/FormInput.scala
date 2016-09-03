@@ -5,6 +5,7 @@ import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent, BootstrapHtmlCompon
 import org.scalajs.dom
 import rx._
 
+import scala.language.implicitConversions
 import scalatags.JsDom.all
 import scalatags.JsDom.all._
 
@@ -30,7 +31,7 @@ final class FormCheckbox(checkboxLabel: Modifier) extends BootstrapHtmlComponent
   }
 }
 
-case class FormRadio(title: String, radioName: String, radioValue: String, radioId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
+class FormRadio(title: Modifier, val radioName: String, val radioValue: String, val radioId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: Modifier*): RenderedTag = {
     div("radio".addClass)(
       label(
@@ -64,8 +65,8 @@ class FormRadioGroup(final val radioList: Rx[Seq[FormRadio]])(implicit ctx: Ctx.
   }
 }
 
-class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val options: Rx[Seq[String]], val inputId: String = Bootstrap.newId)(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
-  final val selected: Var[Seq[String]] = Var(Seq(options.now.head))
+class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val options: FormSelectOptions, val inputId: String = Bootstrap.newId)(implicit ctx: Ctx.Owner) extends BootstrapHtmlComponent[dom.html.Div] {
+  final val selected: Var[Seq[String]] = Var(options.values.now.headOption.map(_.value).toSeq)
 
   override def renderTag(md: all.Modifier*): RenderedTag = {
     val controlId = s"$inputId-form-select-input"
@@ -73,7 +74,7 @@ class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val option
       label(`for` := controlId, selectLabel),
       Rx {
         select("form-control".addClass, if (allowMultiple) multiple else (), id := controlId, md)(
-          for (o ← options()) yield option(o),
+          for (FormSelectOption(optValue, title) ← options.values()) yield option(title, value := optValue),
           selected.reactiveReadWrite("change", e ⇒ {
             val select = e.asInstanceOf[dom.html.Select]
             select.options.collect {
@@ -92,6 +93,13 @@ class FormSelect(selectLabel: Modifier, allowMultiple: Boolean, final val option
   }
 }
 
+case class FormSelectOption(value: String, title: Modifier)
+final class FormSelectOptions(val values: Rx[Seq[FormSelectOption]])
+
+object FormSelectOptions {
+  implicit def fromStaticValues(values: Seq[FormSelectOption]): FormSelectOptions = new FormSelectOptions(Var(values))
+  implicit def fromRxValues(values: Rx[Seq[FormSelectOption]]): FormSelectOptions = new FormSelectOptions(values)
+}
 
 class FormTextArea(val textAreaLabel: Modifier, val inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent[dom.html.Div] {
   override def renderTag(md: all.Modifier*): RenderedTag = {
@@ -126,7 +134,7 @@ object FormInput {
     new FormCheckbox(label).renderTag(md:_*)
   }
 
-  def radio(title: String, radioName: String, radioValue: String, radioId: String = Bootstrap.newId): FormRadio = {
+  def radio(title: Modifier, radioName: String, radioValue: String, radioId: String = Bootstrap.newId): FormRadio = {
     new FormRadio(title, radioName, radioValue, radioId)
   }
 
@@ -138,19 +146,27 @@ object FormInput {
     new FormRadioGroup(radios)
   }
 
-  def select(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
-    new FormSelect(title, false, Rx(options))
+  def select(title: Modifier, options: (String, Modifier)*)(implicit ctx: Ctx.Owner): FormSelect = {
+    new FormSelect(title, false, options.map(FormSelectOption.tupled))
   }
 
-  def select(title: Modifier, options: Rx[Seq[String]])(implicit ctx: Ctx.Owner): FormSelect = {
+  def simpleSelect(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
+    new FormSelect(title, false, options.map(opt ⇒ FormSelectOption(opt, opt)))
+  }
+
+  def select(title: Modifier, options: FormSelectOptions)(implicit ctx: Ctx.Owner): FormSelect = {
     new FormSelect(title, false, options)
   }
 
-  def multipleSelect(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
-    new FormSelect(title, true, Rx(options))
+  def multipleSelect(title: Modifier, options: (String, Modifier)*)(implicit ctx: Ctx.Owner): FormSelect = {
+    new FormSelect(title, true, options.map(FormSelectOption.tupled))
   }
 
-  def multipleSelect(title: Modifier, options: Rx[Seq[String]])(implicit ctx: Ctx.Owner): FormSelect = {
+  def simpleMultipleSelect(title: Modifier, options: String*)(implicit ctx: Ctx.Owner): FormSelect = {
+    new FormSelect(title, true, options.map(opt ⇒ FormSelectOption(opt, opt)))
+  }
+
+  def multipleSelect(title: Modifier, options: FormSelectOptions)(implicit ctx: Ctx.Owner): FormSelect = {
     new FormSelect(title, true, options)
   }
 
