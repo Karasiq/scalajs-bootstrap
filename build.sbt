@@ -6,6 +6,7 @@ lazy val commonSettings = Seq(
   version := "1.1.2",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
+  crossScalaVersions := Seq("2.11.8", "2.12.0"),
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -34,9 +35,9 @@ lazy val commonSettings = Seq(
 lazy val librarySettings = Seq(
   name := "scalajs-bootstrap",
   libraryDependencies ++= Seq(
-    "be.doeraene" %%% "scalajs-jquery" % "0.9.0",
-    "com.lihaoyi" %%% "scalatags" % "0.6.0",
-    "com.lihaoyi" %%% "scalarx" % "0.3.1"
+    "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+    "com.lihaoyi" %%% "scalatags" % "0.6.2",
+    "com.lihaoyi" %%% "scalarx" % "0.3.2"
   ),
   scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
     val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
