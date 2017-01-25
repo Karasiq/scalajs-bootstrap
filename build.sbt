@@ -3,10 +3,9 @@ import sbt.Keys._
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.1.2",
+  version := "1.1.3",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
-  scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.11.8", "2.12.0"),
+  scalaVersion := "2.12.1",
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -33,6 +32,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val librarySettings = Seq(
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
   name := "scalajs-bootstrap",
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
@@ -46,6 +46,7 @@ lazy val librarySettings = Seq(
 )
 
 lazy val testServerSettings = Seq(
+  scalaVersion := "2.11.8",
   name := "scalajs-bootstrap-test",
   resolvers += Resolver.sonatypeRepo("snapshots"),
   libraryDependencies ++= {
