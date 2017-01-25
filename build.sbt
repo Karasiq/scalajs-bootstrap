@@ -3,7 +3,7 @@ import sbt.Keys._
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.1.3",
+  version := "1.1.4",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.12.1",
   publishMavenStyle := true,
