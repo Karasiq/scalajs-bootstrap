@@ -15,6 +15,9 @@ sealed trait Modal {
   def title: Modifier
   def body: Modifier
   def buttons: Modifier
+  def style: Modifier
+  def dialogStyle: Modifier
+  def contentStyle: Modifier
 
   private def modalHeader = {
     div(`class` := "modal-header")(
@@ -30,15 +33,13 @@ sealed trait Modal {
   }
 
   private def modalFooter = {
-    div(`class` := "modal-footer")(
-      this.buttons
-    )
+    div(`class` := "modal-footer", this.buttons)
   }
 
   private def modal = {
-    div(`class` := "modal fade", tabindex := -1, role := "dialog")(
-      div(`class` := "modal-dialog")(
-        div(`class` := "modal-content")(
+    div(`class` := "modal fade", tabindex := -1, role := "dialog", style)(
+      div(`class` := "modal-dialog", dialogStyle)(
+        div(`class` := "modal-content", contentStyle)(
           modalHeader,
           modalBody,
           modalFooter
@@ -79,14 +80,17 @@ object Modal {
     Button(ButtonStyle.primary)(md)
   }
 
-  def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = Modal.closeButton()): ModalBuilder = {
-    ModalBuilder(title, body, buttons)
+  def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = Modal.closeButton(), style: Modifier = (), dialogStyle: Modifier = ModalDialogSize.default, contentStyle: Modifier = ()): ModalBuilder = {
+    ModalBuilder(title, body, buttons, style, dialogStyle, contentStyle)
   }
 }
 
-case class ModalBuilder(title: Modifier, body: Modifier, buttons: Modifier) extends Modal {
+case class ModalBuilder(title: Modifier, body: Modifier, buttons: Modifier, style: Modifier, dialogStyle: Modifier, contentStyle: Modifier) extends Modal {
   def withTitle(md: Modifier*): ModalBuilder = copy(title = md)
   def withBody(md: Modifier*): ModalBuilder = copy(body = md)
   def withButtons(md: Modifier*): ModalBuilder = copy(buttons = md)
+  def withStyle(md: Modifier*): ModalBuilder = copy(style = md)
+  def withDialogStyle(md: Modifier*): ModalBuilder = copy(dialogStyle = md)
+  def withContentStyle(md: Modifier*): ModalBuilder = copy(contentStyle = md)
 }
 

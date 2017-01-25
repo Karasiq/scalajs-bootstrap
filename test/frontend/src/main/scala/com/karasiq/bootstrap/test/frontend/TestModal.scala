@@ -4,7 +4,7 @@ import com.karasiq.bootstrap.Bootstrap
 import com.karasiq.bootstrap.BootstrapImplicits._
 import com.karasiq.bootstrap.form.{Form, FormInput, FormInputGroup}
 import com.karasiq.bootstrap.icons.FontAwesome
-import com.karasiq.bootstrap.modal.Modal
+import com.karasiq.bootstrap.modal.{Modal, ModalDialogSize}
 import org.scalajs.dom.window
 import rx._
 
@@ -36,5 +36,6 @@ object TestModal {
       .withTitle(radioGroup.value, " / ", select.selected.map(_.head), " / ", multipleSelect.selected.map(_.mkString(" + ")))
       .withBody(p("You won ", modalInputValue, "$"), p(form))
       .withButtons(Modal.closeButton(), Modal.button("Take", Modal.dismiss))
+      .withDialogStyle(ModalDialogSize.large)
   }
 }
