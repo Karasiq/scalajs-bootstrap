@@ -7,7 +7,7 @@ import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
 import spray.can.Http
-import spray.http.MediaTypes
+import spray.http._
 import spray.routing.HttpService
 
 import scala.concurrent.Await
@@ -19,6 +19,10 @@ object BootstrapTestApp extends App {
     override def receive: Actor.Receive = runRoute {
       get {
         compressResponse() {
+          // Server-rendered page
+          path("serverside.html") {
+            complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`text/html`), TestHtmlPage())))
+          } ~
           // Index page
           (pathSingleSlash & respondWithMediaType(MediaTypes.`text/html`)) {
             getFromResource("webapp/index.html")
