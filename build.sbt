@@ -1,11 +1,15 @@
 import sbt.Keys._
 
+// Versions
+val scalaTagsVersion = "0.6.2"
+val scalaRxVersion = "0.3.2"
+
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.1.4",
+  version := "1.2.0",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
-  scalaVersion := "2.12.1",
+  scalaVersion := "2.11.8",
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -36,13 +40,18 @@ lazy val librarySettings = Seq(
   name := "scalajs-bootstrap",
   libraryDependencies ++= Seq(
     "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-    "com.lihaoyi" %%% "scalatags" % "0.6.2",
-    "com.lihaoyi" %%% "scalarx" % "0.3.2"
+    "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
+    "com.lihaoyi" %%% "scalarx" % scalaRxVersion
   ),
   scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
     val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
     s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
   }))
+)
+
+lazy val textLibrarySettings = Seq(
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
+  name := "scalajs-bootstrap-text"
 )
 
 lazy val testServerSettings = Seq(
@@ -93,9 +102,24 @@ lazy val testPageSettings = Seq(
 lazy val library = (project in file("."))
   .settings(commonSettings, librarySettings)
   .enablePlugins(ScalaJSPlugin)
+  .aggregate(textLibraryJS, textLibraryJVM)
+
+lazy val textLibrary = (crossProject in file("text"))
+  .settings(commonSettings, textLibrarySettings)
+  .jsSettings(
+    libraryDependencies ++= Seq("com.lihaoyi" %%% "scalatags" % scalaTagsVersion)
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq("com.lihaoyi" %% "scalatags" % scalaTagsVersion)
+  )
+
+lazy val textLibraryJS = textLibrary.js
+
+lazy val textLibraryJVM = textLibrary.jvm 
 
 lazy val testServer = (project in file("test"))
-  .settings(commonSettings, testServerSettings)
+  .settings(testServerSettings)
+  .dependsOn(textLibraryJVM)
   .enablePlugins(ScalaJSBundlerPlugin)
 
 lazy val testPage = (project in (file("test") / "frontend"))

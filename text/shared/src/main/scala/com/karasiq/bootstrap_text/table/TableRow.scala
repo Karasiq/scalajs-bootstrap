@@ -1,9 +1,9 @@
-package com.karasiq.bootstrap.table
+package com.karasiq.bootstrap_text.table
 
-import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.ModifierFactory
+import com.karasiq.bootstrap_text.BootstrapImplicits._
+import com.karasiq.bootstrap_text.ModifierFactory
 
-import scalatags.JsDom.all._
+import scalatags.Text.all._
 
 trait TableRow {
   def columns: Seq[Modifier]
@@ -21,7 +21,6 @@ sealed trait TableRowStyle extends ModifierFactory {
 object TableRow {
   def apply(data: Seq[Modifier], ms: Modifier*): TableRow = new TableRow {
     override def modifiers: Modifier = ms
-
     override def columns: Seq[Modifier] = data
   }
 
