@@ -219,7 +219,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
 
     def dataProperties[T: AttrValue](props: (String, T)*): Modifier = {
       props.map { case (name, value) ⇒
-        attr(name) := value
+        attr("data-" + name) := value
       }
     }
   }

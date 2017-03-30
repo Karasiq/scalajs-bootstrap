@@ -27,12 +27,13 @@ object ReactiveBinds {
   * Predefined binds
   */
 trait ReactiveBinds { self: RenderingContext ⇒
-  type Event
+  protected type Event
+  protected type Renderable[T] = T ⇒ scalaTags.Frag
 
   implicit val scalaRxContext: Ctx.Owner
   implicit def rxEventListener[EL <: Element, EV <: Event]: ReactiveRead[EL, EventListener[EL, EV]]
   implicit def rxModify[E <: Element, T]: ReactiveWrite[E, Modify[E, T]]
-  implicit def rxBindNode[E <: Element, N <: FragT]: ReactiveWrite[E, BindNode[N]]
+  implicit def rxBindNode[E <: Element, N: Renderable]: ReactiveWrite[E, BindNode[N]]
   implicit def rxFormValue[E <: Element]: ReactiveRW[E, FormValue[String]]
   implicit def rxFormValueInt[E <: Element]: ReactiveRW[E, FormValue[Int]]
   implicit def rxFormValueBoolean[E <: Element]: ReactiveRW[E, FormValue[Boolean]]

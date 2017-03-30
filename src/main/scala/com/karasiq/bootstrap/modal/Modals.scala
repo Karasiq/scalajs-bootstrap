@@ -39,7 +39,7 @@ trait Modals { self: RenderingContext with Utils with BootstrapComponents with C
     }
 
     def modal: Tag = {
-      div(`class` := "modal fade", tabindex := -1, role := "dialog", style)(
+      div(`class` := "modal fade", tabindex := -1, role := "dialog", id := modalId, style)(
         div(`class` := "modal-dialog", dialogStyle)(
           div(`class` := "modal-content", contentStyle)(
             modalHeader,

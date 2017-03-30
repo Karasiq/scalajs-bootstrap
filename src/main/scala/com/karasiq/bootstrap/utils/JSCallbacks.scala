@@ -2,7 +2,6 @@ package com.karasiq.bootstrap.utils
 
 import com.karasiq.bootstrap.context.JSRenderingContext
 import org.scalajs.dom
-import org.scalajs.dom.html.{Form, Input}
 import org.scalajs.dom.raw.MouseEvent
 
 import scala.language.postfixOps
@@ -11,12 +10,13 @@ import scalatags.generic.{Attr, AttrValue}
 
 trait JSCallbacks extends Callbacks { self: JSRenderingContext ⇒
   type Callback = js.Function
+  type ClickElement = dom.html.Element
   type InputElement = dom.html.Input
   type FormElement = dom.html.Form
 
   object Callback extends CallbackFactory {
-    def onClick(f: (Element) => Unit): js.Function = {
-      js.ThisFunction.fromFunction2 { (element: dom.Element, ev: MouseEvent) ⇒
+    def onClick(f: ClickElement ⇒ Unit): js.Function = {
+      js.ThisFunction.fromFunction2 { (element: dom.html.Element, ev: MouseEvent) ⇒
         if (ev.button == 0 && !(ev.shiftKey || ev.altKey || ev.metaKey || ev.ctrlKey)) {
           ev.preventDefault()
           f(element)
@@ -24,14 +24,14 @@ trait JSCallbacks extends Callbacks { self: JSRenderingContext ⇒
       }
     }
 
-    def onInput(f: (Input) => Unit): js.Function = {
+    def onInput(f: InputElement ⇒ Unit): js.Function = {
       js.ThisFunction.fromFunction2 { (element: dom.html.Input, ev: Event) ⇒
         // ev.preventDefault()
         f(element)
       }
     }
 
-    def onSubmit(f: (Form) => Unit): js.Function = {
+    def onSubmit(f: FormElement ⇒ Unit): js.Function = {
       js.ThisFunction.fromFunction2 { (element: dom.html.Form, ev: Event) ⇒
         ev.preventDefault()
         f(element)

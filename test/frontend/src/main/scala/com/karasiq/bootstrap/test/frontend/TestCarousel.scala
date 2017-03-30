@@ -1,8 +1,8 @@
 package com.karasiq.bootstrap.test.frontend
 
-import com.karasiq.bootstrap.Bootstrap._
+import com.karasiq.bootstrap.Bootstrap.default._
 
-import scalatags.JsDom.all._
+import scalaTags.all._
 
 final class TestCarousel(imgSrc: String) extends BootstrapComponent {
   override def render(md: Modifier*): Modifier = {

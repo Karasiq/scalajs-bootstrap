@@ -1,5 +1,6 @@
 package com.karasiq.bootstrap.components
 
+import com.karasiq.bootstrap.components.generic.{GenComponent, GenDomComponent, GenHtmlComponent, GenModifierFactory}
 import com.karasiq.bootstrap.context.RenderingContext
 
 import scala.language.{implicitConversions, postfixOps}
@@ -24,5 +25,21 @@ trait BootstrapComponents { self: RenderingContext ⇒
 
   implicit def renderModifierFactory[C](bc: C)(implicit ev: C ⇒ ModifierFactory): scalaTags.Modifier = {
     bc.createModifier
+  }
+
+  implicit def renderGenModifierFactory(bc: GenModifierFactory { type RC >: self.type }): scalaTags.Modifier = {
+    bc.render(self)
+  }
+
+  implicit def renderGenComponent(bc: GenComponent { type RC >: self.type }): scalaTags.Modifier = {
+    bc.render(self)
+  }
+
+  implicit def renderGenDomComponent(bc: GenDomComponent { type RC >: self.type }): scalaTags.Frag = {
+    bc.render(self)
+  }
+
+  implicit def renderGenHtmlComponent(bc: GenHtmlComponent { type RC >: self.type }): scalaTags.Tag = {
+    bc.render(self)
   }
 }
