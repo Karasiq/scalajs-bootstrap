@@ -6,7 +6,7 @@ import rx.{Rx, Var}
 import scala.language.postfixOps
 
 trait ReactiveImplicits { self: RenderingContext ⇒
-  import scalaTags._
+  import scalaTags.all._
 
   def readModifier[P](property: P)(implicit rb: ReactiveRead[Element, P]): Modifier = new Modifier {
     def applyTo(t: Element): Unit = {
@@ -69,15 +69,9 @@ trait ReactiveImplicits { self: RenderingContext ⇒
     }
   }
 
-  implicit class RxNode(rx: Rx[FragT])(implicit wb: ReactiveWrite[Element, BindNode[FragT]]) extends Modifier {
+  implicit class RxNodeBind[T](value: Rx[T])(implicit wb: ReactiveWrite[Element, BindNode[T]]) extends Modifier {
     override def applyTo(t: Element): Unit = {
-      writeModifier(BindNode(rx)).applyTo(t)
-    }
-  }
-
-  implicit class RxFragNode[T](value: Rx[T])(implicit ev: T ⇒ Frag, wb: ReactiveWrite[Element, BindNode[FragT]]) extends Modifier {
-    override def applyTo(t: Element): Unit = {
-      new RxNode(value.map(_.render)).applyTo(t)
+      writeModifier(BindNode(value)).applyTo(t)
     }
   }
 

@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap.test.frontend
 
-import com.karasiq.bootstrap.Bootstrap._
+import com.karasiq.bootstrap.Bootstrap.default._
 import rx._
 
 import scalaTags.all._

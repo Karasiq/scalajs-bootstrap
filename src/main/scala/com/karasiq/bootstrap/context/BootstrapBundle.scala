@@ -22,5 +22,4 @@ import scala.language.postfixOps
 
 trait BootstrapBundle extends RenderingContext with BootstrapComponents with ClassModifiers with Alerts with Buttons
   with Carousels with Collapses with Dropdowns with Forms with Grids with Icons with Modals
-  with NavigationBars with Panels with Popovers with ProgressBars with Tables with PagedTables with Tooltips with Utils {
-}
+  with NavigationBars with Panels with Popovers with ProgressBars with Tables with PagedTables with Tooltips with Utils

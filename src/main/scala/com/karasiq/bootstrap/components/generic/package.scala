@@ -4,7 +4,9 @@ import scala.language.postfixOps
 import scalatags.generic.{Frag, Modifier, TypedTag}
 
 package object generic {
+  // Context-bound components
   trait ModifierFactory[E] extends Modifier[E] {
+    // Shortcuts
     protected type ElementT = E
     protected type ModifierT = Modifier[E]
 
@@ -23,10 +25,14 @@ package object generic {
     }
   }
 
-  trait BootstrapDomComponent[E, F] extends BootstrapComponent[E] {
+  trait BootstrapDomComponent[E, F] extends BootstrapComponent[E] with Frag[E, F] {
     protected type FragT = Frag[E, F]
 
     def renderFrag(md: ModifierT*): FragT
+
+    final def render: F = {
+      renderFrag().render
+    }
 
     final def render(md: ModifierT*): ModifierT = {
       renderFrag(md:_*)

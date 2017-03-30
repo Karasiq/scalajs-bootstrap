@@ -1,14 +1,14 @@
 package com.karasiq.bootstrap.context
 
+import com.karasiq.bootstrap.utils.ClassModifiers
 import org.scalajs.dom
-import org.scalajs.dom.html
 
 import scala.language.{implicitConversions, postfixOps}
 import scala.scalajs.js
 
-trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext ⇒
+trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with ClassModifiers ⇒
   import ReactiveBinds._
-  type Event = dom.Event
+  protected type Event = dom.Event
 
   implicit def rxEventListener[EL <: Element, EV <: Event]: ReactiveRead[EL, EventListener[EL, EV]] = new ReactiveRead[EL, EventListener[EL, EV]] {
     def bindRead(element: EL, property: EventListener[EL, EV]): Unit = {
@@ -32,14 +32,14 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext ⇒
     }
   }
 
-  implicit def rxBindNode[E <: Element, N <: FragT]: ReactiveWrite[E, BindNode[N]] = new ReactiveWrite[E, BindNode[N]] {
+  implicit def rxBindNode[E <: Element, N: Renderable]: ReactiveWrite[E, BindNode[N]] = new ReactiveWrite[E, BindNode[N]] {
     def bindWrite(parent: E, property: BindNode[N]): Unit = {
       val elRx = property.value.map(identity)
-      var oldElement = property.value.now
+      var oldElement = property.value.now.render
       elRx.triggerLater {
         val element = oldElement
         if (isElementAvailable(element) && isElementAvailable(element.parentNode)) {
-          val newElement = elRx.now
+          val newElement = elRx.now.render
           oldElement = newElement
           element.parentNode.replaceChild(newElement, element)
         } else {
@@ -98,14 +98,19 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext ⇒
 
   implicit def rxVisibility[E <: Element]: ReactiveWrite[E, Visibility] = new ReactiveWrite[E, Visibility] {
     def bindWrite(element: E, property: Visibility): Unit = {
-      var oldDisplay = "block"
+      // var oldDisplay = "block"
       rxModify[Element, Boolean].bindWrite(element, Modify(property.visible, { (e, isVisible) ⇒
-        val htmlElement = e.asInstanceOf[html.Element]
+        /* val htmlElement = e.asInstanceOf[html.Element]
         if (!isVisible) {
           if (htmlElement.style.display != "none") oldDisplay = htmlElement.style.display
           htmlElement.style.display = "none"
         } else if (htmlElement.style.display == "none") {
           htmlElement.style.display = oldDisplay
+        } */
+        if (!isVisible) {
+          addClass(element, "hide")
+        } else {
+          removeClass(element, "hide")
         }
       }))
     }

@@ -1,16 +1,18 @@
 package com.karasiq.bootstrap.utils
 
+import com.karasiq.bootstrap.context.RenderingContext
+
 import scala.language.postfixOps
 import scalatags.generic.AttrValue
 
-trait Callbacks {
+trait Callbacks { self: RenderingContext ⇒
   type Callback
-  type Element
-  type InputElement <: Element
-  type FormElement <: Element
+  protected type ClickElement
+  protected type InputElement
+  protected type FormElement
 
   trait CallbackFactory {
-    def onClick(f: Element ⇒ Unit): Callback
+    def onClick(f: ClickElement ⇒ Unit): Callback
     def onInput(f: InputElement ⇒ Unit): Callback
     def onSubmit(f: FormElement ⇒ Unit): Callback
   }

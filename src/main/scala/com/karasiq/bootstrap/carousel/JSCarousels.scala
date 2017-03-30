@@ -14,20 +14,18 @@ trait JSCarousels { self: JSRenderingContext with Carousels with BootstrapCompon
 
   class JSCarousel(carouselId: String, content: Rx[Seq[Modifier]]) extends Carousel(carouselId, content) {
     def create(interval: Int = 5000, pause: String = "hover", wrap: Boolean = true, keyboard: Boolean = true, modifiers: Modifier = ()): Element = {
-      val e = carousel(modifiers).render
-      val options = js.Object().asInstanceOf[js.Dynamic]
+      val element = carousel(modifiers).render
+      val options = js.Object().asInstanceOf[JSCarouselOptions]
       options.interval = interval
       options.pause = pause
       options.wrap = wrap
       options.keyboard = keyboard
-      jQuery(e).carousel(options)
-      e
+      jQuery(element).carousel(options)
+      element
     }
 
-    override def render(md: Modifier*): Modifier = new Modifier {
-      def applyTo(t: Element): Unit = {
-        t.appendChild(create(modifiers = md))
-      }
+    override def render(md: Modifier*): Modifier = {
+      create(modifiers = md)
     }
   }
 

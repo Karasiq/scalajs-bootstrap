@@ -8,7 +8,7 @@ trait Alerts { self: BootstrapBundle ⇒
   import scalaTags.all._
 
   final class Alert(style: AlertStyle) extends BootstrapHtmlComponent {
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       div(Seq("alert", "alert-dismissible", "fade", "in").map(_.addClass), style, role := "alert")(
         button(`type` := "button", "close".addClass, `data-dismiss` := "alert", aria.label := "Close")(
           span(aria.hidden := true, raw("&times;"))
