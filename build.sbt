@@ -9,7 +9,8 @@ lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
   version := "2.0.0-SNAPSHOT",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.11.8",
+  crossScalaVersions := Seq("2.11.8", "2.12.1")
 )
 
 lazy val publishSettings = Seq(
@@ -38,8 +39,13 @@ lazy val publishSettings = Seq(
     </developers>
 )
 
+lazy val noPublishSettings = Seq(
+  publishArtifact := false,
+  publishArtifact in makePom := false,
+  publishTo := Some(Resolver.file("Repo", file("target/repo")))
+)
+
 lazy val librarySettings = Seq(
-  crossScalaVersions := Seq("2.11.8", "2.12.1"),
   name := "scalajs-bootstrap"
 )
 
@@ -89,7 +95,7 @@ lazy val testPageSettings = Seq(
 
 // Projects
 lazy val library = crossProject
-  .settings(commonSettings, publishSettings, librarySettings)
+  .settings(commonSettings, librarySettings, publishSettings)
   .jsSettings(
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
@@ -129,3 +135,7 @@ lazy val testPage = (project in (file("test") / "frontend"))
   .settings(commonSettings, testPageSettings)
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(testSharedJS)
+
+lazy val root = (project in file("."))
+  .settings(commonSettings, noPublishSettings)
+  .aggregate(libraryJS, libraryJVM)
