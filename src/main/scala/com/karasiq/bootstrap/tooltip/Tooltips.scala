@@ -1,0 +1,59 @@
+package com.karasiq.bootstrap.tooltip
+
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
+
+import scala.language.{implicitConversions, postfixOps}
+
+trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
+  import scalaTags.all._
+
+  case class TooltipOptions(animation: Boolean = true, container: String = "", delay: String = "",
+                            html: Boolean = false, placement: TooltipPlacement = TooltipPlacement.right, selector: String = "", template: String = "",
+                            title: Frag = "", trigger: String = "", viewport: String = "") {
+    def toStrings: Seq[(String, String)] = {
+      def opt[T](name: String, value: T, default: T) = Option(name → value).filterNot(_._2 == default)
+      Seq(
+        opt("animation", animation, true),
+        opt("container", container, ""),
+        opt("delay", delay, ""),
+        opt("html", html, false),
+        opt("placement", placement, TooltipPlacement.right),
+        opt("selector", selector, ""),
+        opt("template", template, ""),
+        opt("title", title, ""),
+        opt("trigger", trigger, ""),
+        opt("viewport", viewport, "")
+      ).flatten.map(kv ⇒ kv._1 → kv._2.toString)
+    }
+  }
+
+  trait Tooltip extends BootstrapComponent {
+    def options: TooltipOptions
+  }
+
+  /**
+    * Inspired by the excellent jQuery.tipsy plugin written by Jason Frame;
+    * Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage.
+    * Tooltips with zero-length titles are never displayed.
+    * @see [[http://getbootstrap.com/javascript/#tooltips]]
+    */
+  trait TooltipFactory {
+    def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Tooltip
+  }
+
+  val Tooltip: TooltipFactory
+
+  final class TooltipPlacement private[tooltip](value: String) {
+    override def toString: String = value
+  }
+
+  object TooltipPlacement {
+    private[this] def placement(str: String): TooltipPlacement = new TooltipPlacement(str)
+    val auto = placement("auto")
+    val left = placement("left")
+    val right = placement("right")
+    val top = placement("top")
+    val bottom = placement("bottom")
+  }
+}

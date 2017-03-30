@@ -1,18 +1,16 @@
 package com.karasiq.bootstrap.test.frontend
 
-import com.karasiq.bootstrap.BootstrapImplicits._
-import com.karasiq.bootstrap.table.{PagedTable, TableRow, TableStyle}
-import com.karasiq.bootstrap.{Bootstrap, BootstrapComponent}
+import com.karasiq.bootstrap.Bootstrap._
 import rx._
 
-import scalatags.JsDom.all._
+import scalaTags.all._
 
-final class TestTable(implicit ctx: Ctx.Owner) extends BootstrapComponent {
+final class TestTable extends BootstrapComponent {
   override def render(md: Modifier*): Modifier = {
     // Table content
     val reactiveColumn = Var(2)
     val heading = Var(Seq[Modifier]("First", "Second", "Third"))
-    val content = Var(for (i <- 1 to 45) yield TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := Bootstrap.jsClick { row ⇒
+    val content = Var(for (i <- 1 to 45) yield TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := Callback.onClick { row ⇒
       reactiveColumn.update(reactiveColumn.now + 1)
       row.classList.add("success")
     }))
