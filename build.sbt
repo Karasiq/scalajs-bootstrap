@@ -7,9 +7,12 @@ val scalaRxVersion = "0.3.2"
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "1.2.0",
+  version := "2.0.0-SNAPSHOT",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.8"
+)
+
+lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -37,21 +40,7 @@ lazy val commonSettings = Seq(
 
 lazy val librarySettings = Seq(
   crossScalaVersions := Seq("2.11.8", "2.12.1"),
-  name := "scalajs-bootstrap",
-  libraryDependencies ++= Seq(
-    "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-    "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
-    "com.lihaoyi" %%% "scalarx" % scalaRxVersion
-  ),
-  scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
-    val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
-    s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
-  }))
-)
-
-lazy val textLibrarySettings = Seq(
-  crossScalaVersions := Seq("2.11.8", "2.12.1"),
-  name := "scalajs-bootstrap-text"
+  name := "scalajs-bootstrap"
 )
 
 lazy val testServerSettings = Seq(
@@ -99,30 +88,44 @@ lazy val testPageSettings = Seq(
 )
 
 // Projects
-lazy val library = (project in file("."))
-  .settings(commonSettings, librarySettings)
-  .enablePlugins(ScalaJSPlugin)
-  .aggregate(textLibraryJS, textLibraryJVM)
-
-lazy val textLibrary = (crossProject in file("text"))
-  .settings(commonSettings, textLibrarySettings)
+lazy val library = crossProject
+  .settings(commonSettings, publishSettings, librarySettings)
   .jsSettings(
-    libraryDependencies ++= Seq("com.lihaoyi" %%% "scalatags" % scalaTagsVersion)
+    libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
+    ),
+    scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
+      val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
+      s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
+    }))
   )
   .jvmSettings(
-    libraryDependencies ++= Seq("com.lihaoyi" %% "scalatags" % scalaTagsVersion)
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %% "scalarx" % scalaRxVersion
+    )
   )
 
-lazy val textLibraryJS = textLibrary.js
+lazy val libraryJS = library.js
 
-lazy val textLibraryJVM = textLibrary.jvm 
+lazy val libraryJVM = library.jvm
+
+lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
+  .settings(commonSettings, name := "scalajs-bootstrap-test-shared")
+  .dependsOn(library)
+
+lazy val testSharedJS = testShared.js
+
+lazy val testSharedJVM = testShared.jvm
 
 lazy val testServer = (project in file("test"))
   .settings(testServerSettings)
-  .dependsOn(textLibraryJVM)
+  .dependsOn(testSharedJVM)
   .enablePlugins(ScalaJSBundlerPlugin)
 
 lazy val testPage = (project in (file("test") / "frontend"))
   .settings(commonSettings, testPageSettings)
   .enablePlugins(ScalaJSPlugin)
-  .dependsOn(library)
+  .dependsOn(testSharedJS)

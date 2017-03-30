@@ -1,6 +1,7 @@
 package com.karasiq.bootstrap.test.frontend
 
 import com.karasiq.bootstrap.Bootstrap.default._
+import com.karasiq.bootstrap.test.TestHtmlPage
 import org.scalajs.dom
 import org.scalajs.dom.window
 import org.scalajs.jquery._
@@ -28,7 +29,7 @@ object BootstrapTestApp extends JSApp {
         NavigationTab("Carousel", "carousel", "picture".glyphicon, new TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
         NavigationTab("ToDo list", "todo", "fort-awesome".fontAwesome(FontAwesome.fixedWidth), new TodoList),
         NavigationTab("Text rendering", "text", "envelope".glyphicon, Bootstrap.jumbotron(
-          FormInput.textArea("Text rendering", rows := 10, readonly, TestTextPage())
+          FormInput.textArea(a("Text rendering", href := "serverside.html"), rows := 10, readonly, TestHtmlPage())
         ))
       ))
       val navigationBar = NavigationBar()
