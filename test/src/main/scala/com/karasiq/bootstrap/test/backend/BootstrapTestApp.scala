@@ -6,6 +6,7 @@ import akka.actor._
 import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
+import com.karasiq.bootstrap.test.TestHtmlPage
 import spray.can.Http
 import spray.http._
 import spray.routing.HttpService
