@@ -5,34 +5,17 @@ import com.karasiq.bootstrap.context.RenderingContext
 import scala.language.{implicitConversions, postfixOps}
 
 trait BootstrapComponents { self: RenderingContext ⇒
-  import scalaTags.all.{Modifier, Tag}
-
-  trait ModifierFactory extends scalaTags.Modifier {
-    def createModifier: Modifier
-
-    final def applyTo(t: Element): Unit = {
-      createModifier.applyTo(t)
-    }
-  }
-
-  trait BootstrapComponent extends ModifierFactory {
-    def render(md: Modifier*): Modifier
-
-    final def createModifier: Modifier = {
-      render()
-    }
-  }
-
-  trait BootstrapHtmlComponent extends BootstrapComponent {
-    def renderTag(md: Modifier*): Tag
-
-    final def render(md: Modifier*): Modifier = {
-      renderTag(md:_*)
-    }
-  }
+  final type ModifierFactory = generic.ModifierFactory[Element]
+  final type BootstrapComponent = generic.BootstrapComponent[Element]
+  final type BootstrapDomComponent = generic.BootstrapDomComponent[Element, FragT]
+  final type BootstrapHtmlComponent = generic.BootstrapHtmlComponent[Element, Output, FragT]
 
   implicit def renderBootstrapHtmlComponent[C](bc: C)(implicit ev: C ⇒ BootstrapHtmlComponent): scalaTags.Tag = {
     bc.renderTag()
+  }
+
+  implicit def renderBootstrapDomComponent[C](bc: C)(implicit ev: C ⇒ BootstrapDomComponent): scalaTags.Frag = {
+    bc.renderFrag()
   }
 
   implicit def renderBootstrapComponent[C](bc: C)(implicit ev: C ⇒ BootstrapComponent): scalaTags.Modifier = {
