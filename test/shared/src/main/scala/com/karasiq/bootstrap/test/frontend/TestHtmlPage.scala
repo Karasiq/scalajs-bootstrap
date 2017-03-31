@@ -1,9 +1,10 @@
-package com.karasiq.bootstrap.test
-
-import com.karasiq.bootstrap.Bootstrap.text._
-import rx._
+package com.karasiq.bootstrap.test.frontend
 
 import scala.language.postfixOps
+
+import rx._
+
+import com.karasiq.bootstrap.Bootstrap.text._
 import scalaTags.all._
 
 object TestHtmlPage {
@@ -29,9 +30,9 @@ object TestHtmlPage {
       val navigationBar = NavigationBar()
         .withBrand(rxText, href := "http://getbootstrap.com/components/#navbar")
         .withTabs(
-          NavigationTab("Table", "table", "table".fontAwesome(FontAwesome.fixedWidth), this.createTable),
+          NavigationTab("Table", "table", "table".faFwIcon, this.createTable),
           NavigationTab("Carousel", "carousel", "picture".glyphicon, this.createCarousel),
-          NavigationTab("Buttons", "empty", "address-book".fontAwesome(FontAwesome.fixedWidth), Bootstrap.jumbotron(
+          NavigationTab("Buttons", "empty", "address-book".faFwIcon, Bootstrap.jumbotron(
             Bootstrap.button("Modal", testModal.toggle)
           ))
         )
@@ -53,19 +54,7 @@ object TestHtmlPage {
     }
 
     private[this] def createCarousel = {
-      val imgSrc = "https://upload.wikimedia.org/wikipedia/commons/9/9e/Scorpius_featuring_Mars_and_Saturn._%2828837147345%29.jpg"
-      Carousel(
-        Carousel.slide(
-          imgSrc,
-          h3("First slide label"),
-          p("Nulla vitae elit libero, a pharetra augue mollis interdum.")
-        ),
-        Carousel.slide(
-          imgSrc,
-          h3("Second slide label"),
-          p("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-        )
-      )
+      TestCarousel("https://upload.wikimedia.org/wikipedia/commons/9/9e/Scorpius_featuring_Mars_and_Saturn._%2828837147345%29.jpg")
     }
   }
 

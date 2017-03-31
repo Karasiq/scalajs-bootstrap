@@ -14,4 +14,5 @@ trait RenderingContext extends ReactiveBinds with ReactiveImplicits with Callbac
   type FragT
 
   val scalaTags: generic.Bundle[Element, Output, FragT] with generic.Aliases[Element, Output, FragT]
+  implicit val implicitRenderingContext: this.type = this
 }

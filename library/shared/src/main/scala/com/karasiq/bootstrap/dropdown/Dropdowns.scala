@@ -12,7 +12,7 @@ trait Dropdowns { self: BootstrapBundle ⇒
       div(`class` := "dropdown")(
         Bootstrap.button("dropdown-toggle".addClass, id := dropdownId, `data-toggle` := "dropdown", aria.haspopup := true, aria.expanded := false)(
           title,
-          raw("&nbsp"),
+          Bootstrap.nbsp,
           span(`class` := "caret")
         ),
         ul(`class` := "dropdown-menu", aria.labelledby := dropdownId)(

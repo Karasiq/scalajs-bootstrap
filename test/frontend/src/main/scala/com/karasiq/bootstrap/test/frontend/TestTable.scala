@@ -5,6 +5,12 @@ import rx._
 
 import scalaTags.all._
 
+object TestTable {
+  def apply(): TestTable = {
+    new TestTable()
+  }
+}
+
 final class TestTable extends BootstrapComponent {
   override def render(md: Modifier*): Modifier = {
     // Table content

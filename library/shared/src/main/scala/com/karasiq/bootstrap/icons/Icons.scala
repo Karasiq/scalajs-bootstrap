@@ -1,22 +1,24 @@
 package com.karasiq.bootstrap.icons
 
+import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.utils.ClassModifiers
 
 import scala.language.{implicitConversions, postfixOps}
 
-trait Icons { self: RenderingContext with ClassModifiers ⇒
+trait Icons { self: RenderingContext with BootstrapComponents with ClassModifiers ⇒
   import scalaTags.all._
 
   trait IconModifier extends BootstrapComponent
 
   case object NoIcon extends IconModifier {
-    override def render(md: Modifier*): Modifier = ()
+    private[this] val modifier: ModifierT = ()
+    override def render(md: ModifierT*): ModifierT = modifier
   }
 
   final class BootstrapGlyphicon(name: String) extends BootstrapHtmlComponent with IconModifier {
-    override def renderTag(md: Modifier*): Tag = {
-      span(`class` := s"glyphicon glyphicon-$name", aria.hidden := true, md)
+    override def renderTag(md: ModifierT*): TagT = {
+      span(`class` := "glyphicon glyphicon-" + name, aria.hidden := true)(md:_*)
     }
   }
 
@@ -27,13 +29,13 @@ trait Icons { self: RenderingContext with ClassModifiers ⇒
   }
 
   final class FontAwesomeIcon(name: String, styles: Seq[FontAwesomeStyle]) extends BootstrapHtmlComponent with IconModifier {
-    override def renderTag(md: Modifier*): Tag = {
-      i(Seq("fa", s"fa-$name").map(_.addClass), styles, aria.hidden := true, md)
+    override def renderTag(md: ModifierT*): TagT = {
+      i(`class` := "fa fa-" + name, styles, aria.hidden := true)(md:_*)
     }
   }
 
   final class FontAwesomeStyle private[icons] (style: String) extends ModifierFactory {
-    override val createModifier: Modifier = s"fa-$style".addClass
+    override val createModifier: ModifierT = ("fa-" + style).addClass
   }
 
   /**
@@ -44,9 +46,8 @@ trait Icons { self: RenderingContext with ClassModifiers ⇒
       new FontAwesomeIcon(name, styles)
     }
 
-    private implicit def style(str: String): FontAwesomeStyle = {
-      new FontAwesomeStyle(str)
-    }
+    @inline
+    private[this] implicit def faStyle(str: String): FontAwesomeStyle = new FontAwesomeStyle(str)
 
     lazy val inverse: FontAwesomeStyle = "inverse"
 
@@ -82,15 +83,20 @@ trait Icons { self: RenderingContext with ClassModifiers ⇒
 
     // Stacked icons
     def stacked(icons: Tag*): Tag = {
-      span(style("stack"), icons)
+      span(faStyle("stack"), icons)
     }
 
     lazy val stacked1x: FontAwesomeStyle = "stack-1x"
     lazy val stacked2x: FontAwesomeStyle = "stack-2x"
   }
 
+  //noinspection SpellCheckingInspection
   implicit class BootstrapIconsOps(iconName: String) {
     def glyphicon: BootstrapGlyphicon = BootstrapGlyphicon(iconName)
     def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
+
+    // Shortcuts
+    def faIcon: FontAwesomeIcon = this.fontAwesome()
+    def faFwIcon: FontAwesomeIcon = this.fontAwesome(FontAwesome.fixedWidth)
   }
 }
