@@ -7,7 +7,7 @@ val scalaRxVersion = "0.3.2"
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "2.0.0-SNAPSHOT",
+  version := "2.0.0",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
   crossScalaVersions := Seq("2.11.8", "2.12.1")
