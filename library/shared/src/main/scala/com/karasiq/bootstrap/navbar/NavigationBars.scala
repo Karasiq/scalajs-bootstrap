@@ -35,7 +35,7 @@ trait NavigationBars { self: RenderingContext with Icons with Grids with Utils w
         val idLink = s"$navId-${tab.id}-tab"
         li(role := "presentation", tab.modifiers)(
           a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
-            if (tab.icon != NoIcon) Seq[Modifier](tab.icon, raw("&nbsp;")) else (),
+            if (tab.icon != NoIcon) Seq[Modifier](tab.icon, Bootstrap.nbsp) else (),
             tab.name
           )
         )
@@ -86,7 +86,7 @@ trait NavigationBars { self: RenderingContext with Icons with Grids with Utils w
           tab.modifiers,
           "active".classIf(active),
           a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
-            if (tab.icon != NoIcon) Seq[Modifier](tab.icon, raw("&nbsp;")) else (),
+            if (tab.icon != NoIcon) Seq[Modifier](tab.icon, Bootstrap.nbsp) else (),
             tab.name
           )
         )

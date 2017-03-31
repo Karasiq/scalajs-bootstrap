@@ -1,12 +1,19 @@
 package com.karasiq.bootstrap.test.frontend
 
-import com.karasiq.bootstrap.Bootstrap.default._
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
 import org.scalajs.dom.window
 import rx._
 
-import scala.concurrent.duration.{span => _, _}
-import scala.language.postfixOps
-import scalaTags.all._
+import com.karasiq.bootstrap.Bootstrap.default._
+import scalaTags.all.{span, _}
+
+object TestPanel {
+  def apply(panelTitle: String, style: PanelStyle): TestPanel = {
+    new TestPanel(panelTitle, style)
+  }
+}
 
 final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHtmlComponent {
   override def renderTag(md: Modifier*): Tag = {
@@ -31,7 +38,7 @@ final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHt
     val panelId = Bootstrap.newId
     val collapseBtnTitle = Var("ERROR")
     val panel = Panel(panelId, style)
-      .withHeader(Panel.title("euro".glyphicon, Panel.collapse(panelId, panelTitle, raw("&nbsp"), Bootstrap.badge("42")), Panel.buttons(
+      .withHeader(Panel.title("euro".glyphicon, Panel.collapse(panelId, panelTitle, Bootstrap.nbsp, Bootstrap.badge("42")), Panel.buttons(
         Panel.button("plus".glyphicon, onclick := Callback.onClick(_ ⇒ window.alert("Panel add"))),
         Panel.button("minus".glyphicon, onclick := Callback.onClick(_ ⇒ window.alert("Panel remove")))
       )))

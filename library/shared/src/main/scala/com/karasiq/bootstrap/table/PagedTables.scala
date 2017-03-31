@@ -100,7 +100,7 @@ trait PagedTables { self: RenderingContext with BootstrapComponents with Tables 
       )
     }
 
-    override def render(md: Modifier*): Modifier = Rx {
+    override def render(md: ModifierT*): ModifierT = Rx {
       ul(`class` := "pagination", Rx(pages() == 1).reactiveHide, md)(
         previousPageButton,
         for(page <- 1 to pages()) yield pageButton(page),

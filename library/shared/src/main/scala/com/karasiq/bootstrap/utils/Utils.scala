@@ -17,24 +17,24 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * A lightweight, flexible component that can optionally extend the entire viewport to showcase key content on your site.
       * @see [[https://getbootstrap.com/components/#jumbotron]]
       */
-    def jumbotron: Tag = div("jumbotron".addClass)
+    lazy val jumbotron: Tag = div(`class` := "jumbotron")
 
     /**
       * Use the well as a simple effect on an element to give it an inset effect.
       * @see [[https://getbootstrap.com/components/#wells]]
       */
-    def well: Tag = div("well".addClass)
+    lazy val well: Tag = div(`class` := "well")
 
     /**
       * Easily highlight new or unread items by adding a badge to links, Bootstrap navs, and more.
       * @see [[https://getbootstrap.com/components/#badges]]
       */
-    def badge: Tag = span("badge".addClass)
+    lazy val badge: Tag = span(`class` := "badge")
 
     /**
       * Default button
       */
-    def button: Tag = Button().renderTag()
+    lazy val button: Tag = Button().renderTag()
 
     /**
       * Glyphicon
@@ -42,7 +42,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[https://getbootstrap.com/components/#glyphicons]]
       */
     def icon(name: String): BootstrapGlyphicon = {
-      new BootstrapGlyphicon(name)
+      BootstrapGlyphicon(name)
     }
 
     /**
@@ -143,7 +143,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * Use the generic close icon for dismissing content like modals and alerts.
       * @see [[http://getbootstrap.com/css/#helper-classes-close]]
       */
-    def closeIcon: Tag = {
+    lazy val closeIcon: Tag = {
       scalaTags.tags.button(`type` := "button", `class` := "close", aria.label := "Close", span(aria.hidden := true, raw("&times;")))
     }
 
@@ -152,9 +152,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * Note that the default caret will reverse automatically in dropup menus.
       * @see [[http://getbootstrap.com/css/#helper-classes-carets]]
       */
-    def caret: Tag = {
-      span(`class` := "caret")
-    }
+    lazy val caret: Tag = span(`class` := "caret")
 
     /**
       * Float an element to the left or right with a class.
@@ -171,14 +169,14 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * Set an element to display: block and center via margin
       * @see [[http://getbootstrap.com/css/#helper-classes-center]]
       */
-    def centerBlock = "center-block".addClass
+    lazy val centerBlock = "center-block".addClass
 
     /**
       * Easily clear floats by adding `.clearfix` <b>to the parent element</b>.
       * Utilizes [[http://nicolasgallagher.com/micro-clearfix-hack/ the micro clearfix]] as popularized by Nicolas Gallagher.
       * @see [[http://getbootstrap.com/css/#helper-classes-clearfix]]
       */
-    def clearFix = "clearfix".addClass
+    lazy val clearFix = "clearfix".addClass
 
     /**
       * Force an element to be shown or hidden (including for screen readers) with the use of `.show` and `.hidden` classes.
@@ -201,27 +199,40 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * Hide an element to all devices except screen readers with `.sr-only`
       * @see [[http://getbootstrap.com/css/#helper-classes-screen-readers]]
       */
-    def srOnly = "sr-only".addClass
+    lazy val srOnly = "sr-only".addClass
 
     /**
       * Combine [[com.karasiq.bootstrap.utils.Utils.Bootstrap#srOnly() .sr-only]] with `.sr-only-focusable` to show the element again when it's focused (e.g. by a keyboard-only user)
       * @see [[http://getbootstrap.com/css/#helper-classes-screen-readers]]
       */
-    def srOnlyFocusable: Modifier = Seq("sr-only", "sr-only-focusable").map(_.addClass)
+    lazy val srOnlyFocusable: Modifier = Seq("sr-only", "sr-only-focusable").map(_.addClass)
 
     /**
       * Utilize the `.text-hide` class or mixin to help replace an element's text content with a background image.
       * @see [[http://getbootstrap.com/css/#helper-classes-image-replacement]]
       */
-    def textHide: TextModifier = new TextModifier {
+    lazy val textHide: TextModifier = new TextModifier {
       def style = "hide"
     }
 
-    def dataProperties[T: AttrValue](props: (String, T)*): Modifier = {
+    /**
+      * Appends `data-%property%` attributes to the element
+      * @param props Properties
+      * @tparam T Value type
+      * @return Modifier
+      */
+    def dataProps[T: AttrValue](props: (String, T)*): Modifier = {
       props.map { case (name, value) ⇒
         attr("data-" + name) := value
       }
     }
+
+    /**
+      * Non-breaking Space
+      * A common character entity used in HTML is the non-breaking space: &nbsp;
+      * A non-breaking space is a space that will not break into a new line.
+      */
+    val nbsp = raw("&nbsp")
   }
 
   object BootstrapAttrs {

@@ -37,7 +37,7 @@ trait Forms { self: BootstrapBundle ⇒
       div("checkbox".addClass)(
         label(
           input(`type` := "checkbox", md),
-          raw("&nbsp;"),
+          Bootstrap.nbsp,
           checkboxLabel
         )
       )

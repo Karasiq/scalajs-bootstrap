@@ -15,7 +15,7 @@ trait TextPopovers { self: RenderingContext with BootstrapComponents with Toolti
   class TextPopover(val options: PopoverOptions) extends Popover {
     override def render(md: Modifier*): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
-        ((`data-toggle` := "popover") +: Bootstrap.dataProperties(options.toStrings:_*) +: md).applyTo(t)
+        ((`data-toggle` := "popover") +: Bootstrap.dataProps(options.toStrings:_*) +: md).applyTo(t)
       }
     }
   }

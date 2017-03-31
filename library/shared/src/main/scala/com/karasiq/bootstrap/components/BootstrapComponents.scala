@@ -27,19 +27,19 @@ trait BootstrapComponents { self: RenderingContext ⇒
     bc.createModifier
   }
 
-  implicit def renderGenModifierFactory(bc: GenModifierFactory { type RC >: self.type }): scalaTags.Modifier = {
-    bc.render(self)
+  implicit def renderGenModifierFactory(bc: GenModifierFactory { type RC >: self.type }): ModifierFactory = {
+    bc.component
   }
 
-  implicit def renderGenComponent(bc: GenComponent { type RC >: self.type }): scalaTags.Modifier = {
-    bc.render(self)
+  implicit def renderGenComponent(bc: GenComponent { type RC >: self.type }): BootstrapComponent = {
+    bc.component
   }
 
-  implicit def renderGenDomComponent(bc: GenDomComponent { type RC >: self.type }): scalaTags.Frag = {
-    bc.render(self)
+  implicit def renderGenDomComponent(bc: GenDomComponent { type RC >: self.type }): BootstrapDomComponent = {
+    bc.component
   }
 
-  implicit def renderGenHtmlComponent(bc: GenHtmlComponent { type RC >: self.type }): scalaTags.Tag = {
-    bc.render(self)
+  implicit def renderGenHtmlComponent(bc: GenHtmlComponent { type RC >: self.type }): BootstrapHtmlComponent = {
+    bc.component
   }
 }

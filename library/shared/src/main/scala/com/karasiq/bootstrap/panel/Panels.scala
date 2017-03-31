@@ -47,7 +47,7 @@ trait Panels { self: RenderingContext with Utils with BootstrapComponents with C
     def title(icon: IconModifier, title: Modifier, modifiers: Modifier*): Tag = {
       h3(`class` := "panel-title")(
         icon,
-        raw("&nbsp;"),
+        Bootstrap.nbsp,
         title,
         modifiers
       )
