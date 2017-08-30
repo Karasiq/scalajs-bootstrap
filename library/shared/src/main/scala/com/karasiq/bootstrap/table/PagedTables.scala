@@ -1,11 +1,12 @@
 package com.karasiq.bootstrap.table
 
+import scala.language.postfixOps
+
+import rx._
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.utils.ClassModifiers
-import rx._
-
-import scala.language.postfixOps
 
 trait PagedTables { self: RenderingContext with BootstrapComponents with Tables with ClassModifiers ⇒
   import scalaTags.all._
@@ -58,7 +59,7 @@ trait PagedTables { self: RenderingContext with BootstrapComponents with Tables 
     }
 
     def static(heading: Seq[Modifier], content: Seq[TableRow], perPage: Int = 20): StaticPagedTable = {
-      this.apply(Rx(heading), Rx(content), perPage)
+      this.apply(Var(heading), Var(content), perPage)
     }
   }
 
