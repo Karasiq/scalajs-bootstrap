@@ -1,9 +1,10 @@
 package com.karasiq.bootstrap.table
 
-import com.karasiq.bootstrap.context.BootstrapBundle
-import rx.Rx
-
 import scala.language.postfixOps
+
+import rx.{Rx, Var}
+
+import com.karasiq.bootstrap.context.BootstrapBundle
 
 trait Tables { self: BootstrapBundle ⇒
   import scalaTags.all._
@@ -26,7 +27,7 @@ trait Tables { self: BootstrapBundle ⇒
       override def styleClass: Option[String] = Some(s)
     }
 
-    def default = new TableRowStyle {
+    def default: TableRowStyle = new TableRowStyle {
       override def styleClass: Option[String] = None
     }
     def active = style("active")
@@ -77,6 +78,10 @@ trait Tables { self: BootstrapBundle ⇒
   object Table {
     def apply(heading: Rx[Seq[Modifier]], content: Rx[Seq[TableRow]]): Table = {
       new StaticTable(heading, content)
+    }
+
+    def static(heading: Seq[Modifier], content: Seq[TableRow]): Table = {
+      apply(Var(heading), Var(content))
     }
   }
 
