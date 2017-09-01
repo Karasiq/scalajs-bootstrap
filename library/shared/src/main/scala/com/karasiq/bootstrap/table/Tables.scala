@@ -4,95 +4,24 @@ import scala.language.postfixOps
 
 import rx.{Rx, Var}
 
-import com.karasiq.bootstrap.context.BootstrapBundle
+import com.karasiq.bootstrap.context.RenderingContext
 
-trait Tables { self: BootstrapBundle ⇒
+trait Tables extends TableRows with TableStyles { self: RenderingContext ⇒
   import scalaTags.all._
 
-  trait TableRow {
-    def columns: Seq[Modifier]
+  type Table <: AbstractTable with BootstrapHtmlComponent
+  val Table: TableFactory
 
-    def modifiers: Modifier
-  }
-
-  sealed trait TableRowStyle extends ModifierFactory {
-    def styleClass: Option[String]
-
-    override final def createModifier: Modifier = styleClass.map(_.addClass)
-  }
-
-  //noinspection TypeAnnotation
-  object TableRowStyle {
-    private def style(s: String): TableRowStyle = new TableRowStyle {
-      override def styleClass: Option[String] = Some(s)
-    }
-
-    def default: TableRowStyle = new TableRowStyle {
-      override def styleClass: Option[String] = None
-    }
-    def active = style("active")
-    def success = style("success")
-    def warning = style("warning")
-    def danger = style("danger")
-    def info = style("info")
-  }
-
-  object TableRow {
-    def apply(data: Seq[Modifier], ms: Modifier*): TableRow = new TableRow {
-      override def modifiers: Modifier = ms
-      override def columns: Seq[Modifier] = data
-    }
-
-    def data(data: Modifier*): TableRow = {
-      apply(data)
-    }
-  }
-
-  trait Table extends BootstrapHtmlComponent {
+  trait AbstractTable {
     def heading: Rx[Seq[Modifier]]
     def content: Rx[Seq[TableRow]]
-
-    private def tableHead: Rx[Tag] = Rx {
-      thead(tr(for (h <- heading()) yield th(h)))
-    }
-
-    private def tableBody: Rx[Tag] = Rx {
-      tbody(for (row <- content()) yield {
-        tr(
-          row.modifiers,
-          for (col <- row.columns) yield td(col)
-        )
-      })
-    }
-
-    override def renderTag(md: Modifier*): Tag = {
-      div("table-responsive".addClass)(
-        table("table".addClass, tableHead, tableBody, md)
-      )
-    }
   }
 
-  class StaticTable(val heading: Rx[Seq[Modifier]],
-                    val content: Rx[Seq[TableRow]]) extends Table
-
-  object Table {
-    def apply(heading: Rx[Seq[Modifier]], content: Rx[Seq[TableRow]]): Table = {
-      new StaticTable(heading, content)
-    }
+  trait TableFactory {
+    def apply(heading: Rx[Seq[Modifier]], content: Rx[Seq[TableRow]]): Table
 
     def static(heading: Seq[Modifier], content: Seq[TableRow]): Table = {
       apply(Var(heading), Var(content))
     }
-  }
-
-  final class TableStyle private[table] (style: String) extends ModifierFactory {
-    val createModifier: Modifier = s"table-$style".addClass
-  }
-
-  object TableStyle {
-    lazy val striped = new TableStyle("striped")
-    lazy val hover = new TableStyle("hover")
-    lazy val bordered = new TableStyle("bordered")
-    lazy val condensed = new TableStyle("condensed")
   }
 }

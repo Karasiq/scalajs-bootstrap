@@ -65,7 +65,7 @@ lazy val testServerSettings = Seq(
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
   scalaJsBundlerInline in Compile := true,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage),
+  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fastOptJS in Compile in testPage),
   scalaJsBundlerAssets in Compile += {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
@@ -84,7 +84,7 @@ lazy val testServerSettings = Seq(
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
-    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage).value)
+    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = true).value)
   }
 )
 

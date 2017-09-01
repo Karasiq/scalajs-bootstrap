@@ -1,8 +1,8 @@
 package com.karasiq.bootstrap.test.frontend
 
-import com.karasiq.bootstrap.Bootstrap.default._
 import rx._
 
+import com.karasiq.bootstrap.Bootstrap.default._
 import scalaTags.all._
 
 object TestTable {
@@ -26,7 +26,7 @@ final class TestTable extends BootstrapComponent {
     val renderedTable = pagedTable.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, md).render
 
     // Test reactive components
-    pagedTable.currentPage.update(2)
+    pagedTable.pageSelector.currentPage() = 2
     content.update(content.now.reverse)
     heading.update(Seq("Eins", "Zwei", Rx("Drei " + reactiveColumn())))
     renderedTable

@@ -1,9 +1,9 @@
 package com.karasiq.bootstrap.tooltip
 
+import scala.language.{implicitConversions, postfixOps}
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
-
-import scala.language.{implicitConversions, postfixOps}
 
 trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
   import scalaTags.all._
@@ -48,6 +48,7 @@ trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
     override def toString: String = value
   }
 
+  //noinspection TypeAnnotation
   object TooltipPlacement {
     private[this] def placement(str: String): TooltipPlacement = new TooltipPlacement(str)
     val auto = placement("auto")
