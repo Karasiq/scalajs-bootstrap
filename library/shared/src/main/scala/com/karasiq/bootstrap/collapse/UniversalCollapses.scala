@@ -10,8 +10,8 @@ trait UniversalCollapses { self: RenderingContext with Collapses with Utils ⇒
 
   type Collapse = UniversalCollapse
   object Collapse extends CollapseFactory {
-    def apply(title: Modifier, collapseId: String = Bootstrap.newId)(content: Modifier*): UniversalCollapse = {
-      new UniversalCollapse(title)
+    def create(title: Modifier, collapseId: String = Bootstrap.newId): UniversalCollapse = {
+      new UniversalCollapse(title, collapseId)
     }
   }
 
@@ -34,7 +34,7 @@ trait UniversalCollapses { self: RenderingContext with Collapses with Utils ⇒
     }
 
     def renderTag(md: ModifierT*): TagT = {
-      div(Bootstrap.button(title, this.toggle), container(Bootstrap.well(md:_*)))
+      div(Bootstrap.button(title, this.toggle), container(Bootstrap.well(md)))
     }
   }
 }

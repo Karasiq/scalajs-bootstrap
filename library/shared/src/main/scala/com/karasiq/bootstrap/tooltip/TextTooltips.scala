@@ -1,17 +1,17 @@
 package com.karasiq.bootstrap.tooltip
 
+import scala.language.postfixOps
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.utils.Utils
 
-import scala.language.postfixOps
-
 trait TextTooltips { self: RenderingContext with BootstrapComponents with Tooltips with Utils ⇒
-  import BootstrapAttrs._
-
   import scalaTags.all._
 
-  class TextTooltip(val options: TooltipOptions) extends Tooltip {
+  import BootstrapAttrs._
+
+  class TextTooltip(val options: TooltipOptions) extends AbstractTooltip {
     override def render(md: Modifier*): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         ((`data-toggle` := "tooltip") +: Bootstrap.dataProps(options.toStrings:_*) +: md).applyTo(t)
@@ -26,7 +26,7 @@ trait TextTooltips { self: RenderingContext with BootstrapComponents with Toolti
     * @see [[http://getbootstrap.com/javascript/#tooltips]]
     */
   object Tooltip extends TooltipFactory {
-    def apply(content: Frag, placement: TooltipPlacement): Tooltip = {
+    def apply(content: Frag, placement: TooltipPlacement): AbstractTooltip = {
       new TextTooltip(TooltipOptions(html = true, title = content, placement = placement))
     }
   }

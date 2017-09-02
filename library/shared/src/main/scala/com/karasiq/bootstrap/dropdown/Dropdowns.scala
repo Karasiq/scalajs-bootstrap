@@ -6,6 +6,7 @@ trait Dropdowns { self: RenderingContext ⇒
   import scalaTags.all._
 
   type Dropdown <: AbstractDropdown
+  val Dropdown: DropdownFactory
 
   trait AbstractDropdown extends BootstrapHtmlComponent {
     def dropdownId: String
@@ -15,7 +16,9 @@ trait Dropdowns { self: RenderingContext ⇒
     def dropdown: Tag
     def dropup: Tag
 
-    def renderTag(md: ModifierT*): TagT = this.dropdown(md:_*)
+    def renderTag(md: ModifierT*): TagT = {
+      this.dropdown(md:_*)
+    }
   }
 
   trait DropdownFactory {

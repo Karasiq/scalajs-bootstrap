@@ -8,6 +8,9 @@ import com.karasiq.bootstrap.context.RenderingContext
 trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
   import scalaTags.all._
 
+  type Tooltip <: AbstractTooltip
+  val Tooltip: TooltipFactory
+
   case class TooltipOptions(animation: Boolean = true, container: String = "", delay: String = "",
                             html: Boolean = false, placement: TooltipPlacement = TooltipPlacement.right, selector: String = "", template: String = "",
                             title: Frag = "", trigger: String = "", viewport: String = "") {
@@ -28,7 +31,7 @@ trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
     }
   }
 
-  trait Tooltip extends BootstrapComponent {
+  trait AbstractTooltip extends BootstrapComponent {
     def options: TooltipOptions
   }
 
@@ -39,10 +42,8 @@ trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
     * @see [[http://getbootstrap.com/javascript/#tooltips]]
     */
   trait TooltipFactory {
-    def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Tooltip
+    def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): AbstractTooltip
   }
-
-  val Tooltip: TooltipFactory
 
   final class TooltipPlacement private[tooltip](value: String) {
     override def toString: String = value

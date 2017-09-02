@@ -1,8 +1,9 @@
 package com.karasiq.bootstrap.utils
 
-import com.karasiq.bootstrap.context.ReactiveBinds.Modify
-import com.karasiq.bootstrap.context.RenderingContext
 import rx.Rx
+
+import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.context.ReactiveBinds.Modify
 
 trait ClassModifiers { self: RenderingContext ⇒
   import scalaTags.all._
@@ -10,28 +11,36 @@ trait ClassModifiers { self: RenderingContext ⇒
   def addClass(element: Element, className: String): Unit
   def removeClass(element: Element, className: String): Unit
 
+  sealed trait ClassModifier extends Modifier {
+    def className: String
+    def classAdded: Boolean
+    def classRemoved: Boolean
+  }
+
+  case class ClassAdd(className: String) extends ClassModifier {
+    val classAdded = true
+    val classRemoved = false
+    def applyTo(t: Element): Unit = addClass(t, className)
+  }
+
+  case class ClassRemove(className: String) extends ClassModifier {
+    val classAdded = false
+    val classRemoved = true
+    def applyTo(t: Element): Unit = removeClass(t, className)
+  }
+
   //noinspection MutatorLikeMethodIsParameterless
   implicit class HtmlClassOps(className: String) {
-    def addClass: Modifier = new Modifier {
-      override def applyTo(t: Element): Unit = {
-        ClassModifiers.this.addClass(t, className)
-      }
+    def addClass: ClassAdd = {
+      ClassAdd(className)
     }
 
-    def removeClass: Modifier = new Modifier {
-      override def applyTo(t: Element): Unit = {
-        ClassModifiers.this.removeClass(t, className)
-      }
+    def removeClass: ClassRemove = {
+      ClassRemove(className)
     }
 
-    def classIf(state: Boolean): Modifier = new Modifier {
-      override def applyTo(t: Element): Unit = {
-        if (state) {
-          ClassModifiers.this.addClass(t, className)
-        } else {
-          ClassModifiers.this.removeClass(t, className)
-        }
-      }
+    def classIf(state: Boolean): ClassModifier = {
+      if (state) addClass else removeClass
     }
 
     def classIf(state: Rx[Boolean]): Modifier = {
