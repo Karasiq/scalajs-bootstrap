@@ -1,11 +1,11 @@
 package com.karasiq.bootstrap.popover
 
+import scala.language.postfixOps
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.tooltip.Tooltips
 import com.karasiq.bootstrap.utils.Utils
-
-import scala.language.postfixOps
 
 trait Popovers { self: RenderingContext with BootstrapComponents with Tooltips with Utils ⇒
   import scalaTags.all._
@@ -30,7 +30,6 @@ trait Popovers { self: RenderingContext with BootstrapComponents with Tooltips w
       ).flatten.map(kv ⇒ kv._1 → kv._2.toString)
     }
   }
-
 
   trait Popover extends BootstrapComponent {
     def options: PopoverOptions
