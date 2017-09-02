@@ -16,7 +16,7 @@ import com.karasiq.bootstrap.navbar.NavigationBars
 import com.karasiq.bootstrap.pagination.{PageSelectors, UniversalPageSelectors}
 import com.karasiq.bootstrap.panel.Panels
 import com.karasiq.bootstrap.popover.Popovers
-import com.karasiq.bootstrap.progressbar.ProgressBars
+import com.karasiq.bootstrap.progressbar.{ProgressBars, UniversalProgressBars}
 import com.karasiq.bootstrap.table.{PagedTables, Tables, UniversalPagedTables, UniversalTables}
 import com.karasiq.bootstrap.tooltip.Tooltips
 import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
@@ -26,4 +26,4 @@ trait BootstrapBundle extends RenderingContext with BootstrapComponents with Cla
   with Panels with Popovers with ProgressBars with Tables with PageSelectors with PagedTables with Tooltips with Utils
 
 trait UniversalBootstrapBundle extends BootstrapBundle
-  with UniversalPageSelectors with UniversalTables with UniversalPagedTables
+  with UniversalPageSelectors with UniversalTables with UniversalPagedTables with UniversalProgressBars
