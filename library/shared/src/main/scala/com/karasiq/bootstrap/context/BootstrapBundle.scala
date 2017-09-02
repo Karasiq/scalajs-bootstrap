@@ -5,7 +5,7 @@ import scala.language.postfixOps
 import com.karasiq.bootstrap.alert.Alerts
 import com.karasiq.bootstrap.buttons.Buttons
 import com.karasiq.bootstrap.carousel.Carousels
-import com.karasiq.bootstrap.collapse.Collapses
+import com.karasiq.bootstrap.collapse.{Collapses, UniversalCollapses}
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.dropdown.{Dropdowns, UniversalDropdowns}
 import com.karasiq.bootstrap.form.{Forms, UniversalForms}
@@ -28,3 +28,4 @@ trait BootstrapBundle extends RenderingContext with BootstrapComponents with Cla
 trait UniversalBootstrapBundle extends BootstrapBundle
   with UniversalPageSelectors with UniversalTables with UniversalPagedTables with UniversalProgressBars with UniversalPanels
   with UniversalNavigationBars with UniversalModals with UniversalIcons with UniversalGrids with UniversalForms with UniversalDropdowns
+  with UniversalCollapses

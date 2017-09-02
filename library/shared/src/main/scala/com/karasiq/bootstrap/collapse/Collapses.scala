@@ -1,26 +1,21 @@
 package com.karasiq.bootstrap.collapse
 
-import com.karasiq.bootstrap.context.BootstrapBundle
+import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait Collapses { self: BootstrapBundle ⇒
-  import BootstrapAttrs._
-
+trait Collapses { self: RenderingContext with Utils⇒
   import scalaTags.all._
 
-  class Collapse(collapseId: String = Bootstrap.newId) {
-    def button(btn: Tag): Tag = {
-      btn(`data-toggle` := "collapse", `data-target` := s"#$collapseId-collapse", aria.expanded := "false", aria.controls := s"$collapseId-collapse")
-    }
+  type Collapse <: AbstractCollapse
+  val Collapse: CollapseFactory
 
-    def container(md: Modifier*): Tag = {
-      div("collapse".addClass, id := s"$collapseId-collapse", md)
-    }
+  trait AbstractCollapse extends BootstrapHtmlComponent {
+    def collapseId: String
+    def toggle: Modifier
+    def container: Tag
   }
 
-  object Collapse {
-    def apply(btnTitle: Modifier)(content: Modifier*): Modifier = {
-      val c = new Collapse()
-      Seq(c.button(Bootstrap.button(btnTitle)), c.container(Bootstrap.well(content)))
-    }
+  trait CollapseFactory {
+    def apply(title: Modifier, collapseId: String = Bootstrap.newId)(content: Modifier*): Collapse
   }
 }
