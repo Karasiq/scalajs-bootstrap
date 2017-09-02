@@ -12,7 +12,7 @@ import com.karasiq.bootstrap.form.Forms
 import com.karasiq.bootstrap.grid.Grids
 import com.karasiq.bootstrap.icons.Icons
 import com.karasiq.bootstrap.modal.Modals
-import com.karasiq.bootstrap.navbar.NavigationBars
+import com.karasiq.bootstrap.navbar.{NavigationBars, UniversalNavigationBars}
 import com.karasiq.bootstrap.pagination.{PageSelectors, UniversalPageSelectors}
 import com.karasiq.bootstrap.panel.{Panels, UniversalPanels}
 import com.karasiq.bootstrap.popover.Popovers
@@ -27,3 +27,4 @@ trait BootstrapBundle extends RenderingContext with BootstrapComponents with Cla
 
 trait UniversalBootstrapBundle extends BootstrapBundle
   with UniversalPageSelectors with UniversalTables with UniversalPagedTables with UniversalProgressBars with UniversalPanels
+  with UniversalNavigationBars
