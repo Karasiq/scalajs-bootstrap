@@ -7,10 +7,10 @@ val scalaRxVersion = "0.3.2"
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "2.0.0",
+  version := "2.1.0",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.11.8", "2.12.1")
+  crossScalaVersions := Seq("2.11.8", "2.12.3")
 )
 
 lazy val publishSettings = Seq(
@@ -65,7 +65,7 @@ lazy val testServerSettings = Seq(
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
   scalaJsBundlerInline in Compile := true,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fastOptJS in Compile in testPage),
+  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage),
   scalaJsBundlerAssets in Compile += {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
@@ -74,8 +74,8 @@ lazy val testServerSettings = Seq(
       Script from url("https://code.jquery.com/jquery-1.12.0.js"),
 
       // Bootstrap
-      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/css/bootstrap.css"),
-      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/js/bootstrap.js"),
+      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/css/bootstrap.css"),
+      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/js/bootstrap.js"),
 
       // Font Awesome
       Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")
@@ -84,7 +84,7 @@ lazy val testServerSettings = Seq(
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
-    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = true).value)
+    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false).value)
   }
 )
 
