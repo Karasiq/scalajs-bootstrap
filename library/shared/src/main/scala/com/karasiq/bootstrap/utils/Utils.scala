@@ -59,8 +59,8 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[http://getbootstrap.com/css/#images-shapes]]
       */
     object image {
-      final class ImageStyle private[bootstrap](style: String) extends ModifierFactory {
-        def createModifier: Modifier = s"img-$style".addClass
+      final class ImageStyle private[bootstrap](val styleName: String) extends ModifierFactory {
+        def createModifier: Modifier = s"img-$styleName".addClass
       }
 
       /**
@@ -78,8 +78,8 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     }
 
     sealed trait TextModifier extends ModifierFactory {
-      def style: String
-      def createModifier: Modifier = s"text-$style".addClass
+      def styleName: String
+      def createModifier: Modifier = s"text-$styleName".addClass
     }
 
     /**
@@ -87,7 +87,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[http://getbootstrap.com/css/#type-alignment]]
       */
     object textAlign {
-      final class TextAlignment private[bootstrap](val style: String) extends TextModifier
+      final class TextAlignment private[bootstrap](val styleName: String) extends TextModifier
 
       lazy val left = new TextAlignment("left")
       lazy val center = new TextAlignment("center")
@@ -101,7 +101,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[http://getbootstrap.com/css/#type-transformation]]
       */
     object textTransform {
-      final class TextTransformation private[bootstrap](val style: String) extends TextModifier
+      final class TextTransformation private[bootstrap](val styleName: String) extends TextModifier
 
       lazy val lowercase = new TextTransformation("lowercase")
       lazy val uppercase = new TextTransformation("uppercase")
@@ -114,7 +114,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[http://getbootstrap.com/css/#helper-classes-colors]]
       */
     object textStyle {
-      final class TextStyle private[bootstrap](val style: String) extends TextModifier
+      final class TextStyle private[bootstrap](val styleName: String) extends TextModifier
 
       lazy val muted = new TextStyle("muted")
       lazy val primary = new TextStyle("primary")
@@ -130,8 +130,8 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[http://getbootstrap.com/css/#helper-classes-backgrounds]]
       */
     object background {
-      final class BackgroundStyle private[bootstrap](style: String) extends ModifierFactory {
-        def createModifier: Modifier = s"bg-$style".addClass
+      final class BackgroundStyle private[bootstrap](val styleName: String) extends ModifierFactory {
+        def createModifier: Modifier = s"bg-$styleName".addClass
       }
 
       lazy val primary = new BackgroundStyle("primary")
@@ -192,6 +192,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       final class ElementVisibility private[bootstrap](val className: String) extends ModifierFactory {
         val createModifier = className.addClass
       }
+
       lazy val show = new ElementVisibility("show")
       lazy val hidden = new ElementVisibility("hidden")
       lazy val invisible = new ElementVisibility("invisible")
@@ -214,7 +215,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @see [[http://getbootstrap.com/css/#helper-classes-image-replacement]]
       */
     lazy val textHide: TextModifier = new TextModifier {
-      def style = "hide"
+      def styleName = "hide"
     }
 
     /**
