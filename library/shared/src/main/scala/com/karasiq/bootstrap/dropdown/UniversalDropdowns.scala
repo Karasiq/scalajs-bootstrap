@@ -24,7 +24,7 @@ trait UniversalDropdowns { self: RenderingContext with Dropdowns with Utils ⇒
                                                   val dropdownId: String = Bootstrap.newId)
     extends AbstractDropdown {
 
-    val dropdown: Tag = {
+    def dropdown: Tag = {
       div(`class` := "dropdown")(
         Bootstrap.button(
           "dropdown-toggle".addClass,

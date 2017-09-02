@@ -34,7 +34,9 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     /**
       * Default button
       */
-    lazy val button: Tag = Button().renderTag()
+    lazy val button: Tag = {
+      Button().renderTag()
+    }
 
     /**
       * Default icon

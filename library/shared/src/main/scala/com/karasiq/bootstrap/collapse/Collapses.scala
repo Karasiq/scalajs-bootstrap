@@ -1,9 +1,10 @@
 package com.karasiq.bootstrap.collapse
 
+import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.utils.Utils
 
-trait Collapses { self: RenderingContext with Utils⇒
+trait Collapses { self: RenderingContext with Utils with BootstrapComponents ⇒
   import scalaTags.all._
 
   type Collapse <: AbstractCollapse
@@ -16,6 +17,10 @@ trait Collapses { self: RenderingContext with Utils⇒
   }
 
   trait CollapseFactory {
-    def apply(title: Modifier, collapseId: String = Bootstrap.newId)(content: Modifier*): Collapse
+    def create(title: Modifier, collapseId: String = Bootstrap.newId): Collapse
+
+    def apply(title: Modifier)(content: Modifier*): Tag = {
+      create(title, Bootstrap.newId).renderTag(content:_*)
+    }
   }
 }
