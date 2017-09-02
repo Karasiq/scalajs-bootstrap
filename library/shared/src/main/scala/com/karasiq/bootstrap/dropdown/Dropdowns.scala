@@ -1,44 +1,28 @@
 package com.karasiq.bootstrap.dropdown
 
-import com.karasiq.bootstrap.context.BootstrapBundle
+import com.karasiq.bootstrap.context.RenderingContext
 
-trait Dropdowns { self: BootstrapBundle ⇒
-  import BootstrapAttrs._
-
+trait Dropdowns { self: RenderingContext ⇒
   import scalaTags.all._
 
-  private[dropdown] final class Dropdown(title: Modifier, dropdownId: String, items: Modifier){
-    def dropdown: Tag = {
-      div(`class` := "dropdown")(
-        Bootstrap.button("dropdown-toggle".addClass, id := dropdownId, `data-toggle` := "dropdown", aria.haspopup := true, aria.expanded := false)(
-          title,
-          Bootstrap.nbsp,
-          span(`class` := "caret")
-        ),
-        ul(`class` := "dropdown-menu", aria.labelledby := dropdownId)(
-          items
-        )
-      )
-    }
+  type Dropdown <: AbstractDropdown
 
-    def dropup: Tag = this.dropdown(`class` := "dropup")
+  trait AbstractDropdown extends BootstrapHtmlComponent {
+    def dropdownId: String
+    def title: Modifier
+    def items: Seq[Modifier]
+
+    def dropdown: Tag
+    def dropup: Tag
+
+    def renderTag(md: ModifierT*): TagT = this.dropdown(md:_*)
   }
 
-  object Dropdown {
-    def item(md: Modifier*): Tag = {
-      this.link("javascript:void(0);", md:_*)
-    }
+  trait DropdownFactory {
+    def apply(title: Modifier, items: Modifier*): Dropdown
+    def link(targetId: String, md: Modifier*): Tag
 
-    def link(target: String, md: Modifier*): Tag = {
-      li(a(href := target, md))
-    }
-
-    def apply(title: Modifier, items: Modifier*): Tag = {
-      new Dropdown(title, Bootstrap.newId, items).dropdown
-    }
-
-    def dropup(title: Modifier, items: Modifier*): Tag = {
-      new Dropdown(title, Bootstrap.newId, items).dropup
-    }
+    def dropup(title: Modifier, items: Modifier*): Tag = apply(title, items:_*).dropup
+    def item(md: Modifier*): Tag = this.link("javascript:void(0);", md:_*)
   }
 }

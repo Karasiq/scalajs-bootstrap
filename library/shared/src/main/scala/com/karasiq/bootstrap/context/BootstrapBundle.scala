@@ -7,7 +7,7 @@ import com.karasiq.bootstrap.buttons.Buttons
 import com.karasiq.bootstrap.carousel.Carousels
 import com.karasiq.bootstrap.collapse.Collapses
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.dropdown.Dropdowns
+import com.karasiq.bootstrap.dropdown.{Dropdowns, UniversalDropdowns}
 import com.karasiq.bootstrap.form.{Forms, UniversalForms}
 import com.karasiq.bootstrap.grid.{Grids, UniversalGrids}
 import com.karasiq.bootstrap.icons.{Icons, UniversalIcons}
@@ -27,4 +27,4 @@ trait BootstrapBundle extends RenderingContext with BootstrapComponents with Cla
 
 trait UniversalBootstrapBundle extends BootstrapBundle
   with UniversalPageSelectors with UniversalTables with UniversalPagedTables with UniversalProgressBars with UniversalPanels
-  with UniversalNavigationBars with UniversalModals with UniversalIcons with UniversalGrids with UniversalForms
+  with UniversalNavigationBars with UniversalModals with UniversalIcons with UniversalGrids with UniversalForms with UniversalDropdowns
