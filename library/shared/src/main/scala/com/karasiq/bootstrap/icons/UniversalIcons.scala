@@ -9,6 +9,20 @@ import com.karasiq.bootstrap.utils.ClassModifiers
 trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers with BootstrapComponents ⇒
   import scalaTags.all._
 
+  object Icon extends IconFactory {
+    def apply(iconName: String): BootstrapGlyphicon = {
+      BootstrapGlyphicon(iconName)
+    }
+
+    def fa(iconName: String, styles: FontAwesomeStyle*): FontAwesomeIcon = {
+      FontAwesome(iconName, styles:_*)
+    }
+
+    def faFw(iconName: String, styles: FontAwesomeStyle*): FontAwesomeIcon = {
+      FontAwesome(iconName, FontAwesome.fixedWidth +: styles:_*)
+    }
+  }
+
   final class BootstrapGlyphicon(val iconName: String) extends BootstrapHtmlComponent with IconModifier {
     override def renderTag(md: ModifierT*): TagT = {
       span(`class` := "glyphicon glyphicon-" + iconName, aria.hidden := true)(md:_*)
@@ -21,14 +35,14 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
     }
   }
 
-  final class FontAwesomeIcon(name: String, styles: Seq[FontAwesomeStyle]) extends BootstrapHtmlComponent with IconModifier {
+  final class FontAwesomeIcon(val iconName: String, val styles: Seq[FontAwesomeStyle]) extends BootstrapHtmlComponent with IconModifier {
     override def renderTag(md: ModifierT*): TagT = {
-      i(`class` := "fa fa-" + name, styles, aria.hidden := true)(md:_*)
+      i(`class` := "fa fa-" + iconName, styles, aria.hidden := true)(md:_*)
     }
   }
 
-  final class FontAwesomeStyle private[icons] (style: String) extends ModifierFactory {
-    override val createModifier: ModifierT = ("fa-" + style).addClass
+  final class FontAwesomeStyle private[icons] (val styleName: String) extends ModifierFactory {
+    override val createModifier: ModifierT = ("fa-" + styleName).addClass
   }
 
   /**
@@ -85,8 +99,8 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
 
   //noinspection SpellCheckingInspection
   implicit class BootstrapIconsOps(iconName: String) {
-    def glyphicon: BootstrapGlyphicon = BootstrapGlyphicon(iconName)
-    def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = FontAwesome(iconName, styles:_*)
+    def glyphicon: BootstrapGlyphicon = Icon(iconName)
+    def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = Icon.fa(iconName, styles:_*)
 
     // Shortcuts
     def faIcon: FontAwesomeIcon = this.fontAwesome()

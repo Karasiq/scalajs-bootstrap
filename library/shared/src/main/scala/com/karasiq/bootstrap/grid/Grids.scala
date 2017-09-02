@@ -7,6 +7,12 @@ import com.karasiq.bootstrap.context.RenderingContext
 trait Grids { self: RenderingContext ⇒
   import scalaTags.all._
 
+  type GridSystem <: AbstractGridSystem
+  val GridSystem: GridSystem
+
+  /**
+    * @see [[https://getbootstrap.com/css/#grid-options]]
+    */
   trait AbstractGridSystem {
     type ContainerT = Tag
     type RowT = Tag
