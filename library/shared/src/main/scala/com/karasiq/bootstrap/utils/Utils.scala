@@ -1,9 +1,5 @@
 package com.karasiq.bootstrap.utils
 
-import java.util.UUID
-
-import scala.language.postfixOps
-
 import com.karasiq.bootstrap.buttons.Buttons
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.icons.Icons
@@ -12,211 +8,106 @@ import com.karasiq.bootstrap.icons.Icons
 trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers ⇒
   import scalaTags.all._
 
-  object Bootstrap {
+  type Bootstrap <: AbstractUtils
+  val Bootstrap: Bootstrap
+
+  type BootstrapAttrs <: DefaultBootstrapAttrs
+  val BootstrapAttrs: BootstrapAttrs
+
+  trait DefaultBootstrapAttrs {
+    lazy val `data-toggle` = attr("data-toggle")
+    lazy val `data-target` = attr("data-target")
+    lazy val `data-slide-to` = attr("data-slide-to")
+    lazy val `data-ride` = attr("data-ride")
+    lazy val `data-slide` = attr("data-slide")
+    lazy val `data-dismiss` = attr("data-dismiss")
+  }
+
+  trait AbstractUtils {
+    type ModifierT = Modifier
+    type ElementT = Tag
+    type ElementIdT = String
+
+    val image: AbstractImageUtils
+    val textAlign: AbstractTextAlignments
+    val textTransform: AbstractTextTransformations
+    val textStyle: AbstractTextStyles
+    val background: AbstractBackgroundStyles
+    val pull: AbstractPullModifiers
+    val visibility: AbstractVisibilityModifiers
+
+    /**
+      * Generates unique element ID
+      */
+    def newId: ElementIdT
+
     /**
       * A lightweight, flexible component that can optionally extend the entire viewport to showcase key content on your site.
       * @see [[https://getbootstrap.com/components/#jumbotron]]
       */
-    lazy val jumbotron: Tag = div(`class` := "jumbotron")
+    def jumbotron: ElementT
 
     /**
       * Use the well as a simple effect on an element to give it an inset effect.
       * @see [[https://getbootstrap.com/components/#wells]]
       */
-    lazy val well: Tag = div(`class` := "well")
+    def well: ElementT
 
     /**
       * Easily highlight new or unread items by adding a badge to links, Bootstrap navs, and more.
       * @see [[https://getbootstrap.com/components/#badges]]
       */
-    lazy val badge: Tag = span(`class` := "badge")
+    def badge: ElementT
 
     /**
       * Default button
       */
-    lazy val button: Tag = {
-      Button().renderTag()
-    }
+    def button: ElementT
 
     /**
       * Default icon
       * @param name Icon name
       * @see [[https://getbootstrap.com/components/#glyphicons]]
       */
-    def icon(name: String): IconModifier = {
-      Icon(name)
-    }
-
-    /**
-      * Generates unique element ID
-      */
-    def newId: String = {
-      s"bs-auto-${UUID.randomUUID()}"
-    }
-
-    /**
-      * Add classes to an `img` element to easily style images in any project.
-      * @see [[http://getbootstrap.com/css/#images-shapes]]
-      */
-    object image {
-      final class ImageStyle private[bootstrap](val styleName: String) extends ModifierFactory {
-        def createModifier: Modifier = s"img-$styleName".addClass
-      }
-
-      /**
-        * Images in Bootstrap 3 can be made responsive-friendly via the addition of the .img-responsive class.
-        * This applies max-width: 100%;, height: auto; and display: block; to the image so that it scales nicely to the parent element.
-        * To center images which use the .img-responsive class, use .center-block instead of .text-center.
-        * See the helper classes section for more details about .center-block usage.
-        * @see [[http://getbootstrap.com/css/#images-responsive]]
-        */
-      lazy val responsive = "img-responsive".addClass
-
-      lazy val rounded = new ImageStyle("rounded")
-      lazy val circle = new ImageStyle("circle")
-      lazy val thumbnail = new ImageStyle("thumbnail")
-    }
-
-    sealed trait TextModifier extends ModifierFactory {
-      def styleName: String
-      def createModifier: Modifier = s"text-$styleName".addClass
-    }
-
-    /**
-      * Easily realign text to components with text alignment classes.
-      * @see [[http://getbootstrap.com/css/#type-alignment]]
-      */
-    object textAlign {
-      final class TextAlignment private[bootstrap](val styleName: String) extends TextModifier
-
-      lazy val left = new TextAlignment("left")
-      lazy val center = new TextAlignment("center")
-      lazy val right = new TextAlignment("right")
-      lazy val justify = new TextAlignment("justify")
-      lazy val nowrap = new TextAlignment("nowrap")
-    }
-
-    /**
-      * Transform text in components with text capitalization classes.
-      * @see [[http://getbootstrap.com/css/#type-transformation]]
-      */
-    object textTransform {
-      final class TextTransformation private[bootstrap](val styleName: String) extends TextModifier
-
-      lazy val lowercase = new TextTransformation("lowercase")
-      lazy val uppercase = new TextTransformation("uppercase")
-      lazy val capitalize = new TextTransformation("capitalize")
-    }
-
-    /**
-      * Convey meaning through color with a handful of emphasis utility classes.
-      * These may also be applied to links and will darken on hover just like our default link styles.
-      * @see [[http://getbootstrap.com/css/#helper-classes-colors]]
-      */
-    object textStyle {
-      final class TextStyle private[bootstrap](val styleName: String) extends TextModifier
-
-      lazy val muted = new TextStyle("muted")
-      lazy val primary = new TextStyle("primary")
-      lazy val success = new TextStyle("success")
-      lazy val info = new TextStyle("info")
-      lazy val warning = new TextStyle("warning")
-      lazy val danger = new TextStyle("danger")
-    }
-
-    /**
-      * Similar to the contextual text color classes, easily set the background of an element to any contextual class.
-      * Anchor components will darken on hover, just like the text classes.
-      * @see [[http://getbootstrap.com/css/#helper-classes-backgrounds]]
-      */
-    object background {
-      final class BackgroundStyle private[bootstrap](val styleName: String) extends ModifierFactory {
-        def createModifier: Modifier = s"bg-$styleName".addClass
-      }
-
-      lazy val primary = new BackgroundStyle("primary")
-      lazy val success = new BackgroundStyle("success")
-      lazy val info = new BackgroundStyle("info")
-      lazy val warning = new BackgroundStyle("warning")
-      lazy val danger = new BackgroundStyle("danger")
-    }
+    def icon(name: String): IconModifier
 
     /**
       * Use the generic close icon for dismissing content like modals and alerts.
       * @see [[http://getbootstrap.com/css/#helper-classes-close]]
       */
-    lazy val closeIcon: Tag = {
-      scalaTags.tags.button(`type` := "button", `class` := "close", aria.label := "Close", span(aria.hidden := true, raw("&times;")))
-    }
+    def closeIcon: ElementT
 
     /**
       * Use carets to indicate dropdown functionality and direction.
       * Note that the default caret will reverse automatically in dropup menus.
       * @see [[http://getbootstrap.com/css/#helper-classes-carets]]
       */
-    lazy val caret: Tag = span(`class` := "caret")
-
-    /**
-      * Float an element to the left or right with a class.
-      * `!important` is included to avoid specificity issues.
-      * @note To align components in navbars with utility classes, use .navbar-left or .navbar-right instead. See the navbar docs for details.
-      * @see [[http://getbootstrap.com/css/#helper-classes-floats]]
-      */
-    object pull {
-      lazy val left = "pull-left".addClass
-      lazy val right = "pull-right".addClass
-    }
+    def caret: ElementT
 
     /**
       * Set an element to display: block and center via margin
       * @see [[http://getbootstrap.com/css/#helper-classes-center]]
       */
-    lazy val centerBlock = "center-block".addClass
+    def centerBlock: ModifierT
 
     /**
       * Easily clear floats by adding `.clearfix` <b>to the parent element</b>.
       * Utilizes [[http://nicolasgallagher.com/micro-clearfix-hack/ the micro clearfix]] as popularized by Nicolas Gallagher.
       * @see [[http://getbootstrap.com/css/#helper-classes-clearfix]]
       */
-    lazy val clearFix = "clearfix".addClass
-
-    /**
-      * Force an element to be shown or hidden (including for screen readers) with the use of `.show` and `.hidden` classes.
-      * These classes use `!important` to avoid specificity conflicts, just like the quick floats.
-      * They are only available for block level toggling. They can also be used as mixins.
-      * `.hide` is available, but it does not always affect screen readers and is deprecated as of v3.0.1. Use `.hidden` or `.sr-only` instead.
-      * Furthermore, `.invisible` can be used to toggle only the visibility of an element, meaning its display is not modified and the element can still affect the flow of the document.
-      * @see [[http://getbootstrap.com/css/#helper-classes-show-hide]]
-      */
-    object visibility {
-      final class ElementVisibility private[bootstrap](val className: String) extends ModifierFactory {
-        val createModifier = className.addClass
-      }
-
-      lazy val show = new ElementVisibility("show")
-      lazy val hidden = new ElementVisibility("hidden")
-      lazy val invisible = new ElementVisibility("invisible")
-    }
+    def clearFix: ModifierT
 
     /**
       * Hide an element to all devices except screen readers with `.sr-only`
       * @see [[http://getbootstrap.com/css/#helper-classes-screen-readers]]
       */
-    lazy val srOnly = "sr-only".addClass
+    def srOnly: ModifierT
 
     /**
-      * Combine [[com.karasiq.bootstrap.utils.Utils.Bootstrap#srOnly() .sr-only]] with `.sr-only-focusable` to show the element again when it's focused (e.g. by a keyboard-only user)
+      * Combine [[com.karasiq.bootstrap.utils.Utils.AbstractUtils#srOnly() .sr-only]] with `.sr-only-focusable` to show the element again when it's focused (e.g. by a keyboard-only user)
       * @see [[http://getbootstrap.com/css/#helper-classes-screen-readers]]
       */
-    lazy val srOnlyFocusable: Modifier = Seq("sr-only", "sr-only-focusable").map(_.addClass)
-
-    /**
-      * Utilize the `.text-hide` class or mixin to help replace an element's text content with a background image.
-      * @see [[http://getbootstrap.com/css/#helper-classes-image-replacement]]
-      */
-    lazy val textHide: TextModifier = new TextModifier {
-      def styleName = "hide"
-    }
+    def srOnlyFocusable: ModifierT
 
     /**
       * Appends `data-%property%` attributes to the element
@@ -238,13 +129,119 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     val nbsp = raw("&nbsp")
   }
 
-  object BootstrapAttrs {
-    lazy val `data-toggle` = attr("data-toggle")
-    lazy val `data-target` = attr("data-target")
-    lazy val `data-slide-to` = attr("data-slide-to")
-    lazy val `data-ride` = attr("data-ride")
-    lazy val `data-slide` = attr("data-slide")
-    lazy val `data-dismiss` = attr("data-dismiss")
+  trait StyleModifier extends ModifierFactory {
+    def styleName: String
+  }
+
+  trait StyleClassModifier extends StyleModifier {
+    def className: String
+  }
+
+  trait AbstractImageStyle extends StyleModifier
+  trait AbstractTextStyle extends StyleModifier
+  trait AbstractTextAlignment extends AbstractTextStyle
+  trait AbstractTextTransformation extends AbstractTextStyle
+  trait AbstractBackgroundStyle extends StyleModifier
+  trait AbstractPullModifier extends StyleModifier
+  trait AbstractVisibilityModifier extends StyleModifier
+
+  /**
+    * Add classes to an `img` element to easily style images in any project.
+    * @see [[http://getbootstrap.com/css/#images-shapes]]
+    */
+  trait AbstractImageUtils {
+    /**
+      * Images in Bootstrap 3 can be made responsive-friendly via the addition of the .img-responsive class.
+      * This applies max-width: 100%;, height: auto; and display: block; to the image so that it scales nicely to the parent element.
+      * To center images which use the .img-responsive class, use .center-block instead of .text-center.
+      * See the helper classes section for more details about .center-block usage.
+      * @see [[http://getbootstrap.com/css/#images-responsive]]
+      */
+    def responsive: AbstractImageStyle
+
+    def rounded: AbstractImageStyle
+    def circle: AbstractImageStyle
+    def thumbnail: AbstractImageStyle
+  }
+
+  /**
+    * Easily realign text to components with text alignment classes.
+    * @see [[http://getbootstrap.com/css/#type-alignment]]
+    */
+  trait AbstractTextAlignments {
+    def left: AbstractTextAlignment
+    def center: AbstractTextAlignment
+    def right: AbstractTextAlignment
+    def justify: AbstractTextAlignment
+    def nowrap: AbstractTextAlignment
+  }
+
+  /**
+    * Transform text in components with text capitalization classes.
+    * @see [[http://getbootstrap.com/css/#type-transformation]]
+    */
+  trait AbstractTextTransformations {
+    def lowercase: AbstractTextTransformation
+    def uppercase: AbstractTextTransformation
+    def capitalize: AbstractTextTransformation
+  }
+
+  /**
+    * Convey meaning through color with a handful of emphasis utility classes.
+    * These may also be applied to links and will darken on hover just like our default link styles.
+    * @see [[http://getbootstrap.com/css/#helper-classes-colors]]
+    */
+  trait AbstractTextStyles {
+    def muted: AbstractTextStyle
+    def primary: AbstractTextStyle
+    def success: AbstractTextStyle
+    def info: AbstractTextStyle
+    def warning: AbstractTextStyle
+    def danger: AbstractTextStyle
+
+    /**
+      * Utilize the `.text-hide` class or mixin to help replace an element's text content with a background image.
+      * @see [[http://getbootstrap.com/css/#helper-classes-image-replacement]]
+      */
+    def hide: AbstractTextStyle
+  }
+
+  /**
+    * Similar to the contextual text color classes, easily set the background of an element to any contextual class.
+    * Anchor components will darken on hover, just like the text classes.
+    * @see [[http://getbootstrap.com/css/#helper-classes-backgrounds]]
+    */
+  trait AbstractBackgroundStyles {
+    def primary: AbstractBackgroundStyle
+    def success: AbstractBackgroundStyle
+    def info: AbstractBackgroundStyle
+    def warning: AbstractBackgroundStyle
+    def danger: AbstractBackgroundStyle
+  }
+
+  /**
+    * Float an element to the left or right with a class.
+    * `!important` is included to avoid specificity issues.
+    * @note To align components in navbars with utility classes, use .navbar-left or .navbar-right instead. See the navbar docs for details.
+    * @see [[http://getbootstrap.com/css/#helper-classes-floats]]
+    */
+  trait AbstractPullModifiers {
+    def left: AbstractPullModifier
+    def right: AbstractPullModifier
+  }
+
+  /**
+    * Force an element to be shown or hidden (including for screen readers) with the use of `.show` and `.hidden` classes.
+    * These classes use `!important` to avoid specificity conflicts, just like the quick floats.
+    * They are only available for block level toggling. They can also be used as mixins.
+    * `.hide` is available, but it does not always affect screen readers and is deprecated as of v3.0.1. Use `.hidden` or `.sr-only` instead.
+    * Furthermore, `.invisible` can be used to toggle only the visibility of an element, meaning its display is not modified and the element can still affect the flow of the document.
+    * @see [[http://getbootstrap.com/css/#helper-classes-show-hide]]
+    */
+  trait AbstractVisibilityModifiers {
+    def show: AbstractVisibilityModifier
+    def hidden: AbstractVisibilityModifier
+    def invisible: AbstractVisibilityModifier
   }
 }
 

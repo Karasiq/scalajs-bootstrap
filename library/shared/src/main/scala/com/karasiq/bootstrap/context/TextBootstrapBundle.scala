@@ -8,6 +8,7 @@ import com.karasiq.bootstrap.carousel.TextCarousels
 import com.karasiq.bootstrap.popover.TextPopovers
 import com.karasiq.bootstrap.tooltip.TextTooltips
 
+// Text components implementation
 trait TextBootstrapBundle extends UniversalBootstrapBundle with TextRenderingContext
   with TextCarousels with TextTooltips with TextPopovers
 

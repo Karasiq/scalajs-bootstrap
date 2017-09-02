@@ -10,6 +10,7 @@ import com.karasiq.bootstrap.navbar.JSNavigationBars
 import com.karasiq.bootstrap.popover.JSPopovers
 import com.karasiq.bootstrap.tooltip.JSTooltips
 
+// JS components implementation
 trait JSBootstrapBundle extends UniversalBootstrapBundle with JSRenderingContext with JSModals with JSTooltips
   with JSPopovers with JSNavigationBars with JSCarousels
 
