@@ -5,7 +5,7 @@ import scala.language.{implicitConversions, postfixOps}
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 
-trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
+trait Tooltips extends TooltipStyles { self: RenderingContext with BootstrapComponents ⇒
   import scalaTags.all._
 
   type Tooltip <: AbstractTooltip
@@ -21,7 +21,7 @@ trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
         opt("container", container, ""),
         opt("delay", delay, ""),
         opt("html", html, false),
-        opt("placement", placement, TooltipPlacement.right),
+        opt("placement", placement.placement, TooltipPlacement.right),
         opt("selector", selector, ""),
         opt("template", template, ""),
         opt("title", title, ""),
@@ -43,19 +43,5 @@ trait Tooltips { self: RenderingContext with BootstrapComponents ⇒
     */
   trait TooltipFactory {
     def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): AbstractTooltip
-  }
-
-  final class TooltipPlacement private[tooltip](value: String) {
-    override def toString: String = value
-  }
-
-  //noinspection TypeAnnotation
-  object TooltipPlacement {
-    private[this] def placement(str: String): TooltipPlacement = new TooltipPlacement(str)
-    val auto = placement("auto")
-    val left = placement("left")
-    val right = placement("right")
-    val top = placement("top")
-    val bottom = placement("bottom")
   }
 }
