@@ -37,6 +37,7 @@ trait NavigationBars extends NavigationBarStyles { self: RenderingContext with I
   trait NavComponent {
     val navId: String
     val navTabs: NavigationTabs
+    def tabId(id: String): String = s"$navId-$id-tab"
   }
 
   trait AbstractNavigation extends NavComponent {
@@ -51,34 +52,17 @@ trait NavigationBars extends NavigationBarStyles { self: RenderingContext with I
   }
 
   trait NavigationBarFactory {
-    def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation", styles: Seq[NavigationBarStyle] = Seq(NavigationBarStyle.default, NavigationBarStyle.fixedTop), container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md), contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md))): NavigationBarBuilder = {
-      NavigationBarBuilder(tabs, barId, brand, styles, container, contentContainer)
-    }
-
-    def create(tabs: NavigationTabs, navId: String,
-               brand: Modifier, styles: Seq[NavigationBarStyle],
-               container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier): NavigationBar
-  }
-
-  // -----------------------------------------------------------------------
-  // Utils
-  // -----------------------------------------------------------------------
-  //noinspection TypeAnnotation
-  case class NavigationBarBuilder(tabs: NavigationTabs, navId: String,
-                                  brand: Modifier, styles: Seq[NavigationBarStyle],
-                                  container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier) {
-
-    def withTabs(tabs: NavigationTabs) = copy(tabs = tabs)
-    def withTabs(tabs: NavigationTab*) = copy(tabs = NavigationTabs.fromSeq(tabs))
-    def withId(id: String) = copy(navId = id)
-    def withBrand(brand: Modifier*) = copy(brand = brand)
-    def withStyles(styles: NavigationBarStyle*) = copy(styles = styles)
-    def withContainer(container: Modifier ⇒ Modifier) = copy(container = container)
-    def withContentContainer(contentContainer: Modifier ⇒ Modifier) = copy(contentContainer = contentContainer)
-
-    def build() = {
-      new NavigationBar(tabs, brand, styles, container, contentContainer, navId)
-    }
+    /**
+      * Creates navigation bar
+      * @param tabs Navbar tabs
+      * @param barId Bar id attribute
+      * @param brand Navbar "brand" content
+      * @param styles Navbar styles
+      * @param container Navbar container type
+      * @param contentContainer Navbar content container type
+      * @return Navigation bar
+      */
+    def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation", styles: Seq[NavigationBarStyle] = Seq(NavigationBarStyle.default, NavigationBarStyle.fixedTop), container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md), contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md))): NavigationBar
   }
 }
 
