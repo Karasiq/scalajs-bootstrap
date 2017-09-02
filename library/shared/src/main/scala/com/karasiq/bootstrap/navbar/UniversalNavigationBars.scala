@@ -8,7 +8,7 @@ import com.karasiq.bootstrap.grid.Grids
 import com.karasiq.bootstrap.icons.Icons
 import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
 
-trait UniversalNavigationBars { self: RenderingContext with Icons with Grids with Utils with BootstrapComponents with ClassModifiers with NavigationBars ⇒
+trait UniversalNavigationBars { self: RenderingContext with Icons with Grids with Utils with BootstrapComponents with ClassModifiers with NavigationBars with NavigationBarStyles ⇒
   import scalaTags.all._
 
   import BootstrapAttrs._
@@ -24,10 +24,10 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
     }
   }
 
-  type NavigationBar = UniversalNavigationBar
+  type NavigationBar = NavigationBarBuilder
   object NavigationBar extends NavigationBarFactory {
-    def create(tabs: NavigationTabs, navId: String, brand: scalaTags.all.Modifier, styles: Seq[NavigationBarStyle], container: (scalaTags.all.Modifier) ⇒ scalaTags.all.Modifier, contentContainer: (scalaTags.all.Modifier) ⇒ scalaTags.all.Modifier): NavigationBar = {
-      new UniversalNavigationBar(tabs, navId, brand, styles, container, contentContainer)
+    def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation", styles: Seq[NavigationBarStyle] = Seq(NavigationBarStyle.default, NavigationBarStyle.fixedTop), container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md), contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md))): NavigationBarBuilder = {
+      NavigationBarBuilder(tabs, barId, brand, styles, container, contentContainer)
     }
   }
 
@@ -37,7 +37,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
 
     private def tabContainer = Rx {
       def renderTab(tab: NavigationTab): Tag = {
-        val idLink = s"$navId-${tab.id}-tab"
+        val idLink = this.tabId(tab.id)
         li(role := "presentation", tab.modifiers)(
           a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
             if (tab.icon != NoIcon) Seq[Modifier](tab.icon, Bootstrap.nbsp) else (),
@@ -55,7 +55,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
 
     private def tabContentContainer = Rx {
       def renderPanel(t: NavigationTab): Tag = {
-        div(role := "tabpanel", "tab-pane".addClass, "fade".addClass, id := s"$navId-${t.id}-tab")(
+        div(role := "tabpanel", "tab-pane".addClass, "fade".addClass, id := this.tabId(t.id))(
           t.content
         )
       }
@@ -87,7 +87,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
 
     private[this] val tabContainer = Rx {
       def renderTab(active: Boolean, tab: NavigationTab): Tag = {
-        val idLink = s"$navId-${tab.id}-tab"
+        val idLink = this.tabId(tab.id)
         li(
           tab.modifiers,
           "active".classIf(active),
@@ -107,7 +107,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
 
     private[this] val tabContentContainer = Rx {
       def renderContent(active: Boolean, tab: NavigationTab): Tag = {
-        div(id := s"$navId-${tab.id}-tab", role := "tabpanel", `class` := (if (active) "tab-pane active fade in" else "tab-pane fade"))(
+        div(id := this.tabId(tab.id), role := "tabpanel", `class` := (if (active) "tab-pane active fade in" else "tab-pane fade"))(
           tab.content
         )
       }
@@ -145,6 +145,28 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
 
     def render(md: Modifier*): Modifier = {
       Seq(navbar, contentContainer(content)) ++ md
+    }
+  }
+
+  //noinspection TypeAnnotation
+  case class NavigationBarBuilder(navTabs: NavigationTabs, navId: String,
+                                  brand: Modifier, styles: Seq[NavigationBarStyle],
+                                  container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier) extends AbstractNavigationBar with BootstrapComponent {
+
+    def withTabs(tabs: NavigationTabs) = copy(navTabs = tabs)
+    def withTabs(tabs: NavigationTab*) = copy(navTabs = NavigationTabs.fromSeq(tabs))
+    def withId(id: String) = copy(navId = id)
+    def withBrand(brand: Modifier*) = copy(brand = brand)
+    def withStyles(styles: NavigationBarStyle*) = copy(styles = styles)
+    def withContainer(container: Modifier ⇒ Modifier) = copy(container = container)
+    def withContentContainer(contentContainer: Modifier ⇒ Modifier) = copy(contentContainer = contentContainer)
+
+    def build(): UniversalNavigationBar = {
+      new UniversalNavigationBar(navTabs, navId, brand, styles, container, contentContainer)
+    }
+
+    def render(md: ModifierT*): ModifierT = {
+      build().render(md:_*)
     }
   }
 }
