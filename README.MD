@@ -5,10 +5,10 @@ Reactive [Scala.js](http://www.scala-js.org/) [bootstrap](https://getbootstrap.c
 Add line to your `build.sbt` (also requires `bootstrap.css` and `bootstrap.js` at runtime):
 ```scala
 // Scala.js 
-libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "2.1.0"
+libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "2.1.1"
 
 // JVM 
-libraryDependencies += "com.github.karasiq" %% "scalajs-bootstrap" % "2.1.0"
+libraryDependencies += "com.github.karasiq" %% "scalajs-bootstrap" % "2.1.1"
 ```
 
 Import bootstrap context:
