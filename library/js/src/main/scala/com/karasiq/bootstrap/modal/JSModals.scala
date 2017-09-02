@@ -6,9 +6,10 @@ import scala.scalajs.js.|
 
 import org.scalajs.jquery.jQuery
 
+import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.JSRenderingContext
 
-trait JSModals { self: JSRenderingContext with Modals ⇒
+trait JSModals { self: JSRenderingContext with Modals with BootstrapComponents ⇒
   implicit class JSModalOps(modal: Modal) {
     def show(backdrop: Boolean | String = true, keyboard: Boolean = true,
              show: Boolean = true, events: Map[String, js.Any] = Map.empty): Unit = {
