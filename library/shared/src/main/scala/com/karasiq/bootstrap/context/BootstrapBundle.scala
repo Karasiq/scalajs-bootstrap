@@ -2,7 +2,7 @@ package com.karasiq.bootstrap.context
 
 import scala.language.postfixOps
 
-import com.karasiq.bootstrap.alert.Alerts
+import com.karasiq.bootstrap.alert.{Alerts, UniversalAlerts}
 import com.karasiq.bootstrap.buttons.{Buttons, UniversalButtons}
 import com.karasiq.bootstrap.carousel.{Carousels, UniversalCarousels}
 import com.karasiq.bootstrap.collapse.{Collapses, UniversalCollapses}
@@ -28,4 +28,4 @@ trait BootstrapBundle extends RenderingContext with BootstrapComponents with Cla
 trait UniversalBootstrapBundle extends BootstrapBundle
   with UniversalPageSelectors with UniversalTables with UniversalPagedTables with UniversalProgressBars with UniversalPanels
   with UniversalNavigationBars with UniversalModals with UniversalIcons with UniversalGrids with UniversalForms with UniversalDropdowns
-  with UniversalCollapses with UniversalCarousels with UniversalButtons
+  with UniversalCollapses with UniversalCarousels with UniversalButtons with UniversalAlerts
