@@ -8,10 +8,10 @@ import com.karasiq.bootstrap.utils.ClassModifiers
 trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
   import scalaTags.all._
 
-  /**
-    * @see [[https://getbootstrap.com/css/#grid-options]]
-    */
-  object GridSystem extends AbstractGridSystem {
+  type GridSystem = UniversalGridSystem
+  object GridSystem extends UniversalGridSystem
+  
+  trait UniversalGridSystem extends AbstractGridSystem {
     val container: Tag = div(`class` := "container")
     val containerFluid: Tag = div(`class` := "container-fluid")
     val row: Tag = div(`class` := "row")

@@ -2,11 +2,11 @@ package com.karasiq.bootstrap.utils
 
 import java.util.UUID
 
+import scala.language.postfixOps
+
 import com.karasiq.bootstrap.buttons.Buttons
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.icons.Icons
-
-import scala.language.postfixOps
 
 //noinspection TypeAnnotation
 trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers ⇒
@@ -37,12 +37,12 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     lazy val button: Tag = Button().renderTag()
 
     /**
-      * Glyphicon
+      * Default icon
       * @param name Icon name
       * @see [[https://getbootstrap.com/components/#glyphicons]]
       */
-    def icon(name: String): BootstrapGlyphicon = {
-      BootstrapGlyphicon(name)
+    def icon(name: String): IconModifier = {
+      Icon(name)
     }
 
     /**
