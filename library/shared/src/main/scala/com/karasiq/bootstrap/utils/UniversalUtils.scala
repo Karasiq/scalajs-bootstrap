@@ -12,8 +12,8 @@ import com.karasiq.bootstrap.icons.Icons
 trait UniversalUtils { self: RenderingContext with Icons with Buttons with ClassModifiers with Utils ⇒
   import scalaTags.all._
 
-  type Bootstrap = UniversalUtils
-  object Bootstrap extends UniversalUtils
+  type Bootstrap = UniversalUtils with AbstractUtils
+  object Bootstrap extends UniversalUtils with AbstractUtils
 
   type BootstrapAttrs = DefaultBootstrapAttrs
   object BootstrapAttrs extends DefaultBootstrapAttrs
@@ -230,6 +230,25 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
       * @see [[http://getbootstrap.com/css/#helper-classes-screen-readers]]
       */
     lazy val srOnlyFocusable: Modifier = Array("sr-only", "sr-only-focusable").map(_.addClass)
+
+    /**
+      * Appends `data-%property%` attributes to the element
+      * @param props Properties
+      * @tparam T Value type
+      * @return Modifier
+      */
+    def dataProps[T: AttrValue](props: (String, T)*): Modifier = {
+      props.map { case (name, value) ⇒
+        attr("data-" + name) := value
+      }
+    }
+
+    /**
+      * Non-breaking Space
+      * A common character entity used in HTML is the non-breaking space: &nbsp;
+      * A non-breaking space is a space that will not break into a new line.
+      */
+    val nbsp = raw("&nbsp")
   }
 }
 

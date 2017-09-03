@@ -115,18 +115,14 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * @tparam T Value type
       * @return Modifier
       */
-    def dataProps[T: AttrValue](props: (String, T)*): Modifier = {
-      props.map { case (name, value) ⇒
-        attr("data-" + name) := value
-      }
-    }
+    def dataProps[T: AttrValue](props: (String, T)*): ModifierT
 
     /**
       * Non-breaking Space
       * A common character entity used in HTML is the non-breaking space: &nbsp;
       * A non-breaking space is a space that will not break into a new line.
       */
-    val nbsp = raw("&nbsp")
+    def nbsp: ModifierT
   }
 
   trait StyleModifier extends ModifierFactory {
