@@ -1,13 +1,14 @@
 package com.karasiq.bootstrap
 
-import com.karasiq.bootstrap.context.{JSBootstrapBundle, TextBootstrapBundle}
 import rx._
+
+import com.karasiq.bootstrap.context.{JSBootstrapBundle, TextBootstrapBundle}
 
 /**
   * Global context
   */
 object Bootstrap {
-  private[this] lazy val _scalaRxContext = Ctx.Owner.Unsafe
+  private[this] lazy val _scalaRxContext = Ctx.Owner.safe()
 
   lazy val js: JSBootstrapBundle = new JSBootstrapBundle {
     implicit val scalaRxContext = _scalaRxContext
