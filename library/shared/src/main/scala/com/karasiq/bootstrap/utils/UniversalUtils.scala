@@ -226,7 +226,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
     lazy val srOnly = "sr-only".addClass
 
     /**
-      * Combine [[com.karasiq.bootstrap.utils.Utils.Bootstrap#srOnly() .sr-only]] with `.sr-only-focusable` to show the element again when it's focused (e.g. by a keyboard-only user)
+      * Combine [[com.karasiq.bootstrap.utils.UniversalUtils.UniversalUtils#srOnly() .sr-only]] with `.sr-only-focusable` to show the element again when it's focused (e.g. by a keyboard-only user)
       * @see [[http://getbootstrap.com/css/#helper-classes-screen-readers]]
       */
     lazy val srOnlyFocusable: Modifier = Array("sr-only", "sr-only-focusable").map(_.addClass)
