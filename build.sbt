@@ -1,4 +1,5 @@
 import sbt.Keys._
+import sbtcrossproject.{crossProject, CrossType}
 
 // Versions
 val scalaTagsVersion = "0.6.2"
@@ -84,17 +85,18 @@ lazy val testServerSettings = Seq(
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
-    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false).value)
+    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts,
+      scalaJsApplication(testPage, fastOpt = false, launcher = false).value)
   }
 )
 
 lazy val testPageSettings = Seq(
-  persistLauncher in Compile := true,
+  scalaJSUseMainModuleInitializer := true,
   name := "scalajs-bootstrap-test-frontend"
 )
 
 // Projects
-lazy val library = crossProject
+lazy val library = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings, librarySettings, publishSettings)
   .jsSettings(
     libraryDependencies ++= Seq(
@@ -118,7 +120,7 @@ lazy val libraryJS = library.js
 
 lazy val libraryJVM = library.jvm
 
-lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
+lazy val testShared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("test") / "shared")
   .settings(commonSettings, name := "scalajs-bootstrap-test-shared")
   .dependsOn(library)
 
@@ -136,6 +138,6 @@ lazy val testPage = (project in (file("test") / "frontend"))
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(testSharedJS)
 
-lazy val root = (project in file("."))
+lazy val `scalajs-bootstrap` = (project in file("."))
   .settings(commonSettings, noPublishSettings)
   .aggregate(libraryJS, libraryJVM)
