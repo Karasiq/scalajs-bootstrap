@@ -1,19 +1,20 @@
 package com.karasiq.bootstrap.modal
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait ModalStyles { self: RenderingContext ⇒
+trait ModalStyles { self: RenderingContext with Utils ⇒
   import scalaTags.all._
 
   sealed trait ModalDialogSize extends ModifierFactory
 
   object DefaultModalDialogSize extends ModalDialogSize {
-    val createModifier: Modifier = ()
+    val createModifier = Bootstrap.noModifier
   }
 
   final class CustomModalDialogSize private[modal](size: String) extends ModalDialogSize {
     val className: String = size
-    val createModifier: Modifier = className.addClass
+    val createModifier = className.addClass
   }
 
   //noinspection TypeAnnotation

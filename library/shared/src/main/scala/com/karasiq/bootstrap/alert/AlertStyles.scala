@@ -6,7 +6,7 @@ trait AlertStyles { self: RenderingContext ⇒
   import scalaTags.all._
 
   final class AlertStyle private[alert](val styleName: String) extends ModifierFactory {
-    val createModifier: Modifier = s"alert-$styleName".addClass
+    val createModifier: ModifierT = s"alert-$styleName".addClass
   }
 
   object AlertStyle {

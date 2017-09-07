@@ -13,7 +13,7 @@ trait TableRows { self: RenderingContext with ClassModifiers ⇒
 
   sealed trait TableRowStyle extends ModifierFactory {
     def styleClass: Option[String]
-    override final def createModifier: Modifier = styleClass.map(_.addClass)
+    override final def createModifier: ModifierT = styleClass.map(_.addClass)
   }
 
   //noinspection TypeAnnotation

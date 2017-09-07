@@ -7,7 +7,7 @@ trait NavigationBarStyles { self: RenderingContext ⇒
 
   final class NavigationBarStyle private[navbar](style: String) extends ModifierFactory {
     val className = s"navbar-$style"
-    val createModifier: Modifier = className.addClass
+    val createModifier = className.addClass
   }
 
   object NavigationBarStyle {

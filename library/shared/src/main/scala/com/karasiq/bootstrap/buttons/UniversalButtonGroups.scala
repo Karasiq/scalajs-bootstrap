@@ -21,7 +21,7 @@ trait UniversalButtonGroups { self: RenderingContext with ButtonGroups with Boot
   }
 
   class UniversalButtonGroup(val size: ButtonGroupSize, val buttons: Modifier*) extends AbstractButtonGroup {
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       div("btn-group".addClass, size, role := "group", aria.label := "Button group", md)(
         buttons
       )
@@ -29,7 +29,7 @@ trait UniversalButtonGroups { self: RenderingContext with ButtonGroups with Boot
   }
 
   class UniversalButtonToolbar(val buttonGroups: ButtonGroup*) extends AbstractButtonToolbar {
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       div(`class` := "btn-toolbar", role := "toolbar", aria.label := "Button toolbar", md)(
         buttonGroups.map(_.renderTag())
       )

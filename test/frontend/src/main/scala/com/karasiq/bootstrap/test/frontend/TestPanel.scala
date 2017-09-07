@@ -16,7 +16,7 @@ object TestPanel {
 }
 
 final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHtmlComponent {
-  override def renderTag(md: Modifier*): Tag = {
+  override def renderTag(md: ModifierT*): TagT = {
     val titleVar = Var[Frag]("ERROR")
     val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Callback.onClick(_ ⇒ TestModal().show()), Tooltip(i("Press me"), TooltipPlacement.left)).render
     val dangerButton = Button(ButtonStyle.danger)("Format C:\\", Popover(span(titleVar), "Popover test", TooltipPlacement.right)).render

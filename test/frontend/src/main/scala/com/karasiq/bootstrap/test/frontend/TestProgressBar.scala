@@ -1,14 +1,15 @@
 package com.karasiq.bootstrap.test.frontend
 
-import com.karasiq.bootstrap.Bootstrap.default._
+import scala.concurrent.duration._
+
 import rx._
 import rx.async._
 
-import scala.concurrent.duration._
+import com.karasiq.bootstrap.Bootstrap.default._
 import scalaTags.all._
 
 final class TestProgressBar(style: ProgressBarStyle, updateInterval: FiniteDuration) extends BootstrapComponent {
-  override def render(md: Modifier*): Modifier = {
+  override def render(md: ModifierT*): ModifierT = {
     val progressBarValue = Var(0)
     val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(style, ProgressBarStyle.striped, ProgressBarStyle.animated, md).render
 

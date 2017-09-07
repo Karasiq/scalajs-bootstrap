@@ -67,7 +67,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
     object image extends AbstractImageUtils {
       final class ImageStyle private[bootstrap](val styleName: String) extends AbstractImageStyle with StyleClassModifier {
         val className = s"img-$styleName"
-        def createModifier: Modifier = className.addClass
+        val createModifier = className.addClass
       }
 
       /**
@@ -87,7 +87,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
     sealed trait TextModifier extends StyleClassModifier {
       def styleName: String
       def className = s"text-$styleName"
-      lazy val createModifier: Modifier = className.addClass
+      lazy val createModifier = className.addClass
     }
 
     /**
@@ -146,7 +146,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
     object background extends AbstractBackgroundStyles {
       final class BackgroundStyle private[bootstrap](val styleName: String) extends AbstractBackgroundStyle with StyleClassModifier {
         val className = s"bg-$styleName"
-        def createModifier: Modifier = className.addClass
+        val createModifier = className.addClass
       }
 
       lazy val primary = new BackgroundStyle("primary")
@@ -180,7 +180,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
     object pull extends AbstractPullModifiers {
       final class PullModifier private[bootstrap](val styleName: String) extends AbstractPullModifier with StyleClassModifier {
         val className = s"pull-$styleName"
-        def createModifier: Modifier = className.addClass
+        val createModifier = className.addClass
       }
 
       lazy val left = new PullModifier("left")
@@ -211,7 +211,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
     object visibility extends AbstractVisibilityModifiers {
       final class ElementVisibility private[bootstrap](val styleName: String) extends AbstractVisibilityModifier with StyleClassModifier {
         val className = styleName
-        def createModifier: Modifier = className.addClass
+        val createModifier = className.addClass
       }
 
       lazy val show = new ElementVisibility("show")
@@ -249,6 +249,16 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
       * A non-breaking space is a space that will not break into a new line.
       */
     val nbsp = raw("&nbsp")
+
+    /**
+      * No-op frag
+      */
+    val noContent = (): FragT
+
+    /**
+      * No-op modifier
+      */
+    val noModifier = (): ModifierT
   }
 }
 
