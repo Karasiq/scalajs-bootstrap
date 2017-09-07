@@ -12,10 +12,8 @@ trait TextTooltips { self: RenderingContext with BootstrapComponents with Toolti
   import BootstrapAttrs._
 
   class TextTooltip(val options: TooltipOptions) extends AbstractTooltip {
-    override def render(md: Modifier*): Modifier = new Modifier {
-      override def applyTo(t: Element): Unit = {
-        ((`data-toggle` := "tooltip") +: Bootstrap.dataProps(options.toStrings:_*) +: md).applyTo(t)
-      }
+    override def render(md: ModifierT*): ModifierT = {
+      (`data-toggle` := "tooltip") +: Bootstrap.dataProps(options.toStrings:_*) +: md
     }
   }
 

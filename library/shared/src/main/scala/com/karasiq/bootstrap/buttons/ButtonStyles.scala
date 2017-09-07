@@ -1,14 +1,15 @@
 package com.karasiq.bootstrap.buttons
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait ButtonStyles { self: RenderingContext ⇒
+trait ButtonStyles { self: RenderingContext with Utils ⇒
   import scalaTags.all._
 
   sealed trait ButtonSize extends ModifierFactory
 
   object DefaultButtonSize extends ButtonSize {
-    val createModifier: Modifier = ()
+    val createModifier = Bootstrap.noModifier
   }
 
   final class ButtonSizeValue private[buttons](size: String) extends ButtonSize {
@@ -30,7 +31,7 @@ trait ButtonStyles { self: RenderingContext ⇒
 
   final class ButtonStyle private[buttons](style: String) extends ModifierFactory {
     val className = s"btn-$style"
-    val createModifier: Modifier = className.addClass
+    val createModifier = className.addClass
   }
 
   /**

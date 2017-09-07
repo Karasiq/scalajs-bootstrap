@@ -1,19 +1,20 @@
 package com.karasiq.bootstrap.panel
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait PanelStyles { self: RenderingContext ⇒
+trait PanelStyles { self: RenderingContext with Utils ⇒
   import scalaTags.all._
 
   sealed trait PanelStyle extends ModifierFactory
 
   object DefaultPanelStyle extends PanelStyle {
-    val createModifier: Modifier = ()
+    val createModifier = Bootstrap.noModifier
   }
 
   final class PanelStyleValue private[panel](style: String) extends PanelStyle {
     val className = s"panel-$style"
-    val createModifier: Modifier = className.addClass
+    val createModifier = className.addClass
   }
 
   //noinspection TypeAnnotation

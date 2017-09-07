@@ -1,8 +1,9 @@
 package com.karasiq.bootstrap.buttons
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait ButtonGroups extends ButtonGroupStyles { self: RenderingContext with Buttons ⇒
+trait ButtonGroups extends ButtonGroupStyles { self: RenderingContext with Buttons with Utils ⇒
   import scalaTags.all._
 
   type ButtonGroup <: AbstractButtonGroup

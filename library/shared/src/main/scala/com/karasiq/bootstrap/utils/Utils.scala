@@ -24,6 +24,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
   }
 
   trait AbstractUtils {
+    type FragT = Frag
     type ModifierT = Modifier
     type ElementT = Tag
     type ElementIdT = String
@@ -123,6 +124,16 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * A non-breaking space is a space that will not break into a new line.
       */
     def nbsp: ModifierT
+
+    /**
+      * No-op frag
+      */
+    def noContent: FragT
+
+    /**
+      * No-op modifier
+      */
+    def noModifier: ModifierT
   }
 
   trait StyleModifier extends ModifierFactory {

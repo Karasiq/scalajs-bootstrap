@@ -67,7 +67,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
       )
     }
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       div(tabContainer, tabContentContainer, md)
     }
   }
@@ -143,7 +143,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
       tabContentContainer
     }
 
-    def render(md: Modifier*): Modifier = {
+    def render(md: ModifierT*): ModifierT = {
       Seq(navbar, contentContainer(content)) ++ md
     }
   }

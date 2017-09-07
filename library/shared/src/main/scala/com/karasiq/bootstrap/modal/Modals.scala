@@ -32,8 +32,8 @@ trait Modals extends ModalStyles { self: RenderingContext with Utils with Bootst
     def button(md: Modifier*): Tag
 
     def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = closeButton(),
-              style: Modifier = (), dialogStyle: Modifier = ModalDialogSize.default, contentStyle: Modifier = (),
-              modalId: String = Bootstrap.newId): Modal
+              style: Modifier = Bootstrap.noModifier, dialogStyle: Modifier = ModalDialogSize.default,
+              contentStyle: Modifier = Bootstrap.noModifier, modalId: String = Bootstrap.newId): Modal
   }
 }
 

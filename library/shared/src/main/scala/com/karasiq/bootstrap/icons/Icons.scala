@@ -1,8 +1,9 @@
 package com.karasiq.bootstrap.icons
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait Icons { self: RenderingContext ⇒
+trait Icons { self: RenderingContext with Utils ⇒
   import scalaTags.all._
 
   val Icon: IconFactory
@@ -10,8 +11,9 @@ trait Icons { self: RenderingContext ⇒
   trait IconModifier extends BootstrapComponent
 
   case object NoIcon extends IconModifier {
-    private[this] val modifier: ModifierT = ()
-    override def render(md: ModifierT*): ModifierT = modifier
+    override def render(md: ModifierT*): ModifierT = {
+      md
+    }
   }
 
   trait IconFactory {

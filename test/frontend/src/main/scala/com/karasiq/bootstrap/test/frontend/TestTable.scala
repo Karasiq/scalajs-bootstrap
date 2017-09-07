@@ -12,7 +12,7 @@ object TestTable {
 }
 
 final class TestTable extends BootstrapComponent {
-  override def render(md: Modifier*): Modifier = {
+  override def render(md: ModifierT*): ModifierT = {
     // Table content
     val reactiveColumn = Var(2)
     val heading = Var(Seq[Modifier]("First", "Second", "Third"))

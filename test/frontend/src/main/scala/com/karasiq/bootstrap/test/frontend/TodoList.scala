@@ -2,10 +2,11 @@ package com.karasiq.bootstrap.test.frontend
 
 import java.util.UUID
 
-import com.karasiq.bootstrap.Bootstrap.default._
+import scala.language.postfixOps
+
 import rx._
 
-import scala.language.postfixOps
+import com.karasiq.bootstrap.Bootstrap.default._
 import scalaTags.all._
 
 object TodoList {
@@ -82,7 +83,7 @@ final class TodoList extends BootstrapHtmlComponent {
     )
   }
 
-  override def renderTag(md: Modifier*): Tag = {
+  override def renderTag(md: ModifierT*): TagT = {
     val heading = Rx(Seq[Modifier](
       Seq[Modifier]("Description", GridSystem.col(10)),
       Seq[Modifier]("Actions", GridSystem.col(2)))

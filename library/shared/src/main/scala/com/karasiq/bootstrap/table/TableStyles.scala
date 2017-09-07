@@ -7,7 +7,7 @@ trait TableStyles { self: RenderingContext ⇒
 
   final class TableStyle private[table](val styleName: String) extends ModifierFactory {
     val className = s"table-$styleName"
-    val createModifier: Modifier = className.addClass
+    val createModifier = className.addClass
   }
 
   object TableStyle {

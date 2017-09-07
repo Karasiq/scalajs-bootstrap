@@ -7,7 +7,7 @@ trait ProgressBarStyles { self: RenderingContext ⇒
 
   sealed trait ProgressBarStyle extends ModifierFactory {
     val className: String
-    lazy val createModifier: Modifier = className.addClass
+    lazy val createModifier = className.addClass
   }
 
   object ProgressBarStyle {

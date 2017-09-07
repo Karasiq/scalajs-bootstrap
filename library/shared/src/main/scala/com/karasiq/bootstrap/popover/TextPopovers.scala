@@ -1,22 +1,20 @@
 package com.karasiq.bootstrap.popover
 
+import scala.language.postfixOps
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.tooltip.Tooltips
 import com.karasiq.bootstrap.utils.Utils
 
-import scala.language.postfixOps
-
 trait TextPopovers { self: RenderingContext with BootstrapComponents with Tooltips with Popovers with Utils ⇒
-  import BootstrapAttrs._
-
   import scalaTags.all._
+
+  import BootstrapAttrs._
   
   class TextPopover(val options: PopoverOptions) extends Popover {
-    override def render(md: Modifier*): Modifier = new Modifier {
-      override def applyTo(t: Element): Unit = {
-        ((`data-toggle` := "popover") +: Bootstrap.dataProps(options.toStrings:_*) +: md).applyTo(t)
-      }
+    override def render(md: ModifierT*): ModifierT = {
+      (`data-toggle` := "popover") +: Bootstrap.dataProps(options.toStrings: _*) +: md
     }
   }
 

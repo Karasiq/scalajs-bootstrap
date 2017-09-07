@@ -80,7 +80,7 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
                                val inputId: String = Bootstrap.newId)
     extends BootstrapHtmlComponent {
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-$inputType-input"
       div("form-group".addClass)(
         label(`for` := controlId, inputLabel),
@@ -95,7 +95,7 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
 
     val inputType = "checkbox"
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       div("checkbox".addClass)(
         label(
           input(`type` := "checkbox", id := inputId, md),
@@ -156,7 +156,7 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
 
     final val selected: Var[Seq[String]] = Var(options.values.now.headOption.map(_.value).toSeq)
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-select-input"
       div("form-group".addClass)(
         label(`for` := controlId, selectLabel),
@@ -171,7 +171,7 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
   }
 
   class FormTextArea(val textAreaLabel: Modifier, val inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent {
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-textarea-input"
       div("form-group".addClass)(
         label(`for` := controlId, textAreaLabel),

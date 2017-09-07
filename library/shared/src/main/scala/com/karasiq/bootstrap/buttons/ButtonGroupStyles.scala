@@ -1,14 +1,15 @@
 package com.karasiq.bootstrap.buttons
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait ButtonGroupStyles { self: RenderingContext ⇒
+trait ButtonGroupStyles { self: RenderingContext with Utils ⇒
   import scalaTags.all._
 
   sealed trait ButtonGroupSize extends ModifierFactory
 
   object DefaultButtonGroupSize extends ButtonGroupSize {
-    val createModifier: Modifier = ()
+    val createModifier = Bootstrap.noModifier
   }
 
   final class ButtonGroupSizeValue private[buttons](val size: String) extends ButtonGroupSize {

@@ -31,7 +31,7 @@ trait UniversalProgressBars { self: RenderingContext with BootstrapComponents wi
     protected def content: Modifier
     def progress: Rx[Int]
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       div("progress".addClass)(
         div("progress-bar".addClass, role := "progressbar", Rx(aria.valuenow := progress()).auto,
           aria.valuemin := 0, aria.valuemax := 100, Rx[Modifier](width := progress().pct).auto, content, md)

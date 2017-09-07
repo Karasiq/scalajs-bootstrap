@@ -25,7 +25,7 @@ trait UniversalButtonStates { self: RenderingContext with ButtonStates with Boot
   class UniversalToggleButton(btn: Tag) extends AbstractStatefulButton {
     val state: Var[Boolean] = Var(false)
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       btn(
         "active".classIf(state),
         onclick := Callback.onClick { _ ⇒
@@ -39,7 +39,7 @@ trait UniversalButtonStates { self: RenderingContext with ButtonStates with Boot
   class UniversalDisabledButton(btn: Tag) extends AbstractStatefulButton {
     val state: Var[Boolean] = Var(false)
 
-    override def renderTag(md: Modifier*): Tag = {
+    override def renderTag(md: ModifierT*): TagT = {
       btn(
         "disabled".classIf(state),
         onclick := Callback.onClick { _ ⇒
