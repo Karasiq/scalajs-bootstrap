@@ -27,7 +27,7 @@ trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
       @inline
       private[this] def singleColSize(screenSize: String, _size: Int): GridColSize = new GridColSize {
         // require(modifier.nonEmpty && size <= 12 && size > 0, "Invalid grid column properties")
-        override val createModifier: ModifierT = ("col-" + screenSize + "-" + _size).addClass
+        override val createModifier = ("col-" + screenSize + "-" + _size).addClass
         override val size: Int = _size
       }
       
@@ -43,7 +43,7 @@ trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
     object hidden extends AbstractGridVisibilityFactory {
       final class UniversalGridHiddenModifier private[grid](val screenSize: String) extends AbstractGridVisibility {
         val hidden = true
-        val createModifier: ModifierT = ("hidden-" + screenSize).addClass
+        val createModifier = ("hidden-" + screenSize).addClass
       }
 
       @inline
@@ -64,7 +64,7 @@ trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
     object visible extends AbstractGridVisibilityFactory {
       class UniversalGridVisibleModifier private[grid](val screenSize: String, as: String) extends AbstractGridVisibility {
         val hidden = false
-        val createModifier: ModifierT = ("visible-" + screenSize + "-" + as).addClass
+        val createModifier = ("visible-" + screenSize + "-" + as).addClass
       }
 
       final class UniversalGridVisibility private[grid](screenSize: String) extends UniversalGridVisibleModifier(screenSize, "block") {

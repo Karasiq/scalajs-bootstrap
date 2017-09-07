@@ -42,7 +42,7 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
   }
 
   final class FontAwesomeStyle private[icons] (val styleName: String) extends ModifierFactory {
-    override val createModifier: ModifierT = ("fa-" + styleName).addClass
+    override val createModifier = ("fa-" + styleName).addClass
   }
 
   /**
