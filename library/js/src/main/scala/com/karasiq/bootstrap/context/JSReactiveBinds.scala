@@ -1,10 +1,11 @@
 package com.karasiq.bootstrap.context
 
-import com.karasiq.bootstrap.utils.ClassModifiers
-import org.scalajs.dom
-
 import scala.language.{implicitConversions, postfixOps}
 import scala.scalajs.js
+
+import org.scalajs.dom
+
+import com.karasiq.bootstrap.utils.ClassModifiers
 
 trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with ClassModifiers ⇒
   import ReactiveBinds._
@@ -50,7 +51,8 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
     }
   }
 
-  private[this] final class FormValueRW[E <: Element, T](event: String, read: dom.html.Input ⇒ T,
+  private[this] final class FormValueRW[E <: Element, T](event: String,
+                                                         read: dom.html.Input ⇒ T,
                                                          write: (dom.html.Input, T) ⇒ Unit)
     extends ReactiveRW[E, FormValue[T]] {
 
@@ -60,8 +62,10 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
     }
 
     def bindWrite(element: E, property: FormValue[T]): Unit = {
-      rxModify[E, T].bindWrite(element, Modify(property.value,
-        (e, v) ⇒ write(e.asInstanceOf[dom.html.Input], v)))
+      rxModify[E, T].bindWrite(element, Modify(property.value, { (e, v) ⇒
+        val input = e.asInstanceOf[dom.html.Input]
+        if (read(input) != v) write(input, v)
+      }))
     }
   }
 
