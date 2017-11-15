@@ -19,7 +19,7 @@ trait UniversalPagedTables extends PagedTables { self: RenderingContext with Boo
 
   trait UniversalPagedTable extends AbstractPagedTable with BootstrapHtmlComponent {
     override def renderTag(md: ModifierT*): TagT = {
-      div(div(Bootstrap.textAlign.center, pageSelector), table.renderTag(md:_*))
+      div(div(pageSelector), table.renderTag(md:_*))
     }
   }
 
