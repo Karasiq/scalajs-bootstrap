@@ -10,12 +10,12 @@ import com.karasiq.bootstrap4.Bootstrap.default._
 import scalaTags.all.{span, _}
 
 object TestPanel {
-  def apply(panelTitle: String, style: CardStyle): TestPanel = {
-    new TestPanel(panelTitle, style)
+  def apply(panelTitle: String): TestPanel = {
+    new TestPanel(panelTitle)
   }
 }
 
-final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtmlComponent {
+final class TestPanel(panelTitle: String) extends BootstrapHtmlComponent {
   override def renderTag(md: ModifierT*): TagT = {
     val titleVar = Var[Frag]("ERROR")
     val successButton = Button(ButtonStyle.success)("Win 10000000$", onclick := Callback.onClick(_ ⇒ TestModal().show()), Tooltip(i("Press me"), TooltipPlacement.left)).render
@@ -37,7 +37,7 @@ final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtm
     // Render panel
     val panelId = Bootstrap.newId
     val collapseBtnTitle = Var("ERROR")
-    val panel = Card(panelId, style)
+    val panel = Card(panelId)
       .withHeader("euro".faFwIcon, Card.collapse(panelId, panelTitle, Bootstrap.nbsp, Bootstrap.badge("42")), Card.buttons(
         Card.button("plus".faFwIcon, onclick := Callback.onClick(_ ⇒ window.alert("Panel add"))),
         Card.button("minus".faFwIcon, onclick := Callback.onClick(_ ⇒ window.alert("Panel remove")))
@@ -62,6 +62,7 @@ final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtm
           NavigationTab("Reactive buttons", Bootstrap.newId, "play-circle".faFwIcon, Card().withBody(ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)))
         )
       )
+      .renderTag(Bootstrap.borderStyle.warning, Bootstrap.textStyle.info)
 
     collapseBtnTitle() = "Dropdowns"
     panel

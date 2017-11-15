@@ -48,20 +48,21 @@ trait UniversalCards extends Cards { self: RenderingContext with Icons with Util
       span(Bootstrap.pull.right, buttons)
     }
 
-    def apply(panelId: String = Bootstrap.newId, style: CardStyle = CardStyle.default,
-              header: Option[Modifier] = None, footer: Option[Modifier] = None,
+    def group(cards: Modifier*): Tag = {
+      div(`class` := "card-group", cards)
+    }
+
+    def apply(panelId: String = Bootstrap.newId,
+              header: Option[Modifier] = None,
+              footer: Option[Modifier] = None,
               content: Seq[Modifier] = Nil): CardBuilder = {
-      CardBuilder(panelId, style, header, footer, content)
+      CardBuilder(panelId, header, footer, content)
     }
   }
 
-  case class CardBuilder(cardId: String, style: CardStyle, header: Option[Modifier], footer: Option[Modifier], content: Seq[Modifier]) extends AbstractCard {
+  case class CardBuilder(cardId: String, header: Option[Modifier], footer: Option[Modifier], content: Seq[Modifier]) extends AbstractCard {
     def withId(newId: String): CardBuilder = {
       copy(cardId = newId)
-    }
-
-    def withStyle(style: CardStyle): CardBuilder = {
-      copy(style = style)
     }
 
     def withHeader(modifiers: Modifier*): CardBuilder = {
@@ -81,13 +82,11 @@ trait UniversalCards extends Cards { self: RenderingContext with Icons with Util
     }
 
     def renderTag(md: Modifier*): TagT = {
-      div("card".addClass, style, id := cardId)(
+      div(`class` := "card", id := cardId)(
         for (h ← header) yield div("card-header".addClass, id := s"$cardId-card-header", h),
-        div(id := cardId + "-card-content", `class` := "collapse show")(
-          content,
-          md
-        ),
-        for (f ← footer) yield div("card-footer".addClass, id := s"$cardId-card-footer", f)
+        div(id := cardId + "-card-content", `class` := "collapse show")(content),
+        for (f ← footer) yield div("card-footer".addClass, id := s"$cardId-card-footer", f),
+        md
       )
     }
   }
