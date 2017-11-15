@@ -5,8 +5,9 @@ import rx.{Rx, Var}
 import com.karasiq.bootstrap4.components.BootstrapComponents
 import com.karasiq.bootstrap4.context.RenderingContext
 import com.karasiq.bootstrap4.pagination.PageSelectors
+import com.karasiq.bootstrap4.utils.Utils
 
-trait UniversalPagedTables extends PagedTables { self: RenderingContext with BootstrapComponents with PageSelectors with Tables ⇒
+trait UniversalPagedTables extends PagedTables { self: RenderingContext with BootstrapComponents with PageSelectors with Tables with Utils ⇒
   import scalaTags.all._
 
   type PagedTable = UniversalPagedTable
@@ -18,7 +19,7 @@ trait UniversalPagedTables extends PagedTables { self: RenderingContext with Boo
 
   trait UniversalPagedTable extends AbstractPagedTable with BootstrapHtmlComponent {
     override def renderTag(md: ModifierT*): TagT = {
-      div(div(textAlign.center, pageSelector), table.renderTag(md:_*))
+      div(div(Bootstrap.textAlign.center, pageSelector), table.renderTag(md:_*))
     }
   }
 

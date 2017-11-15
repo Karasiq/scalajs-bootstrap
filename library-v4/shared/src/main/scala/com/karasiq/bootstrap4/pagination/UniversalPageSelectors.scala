@@ -18,23 +18,24 @@ trait UniversalPageSelectors extends PageSelectors { self: RenderingContext ⇒
     extends AbstractPageSelector with BootstrapHtmlComponent {
 
     def previousLink: TagT = {
-      a(href := "#", aria.label := "Previous", onclick := Callback.onClick { _ ⇒
+      a(`class` := "page-link", href := "#", aria.label := "Previous", onclick := Callback.onClick { _ ⇒
         if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
       }, span(aria.hidden := true, raw("&laquo;")))
     }
 
     def nextLink: TagT = {
-      a(href := "#", aria.label := "Next", onclick := Callback.onClick { _ ⇒
+      a(`class` := "page-link", href := "#", aria.label := "Next", onclick := Callback.onClick { _ ⇒
         if (currentPage.now < pages.now) currentPage.update(currentPage.now + 1)
       }, span(aria.hidden := true, raw("&raquo;")))
     }
 
     def pageLink(page: Int): TagT = {
-      a(href := "#", onclick := Callback.onClick(_ ⇒ currentPage.update(page)), page)
+      a(`class` := "page-link", href := "#", onclick := Callback.onClick(_ ⇒ currentPage.update(page)), page)
     }
 
     private[this] def previousPageButton: TagT = {
       li(
+        `class` := "page-item",
         previousLink,
         "disabled".classIf(Rx(currentPage() == 1))
       )
@@ -42,6 +43,7 @@ trait UniversalPageSelectors extends PageSelectors { self: RenderingContext ⇒
 
     private[this] def nextPageButton: TagT = {
       li(
+        `class` := "page-item",
         nextLink,
         "disabled".classIf(Rx(currentPage() == pages()))
       )
@@ -49,15 +51,17 @@ trait UniversalPageSelectors extends PageSelectors { self: RenderingContext ⇒
 
     private[this] def pageButton(page: Int): TagT = {
       li(
+        `class` := "page-item",
         "active".classIf(Rx(page == currentPage())),
         pageLink(page)
       )
     }
 
     def renderTag(md: ModifierT*): TagT = {
-      div(Rx(ul(`class` := "pagination", Rx(pages() == 1).reactiveHide, md)(
+      val nav = tag("nav")
+      nav(Rx(ul(`class` := "pagination", Rx(pages() == 1).reactiveHide, md)(
         previousPageButton,
-        for(page <- 1 to pages()) yield pageButton(page),
+        for(page ← 1 to pages()) yield pageButton(page),
         nextPageButton
       )))
     }

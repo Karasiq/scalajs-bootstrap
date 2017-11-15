@@ -11,7 +11,7 @@ trait Grids { self: RenderingContext ⇒
   val GridSystem: GridSystem
 
   /**
-    * @see [[https://getbootstrap.com/css/#grid-options]]
+    * @see [[https://getbootstrap.com/docs/4.0/layout/grid/]]
     */
   trait AbstractGridSystem {
     type ContainerT = Tag
@@ -22,20 +22,9 @@ trait Grids { self: RenderingContext ⇒
     def row: RowT
 
     def col: AbstractColumnFactory
-    def hidden: AbstractGridVisibilityFactory
-    def visible: AbstractGridVisibilityFactory
     
     def mkRow(md: Modifier*): Tag = {
       row(col(col.maxSize).asDiv(md))
-    }
-
-    def visibility(xs: Boolean = true, sm: Boolean = true, md: Boolean = true, lg: Boolean = true): Modifier = {
-      Array[Modifier](
-        if (xs) visible.xs else hidden.xs,
-        if (sm) visible.sm else hidden.sm,
-        if (md) visible.md else hidden.md,
-        if (lg) visible.lg else hidden.lg
-      )
     }
   }
 
@@ -48,31 +37,19 @@ trait Grids { self: RenderingContext ⇒
     def minSize: Int
     def maxSize: Int
 
-    def xs(size: Int): AbstractColumn
-    def sm(size: Int): AbstractColumn
-    def md(size: Int): AbstractColumn
-    def lg(size: Int): AbstractColumn
+    def xs(size: Int = 0): AbstractColumn
+    def sm(size: Int = 0): AbstractColumn
+    def md(size: Int = 0): AbstractColumn
+    def lg(size: Int = 0): AbstractColumn
+    def xl(size: Int = 0): AbstractColumn
 
-    def responsive(xsSize: Int, smSize: Int, mdSize: Int, lgSize: Int): AbstractColumn = new AbstractColumn {
-      override val createModifier: ModifierT = Seq[ModifierT](xs(xsSize), sm(smSize), md(mdSize), lg(lgSize))
+    def responsive(xsSize: Int = maxSize, smSize: Int = maxSize, mdSize: Int = maxSize, lgSize: Int = maxSize, xlSize: Int = maxSize): AbstractColumn = new AbstractColumn {
+      override val createModifier: ModifierT = Seq[ModifierT](xs(xsSize), sm(smSize), md(mdSize), lg(lgSize), xl(xlSize))
       def size: Int = lgSize
       def asDiv: Tag = div(createModifier)
     }
 
-    def apply(size: Int): AbstractColumn = this.responsive(size, size, size, size)
-  }
-
-  trait AbstractGridVisibility extends ModifierFactory {
-    def screenSize: String
-    def hidden: Boolean
-  }
-
-  trait AbstractGridVisibilityFactory {
-    def xs: AbstractGridVisibility
-    def sm: AbstractGridVisibility
-    def md: AbstractGridVisibility
-    def lg: AbstractGridVisibility
-    def print: AbstractGridVisibility
+    def apply(size: Int): AbstractColumn = this.responsive(size, size, size, size, size)
   }
 }
 

@@ -112,9 +112,9 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
           htmlElement.style.display = oldDisplay
         } */
         if (!isVisible) {
-          addClass(element, "hide")
+          element.setAttribute("hidden", "")
         } else {
-          removeClass(element, "hide")
+          element.removeAttribute("hidden")
         }
       }))
     }
