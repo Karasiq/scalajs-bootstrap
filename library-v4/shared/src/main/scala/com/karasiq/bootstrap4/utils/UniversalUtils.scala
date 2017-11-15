@@ -21,15 +21,9 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
   trait UniversalUtils extends AbstractUtils {
     /**
       * A lightweight, flexible component that can optionally extend the entire viewport to showcase key content on your site.
-      * @see [[https://getbootstrap.com/components/#jumbotron]]
+      * @see [[https://getbootstrap.com/docs/4.0/components/jumbotron/]]
       */
     lazy val jumbotron: Tag = div(`class` := "jumbotron")
-
-    /**
-      * Use the well as a simple effect on an element to give it an inset effect.
-      * @see [[https://getbootstrap.com/components/#wells]]
-      */
-    lazy val well: Tag = div(`class` := "well")
 
     /**
       * Easily highlight new or unread items by adding a badge to links, Bootstrap navs, and more.

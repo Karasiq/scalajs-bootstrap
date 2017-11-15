@@ -31,7 +31,7 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
 
     def file(label: Modifier, md: Modifier*): InputT = {
-      this.ofType("file", label, "form-control".removeClass, md)
+      this.ofType("file", label, "form-control".removeClass, "form-control-file".addClass, md)
     }
 
     def textArea(title: Modifier, md: Modifier*): InputT = {
@@ -96,9 +96,10 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     val inputType = "checkbox"
 
     override def renderTag(md: ModifierT*): TagT = {
-      div("checkbox".addClass)(
+      div(`class` := "form-check")(
         label(
-          input(`type` := "checkbox", id := inputId, md),
+          `class` := "form-check-label",
+          input(`class` := "form-check-input", `type` := "checkbox", id := inputId, md),
           Bootstrap.nbsp,
           inputLabel
         )
@@ -111,9 +112,10 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     extends AbstractFormRadio with BootstrapHtmlComponent {
 
     override def renderTag(md: ModifierT*): TagT = {
-      div("radio".addClass)(
+      div(`class` := "form-check")(
         label(
-          input(`type` := "radio", name := radioName, id := radioId, value := radioValue, md),
+          `class` := "form-check-label",
+          input(`class` := "form-check-input", `type` := "radio", name := radioName, id := radioId, value := radioValue, md),
           title
         )
       )

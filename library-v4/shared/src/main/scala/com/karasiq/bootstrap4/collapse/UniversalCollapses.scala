@@ -34,7 +34,7 @@ trait UniversalCollapses { self: RenderingContext with Collapses with Utils ⇒
     }
 
     def renderTag(md: ModifierT*): TagT = {
-      div(Bootstrap.button(title, this.toggle), container(Bootstrap.well(md)))
+      div(Bootstrap.button(title, this.toggle), container(md))
     }
   }
 }

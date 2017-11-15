@@ -49,12 +49,6 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     def jumbotron: ElementT
 
     /**
-      * Use the well as a simple effect on an element to give it an inset effect.
-      * @see [[https://getbootstrap.com/components/#wells]]
-      */
-    def well: ElementT
-
-    /**
       * Easily highlight new or unread items by adding a badge to links, Bootstrap navs, and more.
       * @see [[https://getbootstrap.com/components/#badges]]
       */
