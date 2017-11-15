@@ -40,10 +40,10 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
     extends AbstractNavigation with BootstrapHtmlComponent {
 
     private def tabContainer = Rx {
-      def renderTab(tab: NavigationTab): Tag = {
+      def renderTab(tab: NavigationTab, active: Boolean): Tag = {
         val idLink = this.tabId(tab.id)
-        li(role := "presentation", tab.modifiers)(
-          a(href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
+        li(`class` := "nav-item", tab.modifiers)(
+          a(`class` := "nav-link", "active".classIf(active), href := "#", aria.controls := idLink, role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink")(
             if (tab.icon != NoIcon) Seq[Modifier](tab.icon, Bootstrap.nbsp) else (),
             tab.name
           )
@@ -51,10 +51,12 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
       }
 
       val tabs = navTabs()
-      ul(`class` := s"nav nav-$navType", role := "tablist")(
-        renderTab(tabs.head)("active".addClass),
-        for (t <- tabs.tail) yield renderTab(t)
-      )
+      val tag = ul(`class` := "nav nav-" + navType, role := "tablist")
+
+      if (tabs.nonEmpty) tag(
+        renderTab(tabs.head, active = true),
+        for (t ← tabs.tail) yield renderTab(t, active = false)
+      ) else tag 
     }
 
     private def tabContentContainer = Rx {
@@ -93,15 +95,18 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
     private[this] val tabContainer = Rx {
       def renderTab(active: Boolean, tab: NavigationTab): Tag = {
         val idLink = this.tabId(tab.id)
-        a(href := s"#$idLink", `class` := "nav-item nav-link", "active".classIf(active), aria.controls := idLink,  role := "tab", `data-toggle` := "tab", id := idLink + "link")(
-          if (tab.icon != NoIcon) Seq[Modifier](tab.icon, Bootstrap.nbsp) else (),
-          tab.name,
+        li(
+          `class` := "nav-item",
+          a(href := "#", `class` := "nav-link", "active".classIf(active), aria.controls := idLink,  role := "tab", `data-toggle` := "tab", `data-target` := s"#$idLink", id := idLink + "link")(
+            if (tab.icon != NoIcon) Seq[Modifier](tab.icon, Bootstrap.nbsp) else (),
+            tab.name
+          ),
           tab.modifiers
         )
       }
 
       val tabs = navTabs()
-      val tag = div(`class` := "navbar-nav", role := "tablist")
+      val tag = ul(`class` := "navbar-nav nav mr-auto", role := "tablist")
       if (tabs.nonEmpty) tag(
         renderTab(active = true, tabs.head),
         for (tab <- tabs.tail) yield renderTab(active = false, tab)
@@ -124,7 +129,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
     }
 
     def navbar(md: Modifier*): Tag = {
-      nav("navbar".addClass, styles)(
+      nav(`class` := "navbar", styles)(
         a(href := "javascript:void(0);", `class` := "navbar-brand", brand),
         button(`class` := "navbar-toggler", `type` := "button", `data-toggle` := "collapse", `data-target` := "#" + navId, aria.controls := navId, aria.expanded := false, aria.label := "Toggle navigation", span(`class` := "navbar-toggler-icon")),
         div(`class` := "collapse navbar-collapse", id := navId, tabContainer, inlineContent, md)
@@ -136,7 +141,7 @@ trait UniversalNavigationBars { self: RenderingContext with Icons with Grids wit
     }
 
     def render(md: ModifierT*): ModifierT = {
-      Seq(navbar(md:_*), contentContainer(content))
+      Seq(container(navbar(md:_*)), contentContainer(content))
     }
   }
 
