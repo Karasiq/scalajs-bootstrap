@@ -30,8 +30,8 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
     def slides: Rx[Tag] = Rx {
       val data = content()
       div(`class` := "carousel-inner", role := "listbox")(
-        div(`class` := "item active", data.head),
-        for (slide <- data.tail) yield div(`class` := "item", slide)
+        div(`class` := "carousel-item active", data.head),
+        for (slide ← data.tail) yield div(`class` := "carousel-item", slide)
       )
     }
 
@@ -39,12 +39,12 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
       div(id := carouselElementId, Seq("carousel", "slide").map(_.addClass))(
         indicators,
         slides,
-        a(`class` := "left carousel-control", href := s"#$carouselElementId", role := "button", `data-slide` := "prev")(
-          Bootstrap.icon("chevron-left"),
+        a(`class` := "carousel-control-prev", href := s"#$carouselElementId", role := "button", `data-slide` := "prev")(
+          span(`class` := "carousel-control-prev-icon", aria.hidden := true),
           span(`class` := "sr-only", "Previous")
         ),
-        a(`class` := "right carousel-control", href := s"#$carouselElementId", role := "button", `data-slide` := "next")(
-          Bootstrap.icon("chevron-right"),
+        a(`class` := "carousel-control-next", href := s"#$carouselElementId", role := "button", `data-slide` := "next")(
+          span(`class` := "carousel-control-next-icon", aria.hidden := true),
           span(`class` := "sr-only", "Next")
         )
       )
@@ -58,7 +58,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
   object UniversalCarousel {
     def slide(image: String, content: Modifier*): Modifier = {
       Seq(
-        img(src := image),
+        img(`class` := "d-block w-100", src := image),
         div(`class` := "carousel-caption")(content:_*)
       )
     }

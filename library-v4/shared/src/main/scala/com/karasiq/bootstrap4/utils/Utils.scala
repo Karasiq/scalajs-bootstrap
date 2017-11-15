@@ -34,6 +34,9 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     val textTransform: AbstractTextTransformations
     val textStyle: AbstractTextStyles
     val background: AbstractBackgroundStyles
+    val border: AbstractBorders
+    val borderStyle: AbstractBorderStyles
+    val borderRounding: AbstractBorderRounding
     val pull: AbstractPullModifiers
     val visibility: AbstractVisibilityModifiers
 
@@ -143,6 +146,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
   trait AbstractTextAlignment extends AbstractTextStyle
   trait AbstractTextTransformation extends AbstractTextStyle
   trait AbstractBackgroundStyle extends StyleModifier
+  trait AbstractBorderStyle extends StyleModifier
   trait AbstractPullModifier extends StyleModifier
   trait AbstractVisibilityModifier extends StyleModifier
 
@@ -226,6 +230,49 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     def light: AbstractBackgroundStyle
     def dark: AbstractBackgroundStyle
     def white: AbstractBackgroundStyle
+  }
+
+  /**
+    * Change the border color using utilities built on our theme colors.
+    * @see [[https://getbootstrap.com/docs/4.0/utilities/borders/#border-color]]
+    */
+  trait AbstractBorderStyles {
+    def primary: AbstractBorderStyle
+    def secondary: AbstractBorderStyle
+    def success: AbstractBorderStyle
+    def info: AbstractBorderStyle
+    def warning: AbstractBorderStyle
+    def danger: AbstractBorderStyle
+    def light: AbstractBorderStyle
+    def dark: AbstractBorderStyle
+    def white: AbstractBorderStyle
+  }
+
+  /**
+    * Add classes to an element to remove all borders or some borders.
+    * @see [[https://getbootstrap.com/docs/4.0/utilities/borders/]]
+    */
+  trait AbstractBorders {
+    def border: Modifier
+    def border0: Modifier
+    def borderTop0: Modifier
+    def borderBottom0: Modifier
+    def borderLeft0: Modifier
+    def borderRight0: Modifier
+  }
+
+  /**
+    * Add classes to an element to easily round its corners.
+    * @see [[https://getbootstrap.com/docs/4.0/utilities/borders/#border-radius]]
+    */
+  trait AbstractBorderRounding {
+    def rounded: Modifier
+    def roundedTop: Modifier
+    def roundedBottom: Modifier
+    def roundedRight: Modifier
+    def roundedLeft: Modifier
+    def roundedCircle: Modifier
+    def rounded0: Modifier
   }
 
   /**

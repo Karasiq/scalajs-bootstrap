@@ -93,7 +93,7 @@ final class TodoList extends BootstrapHtmlComponent {
     )
     val table = PagedTable(heading, items.map(_.map(renderItem)), 5)
 
-    Card(style = CardStyle.success)
+    Card()
       .withHeader("th-list".faFwIcon, Bootstrap.nbsp, span("Scala.js Todo", Rx(Bootstrap.badge(items().count(i ⇒ !i().completed)))), Card.buttons(
         Card.button("plus".faFwIcon, onclick := Callback.onClick(_ ⇒ showAddDialog())),
         Card.button("trash".faFwIcon, onclick := Callback.onClick(_ ⇒ removeCompleted())),

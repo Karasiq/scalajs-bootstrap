@@ -25,9 +25,9 @@ object BootstrapTestApp {
       
       val tabs = Var(Seq[NavigationTab](
         NavigationTab(tabTitle, "table", "table".faFwIcon, TestTable(), tableVisible.reactiveShow),
-        NavigationTab("Carousel", "carousel", "picture".glyphicon, TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
+        NavigationTab("Carousel", "carousel", "file-image-o".faFwIcon, TestCarousel("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Big_Wood%2C_N2.JPG/1280px-Big_Wood%2C_N2.JPG")),
         NavigationTab("ToDo list", "todo", "fort-awesome".faFwIcon, TodoList()),
-        NavigationTab("Text rendering", "text", "envelope".glyphicon, Bootstrap.jumbotron(
+        NavigationTab("Text rendering", "text", "file-text-o".faFwIcon, Bootstrap.jumbotron(
           FormInput.textArea(a("Text rendering", href := "./serverside.html"), rows := 30, readonly, TestHtmlPage())
         ))
       ))
@@ -42,7 +42,7 @@ object BootstrapTestApp {
       navigationBar.applyTo(dom.document.body)
 
       // Reactive navbar test
-      tabs() = tabs.now :+ NavigationTab("Buttons", "buttons", "log-in".glyphicon, TestPanel("Serious business panel", CardStyle.warning))
+      tabs() = tabs.now :+ NavigationTab("Buttons", "buttons", "hand-o-right".faFwIcon, TestPanel("Serious business panel"))
       navigationBar.selectTab(2)
     })
   }

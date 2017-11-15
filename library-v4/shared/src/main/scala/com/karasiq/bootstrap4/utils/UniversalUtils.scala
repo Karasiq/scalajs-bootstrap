@@ -156,6 +156,43 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
       lazy val light = new BackgroundStyle("light")
       lazy val dark = new BackgroundStyle("dark")
       lazy val white = new BackgroundStyle("white")
+      lazy val transparent = new BackgroundStyle("transparent")
+    }
+
+    object border extends AbstractBorders {
+      lazy val border = "border".addClass 
+      lazy val border0 = "border0".addClass 
+      lazy val borderTop0 = "border-top-0".addClass
+      lazy val borderBottom0 = "border-bottom-0".addClass
+      lazy val borderLeft0 = "border-left-0".addClass
+      lazy val borderRight0 = "border-right-0".addClass
+    }
+
+    final class BorderStyle private[bootstrap4](val styleName: String) extends AbstractBorderStyle with StyleClassModifier {
+      val className = s"border-$styleName"
+      val createModifier = className.addClass
+    }
+
+    object borderStyle extends AbstractBorderStyles {
+      lazy val primary = new BorderStyle("primary")
+      lazy val secondary = new BorderStyle("secondary")
+      lazy val success = new BorderStyle("success")
+      lazy val info = new BorderStyle("info")
+      lazy val warning = new BorderStyle("warning")
+      lazy val danger = new BorderStyle("danger")
+      lazy val light = new BorderStyle("light")
+      lazy val dark = new BorderStyle("dark")
+      lazy val white = new BorderStyle("white")
+    }
+
+    object borderRounding extends AbstractBorderRounding {
+      lazy val rounded = "rounded".addClass
+      lazy val roundedTop = "rounded-top".addClass
+      lazy val roundedBottom = "rounded-bottom".addClass
+      lazy val roundedRight = "rounded-right".addClass
+      lazy val roundedLeft = "rounded-left".addClass
+      lazy val roundedCircle = "rounded-circle".addClass
+      lazy val rounded0 = "rounded-0".addClass
     }
 
     /**
