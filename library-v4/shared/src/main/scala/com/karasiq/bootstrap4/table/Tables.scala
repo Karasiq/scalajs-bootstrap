@@ -5,8 +5,9 @@ import scala.language.postfixOps
 import rx.{Rx, Var}
 
 import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap4.utils.Utils
 
-trait Tables extends TableRows with TableStyles { self: RenderingContext ⇒
+trait Tables extends TableRows with TableStyles { self: RenderingContext with Utils ⇒
   import scalaTags.all._
 
   type Table <: AbstractTable with BootstrapHtmlComponent

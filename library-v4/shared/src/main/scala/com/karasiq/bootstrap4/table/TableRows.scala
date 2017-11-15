@@ -1,9 +1,9 @@
 package com.karasiq.bootstrap4.table
 
 import com.karasiq.bootstrap4.context.RenderingContext
-import com.karasiq.bootstrap4.utils.ClassModifiers
+import com.karasiq.bootstrap4.utils.{ClassModifiers, Utils}
 
-trait TableRows { self: RenderingContext with ClassModifiers ⇒
+trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._
 
   trait TableRow {
@@ -11,25 +11,32 @@ trait TableRows { self: RenderingContext with ClassModifiers ⇒
     def modifiers: Modifier
   }
 
-  sealed trait TableRowStyle extends ModifierFactory {
-    def styleClass: Option[String]
-    override final def createModifier: ModifierT = styleClass.map(_.addClass)
+  sealed trait TableRowStyle extends StyleModifier {
+    def styleName: String
   }
 
   //noinspection TypeAnnotation
   object TableRowStyle {
-    private def style(s: String): TableRowStyle = new TableRowStyle {
-      override def styleClass: Option[String] = Some(s)
+    case object Default extends TableRowStyle {
+      def styleName = "default"
+      val createModifier = Bootstrap.noModifier
     }
 
-    def default: TableRowStyle = new TableRowStyle {
-      override def styleClass: Option[String] = None
+    final case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier  {
+      val className = s"table-$styleName"
+      val createModifier = className.addClass
     }
-    def active = style("active")
-    def success = style("success")
-    def warning = style("warning")
-    def danger = style("danger")
-    def info = style("info")
+
+    def default = Default
+    lazy val active = Styled("active")
+    lazy val primary = Styled("primary")
+    lazy val secondary = Styled("secondary")
+    lazy val success = Styled("success")
+    lazy val warning = Styled("warning")
+    lazy val danger = Styled("danger")
+    lazy val info = Styled("info")
+    lazy val light = Styled("light")
+    lazy val dark = Styled("dark")
   }
 
   object TableRow {
