@@ -8,7 +8,7 @@ import rx.async._
 import com.karasiq.bootstrap4.Bootstrap.default._
 import scalaTags.all._
 
-final class TestProgressBar(style: ProgressBarStyle, updateInterval: FiniteDuration) extends BootstrapComponent {
+final class TestProgressBar(style: Modifier, updateInterval: FiniteDuration) extends BootstrapComponent {
   override def render(md: ModifierT*): ModifierT = {
     val progressBarValue = Var(0)
     val progressBar = ProgressBar.withLabel(progressBarValue).renderTag(style, ProgressBarStyle.striped, ProgressBarStyle.animated, md).render
