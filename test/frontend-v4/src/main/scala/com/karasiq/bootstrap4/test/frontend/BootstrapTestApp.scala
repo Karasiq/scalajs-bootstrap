@@ -1,4 +1,4 @@
-package com.karasiq.bootstrap.test.frontend
+package com.karasiq.bootstrap4.test.frontend
 
 import scala.language.postfixOps
 
@@ -7,7 +7,7 @@ import org.scalajs.dom.window
 import org.scalajs.jquery._
 import rx._
 
-import com.karasiq.bootstrap.Bootstrap.default._
+import com.karasiq.bootstrap4.Bootstrap.default._
 import scalaTags.all._
 
 object BootstrapTestApp {
@@ -20,7 +20,7 @@ object BootstrapTestApp {
       // Show table tab in 3 seconds
       window.setTimeout(() ⇒ {
         tableVisible.update(true)
-        window.setTimeout(() ⇒ { tabTitle() = "Table" }, 1000)
+        window.setTimeout(() => { tabTitle() = "Table" }, 1000)
       }, 3000)
       
       val tabs = Var(Seq[NavigationTab](
@@ -36,14 +36,13 @@ object BootstrapTestApp {
         .withBrand("Scala.js Bootstrap Test", href := "https://github.com/Karasiq/scalajs-bootstrap")
         .withTabs(tabs)
         .withContentContainer(content ⇒ GridSystem.container(id := "main-container", GridSystem.mkRow(content)))
-        .withStyles(NavigationBarStyle.inverse, NavigationBarStyle.fixedTop)
         .build()
 
       // Render page
       navigationBar.applyTo(dom.document.body)
 
       // Reactive navbar test
-      tabs() = tabs.now :+ NavigationTab("Buttons", "buttons", "log-in".glyphicon, TestPanel("Serious business panel", PanelStyle.warning))
+      tabs() = tabs.now :+ NavigationTab("Buttons", "buttons", "log-in".glyphicon, TestPanel("Serious business panel", CardStyle.warning))
       navigationBar.selectTab(2)
     })
   }

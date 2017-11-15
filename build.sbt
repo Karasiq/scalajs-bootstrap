@@ -10,7 +10,8 @@ lazy val commonSettings = Seq(
   version := "2.1.5",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.11.8", "2.12.1")
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
+  resolvers += MavenRepository("Central", "https://repo.maven.apache.org/maven2/")
 )
 
 lazy val publishSettings = Seq(
@@ -49,6 +50,10 @@ lazy val librarySettings = Seq(
   name := "scalajs-bootstrap"
 )
 
+lazy val libraryV4Settings = Seq(
+  name := "scalajs-bootstrap-v4"
+)
+
 lazy val testServerSettings = Seq(
   scalaVersion := "2.11.8",
   name := "scalajs-bootstrap-test",
@@ -65,32 +70,47 @@ lazy val testServerSettings = Seq(
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
   scalaJsBundlerInline in Compile := true,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage),
-  scalaJsBundlerAssets in Compile += {
+  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage, fullOptJS in Compile in testPageV4),
+  scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
     val jsDeps = Seq(
       // jQuery
-      Script from url("https://code.jquery.com/jquery-1.12.0.js"),
-
-      // Bootstrap
-      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/css/bootstrap.css"),
-      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/js/bootstrap.js"),
+      Script from url("https://code.jquery.com/jquery-3.2.1.slim.min.js"),
 
       // Font Awesome
       Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")
     )
 
+    val bootstrap3 = Seq(
+      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/css/bootstrap.css"),
+      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/js/bootstrap.js")
+    )
+
+    val bootstrap4 = Seq(
+      Script from url("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/popper.min.js"),
+      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/css/bootstrap.css"),
+      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/js/bootstrap.js")
+    )
+
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
-    Bundle("index", jsDeps, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false).value)
+    Seq(
+      Bundle("index", jsDeps, bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false, launcher = false).value),
+      Bundle("index-v4", jsDeps, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPageV4, fastOpt = false, launcher = false).value)
+    )
   }
 )
 
 lazy val testPageSettings = Seq(
-  persistLauncher in Compile := true,
+  scalaJSUseMainModuleInitializer := true,
   name := "scalajs-bootstrap-test-frontend"
+)
+
+lazy val testPageV4Settings = Seq(
+  scalaJSUseMainModuleInitializer := true,
+  name := "scalajs-bootstrap-test-frontend-v4"
 )
 
 // Projects
@@ -118,6 +138,30 @@ lazy val libraryJS = library.js
 
 lazy val libraryJVM = library.jvm
 
+lazy val libraryV4 = (crossProject in file("library-v4"))
+  .settings(commonSettings, libraryV4Settings, publishSettings)
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
+    ),
+    scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
+      val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
+      s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
+    }))
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %% "scalarx" % scalaRxVersion
+    )
+  )
+
+lazy val libraryV4JS = libraryV4.js
+
+lazy val libraryV4JVM = libraryV4.jvm
+
 lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
   .settings(commonSettings, name := "scalajs-bootstrap-test-shared")
   .dependsOn(library)
@@ -125,6 +169,14 @@ lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / 
 lazy val testSharedJS = testShared.js
 
 lazy val testSharedJVM = testShared.jvm
+
+lazy val testSharedV4 = (crossProject.crossType(CrossType.Pure) in file("test") / "shared-v4")
+  .settings(commonSettings, name := "scalajs-bootstrap-test-shared-v4")
+  .dependsOn(libraryV4)
+
+lazy val testSharedV4JS = testSharedV4.js
+
+lazy val testSharedV4JVM = testSharedV4.jvm
 
 lazy val testServer = (project in file("test"))
   .settings(testServerSettings)
@@ -135,6 +187,11 @@ lazy val testPage = (project in (file("test") / "frontend"))
   .settings(commonSettings, testPageSettings)
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(testSharedJS)
+
+lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
+  .settings(commonSettings, testPageV4Settings)
+  .enablePlugins(ScalaJSPlugin)
+  .dependsOn(testSharedV4JS)
 
 lazy val root = (project in file("."))
   .settings(commonSettings, noPublishSettings)

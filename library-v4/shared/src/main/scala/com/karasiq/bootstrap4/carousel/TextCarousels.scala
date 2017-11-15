@@ -1,0 +1,25 @@
+package com.karasiq.bootstrap4.carousel
+
+import scala.language.postfixOps
+
+import rx.Rx
+
+import com.karasiq.bootstrap4.components.BootstrapComponents
+import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap4.icons.Icons
+import com.karasiq.bootstrap4.utils.Utils
+
+trait TextCarousels extends UniversalCarousels { self: RenderingContext with Carousels with Utils with Icons with BootstrapComponents ⇒
+  import scalaTags.all._
+
+  type Carousel = UniversalCarousel
+  object Carousel extends CarouselFactory {
+    def apply(data: Rx[Seq[Modifier]], id: String = Bootstrap.newId): UniversalCarousel = {
+      new UniversalCarousel(id, data)
+    }
+
+    def slide(image: String, content: Modifier*): Modifier = {
+      UniversalCarousel.slide(image, content)
+    }
+  }
+}

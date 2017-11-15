@@ -2,18 +2,19 @@ package com.karasiq.bootstrap.test.backend
 
 import java.util.concurrent.TimeUnit
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
 import akka.actor._
 import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
-import com.karasiq.bootstrap.test.frontend.TestHtmlPage
 import spray.can.Http
 import spray.http._
 import spray.routing.HttpService
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
-import scala.language.postfixOps
+import com.karasiq.bootstrap.test.frontend.TestHtmlPage
 
 object BootstrapTestApp extends App {
   final class AppHandler extends Actor with HttpService {
