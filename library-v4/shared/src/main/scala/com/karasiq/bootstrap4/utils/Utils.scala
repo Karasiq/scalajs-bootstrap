@@ -39,6 +39,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     val borderRounding: AbstractBorderRounding
     val pull: AbstractPullModifiers
     val visibility: AbstractVisibilityModifiers
+    val display: AbstractDisplayModifiers
 
     /**
       * Generates unique element ID
@@ -149,6 +150,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
   trait AbstractBorderStyle extends StyleModifier
   trait AbstractPullModifier extends StyleModifier
   trait AbstractVisibilityModifier extends StyleModifier
+  trait AbstractDisplayModifier extends StyleModifier
 
   /**
     * Add classes to an `img` element to easily style images in any project.
@@ -287,17 +289,26 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
   }
 
   /**
-    * Force an element to be shown or hidden (including for screen readers) with the use of `.show` and `.hidden` classes.
-    * These classes use `!important` to avoid specificity conflicts, just like the quick floats.
-    * They are only available for block level toggling. They can also be used as mixins.
-    * `.hide` is available, but it does not always affect screen readers and is deprecated as of v3.0.1. Use `.hidden` or `.sr-only` instead.
-    * Furthermore, `.invisible` can be used to toggle only the visibility of an element, meaning its display is not modified and the element can still affect the flow of the document.
-    * @see [[http://getbootstrap.com/css/#helper-classes-show-hide]]
+    * Control the visibility, without modifying the display, of elements with visibility utilities.
+    * @see [[https://getbootstrap.com/docs/4.0/utilities/visibility/]]
     */
   trait AbstractVisibilityModifiers {
-    def show: AbstractVisibilityModifier
-    def hidden: AbstractVisibilityModifier
+    def visible: AbstractVisibilityModifier
     def invisible: AbstractVisibilityModifier
+  }
+
+  /**
+    * @see [[https://getbootstrap.com/docs/4.0/utilities/display/]]
+    */
+  trait AbstractDisplayModifiers {
+    def none: AbstractDisplayModifier
+    def inline: AbstractDisplayModifier
+    def inlineBlock: AbstractDisplayModifier
+    def block: AbstractDisplayModifier
+    def table: AbstractDisplayModifier
+    def tableCell: AbstractDisplayModifier
+    def flex: AbstractDisplayModifier
+    def inlineFlex: AbstractDisplayModifier
   }
 }
 
