@@ -1,11 +1,10 @@
 package com.karasiq.bootstrap.popover
 
+import scala.language.postfixOps
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.JSRenderingContext
 import com.karasiq.bootstrap.tooltip.Tooltips
-import org.scalajs.jquery
-
-import scala.language.postfixOps
 
 trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popovers with Tooltips ⇒
   import scalaTags.all._
@@ -26,7 +25,7 @@ trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popove
         set(options.template, jsOptions.template = _)
         set(options.trigger, jsOptions.trigger = _)
         set(options.viewport, jsOptions.viewport = _)
-        jquery.jQuery(t).popover(jsOptions)
+        JSRenderingContext.jQuery(t).popover(jsOptions)
       }
     }
 

@@ -1,7 +1,5 @@
 package com.karasiq.bootstrap4.tooltip
 
-import org.scalajs.jquery
-
 import com.karasiq.bootstrap4.components.BootstrapComponents
 import com.karasiq.bootstrap4.context.JSRenderingContext
 
@@ -30,7 +28,7 @@ trait JSTooltips { self: JSRenderingContext with BootstrapComponents with Toolti
         set(options.template, jsOptions.template = _)
         set(options.trigger, jsOptions.trigger = _)
         set(options.viewport, jsOptions.viewport = _)
-        jquery.jQuery(t).tooltip(jsOptions)
+        JSRenderingContext.jQuery(t).tooltip(jsOptions)
       }
     }
 
