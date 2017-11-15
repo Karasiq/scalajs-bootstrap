@@ -11,7 +11,7 @@ trait UniversalDropdowns { self: RenderingContext with Dropdowns with Utils ⇒
   type Dropdown = AbstractDropdown
   object Dropdown extends DropdownFactory {
     def link(target: String, md: Modifier*): Tag = {
-      li(a(href := target, md))
+      a(`class` := "dropdown-item", href := target, md)
     }
 
     def apply(title: Modifier, items: Modifier*): Dropdown = {
@@ -36,7 +36,7 @@ trait UniversalDropdowns { self: RenderingContext with Dropdowns with Utils ⇒
           Bootstrap.nbsp,
           span(`class` := "caret")
         ),
-        ul(`class` := "dropdown-menu", aria.labelledby := dropdownId)(items:_*)
+        div(`class` := "dropdown-menu", aria.labelledby := dropdownId)(items:_*)
       )
     }
 
