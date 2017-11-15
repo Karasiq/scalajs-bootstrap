@@ -45,7 +45,7 @@ final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtm
       .withBody(
         new TestProgressBar(ProgressBarStyle.success, 300 millis),
         Navigation.tabs(
-          NavigationTab("Simple buttons", Bootstrap.newId, "remove".faFwIcon, Bootstrap.well(
+          NavigationTab("Simple buttons", Bootstrap.newId, "remove".faFwIcon, Card().withBody(
             GridSystem.mkRow(
               small("Hint: press the green button for reactive forms test", Bootstrap.textStyle.info)
             ),
@@ -59,9 +59,7 @@ final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtm
               )
             ))
           )),
-          NavigationTab("Reactive buttons", Bootstrap.newId, "play-circle".faFwIcon, Bootstrap.well(
-            ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)
-          ))
+          NavigationTab("Reactive buttons", Bootstrap.newId, "play-circle".faFwIcon, Card().withBody(ButtonGroup(ButtonGroupSize.large, toggleButton, disabledButton)))
         )
       )
 
