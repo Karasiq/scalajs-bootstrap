@@ -18,7 +18,7 @@ import com.karasiq.bootstrap.Bootstrap.default._, scalaTags.all._
 
 # Examples
 * [Project test page](https://github.com/Karasiq/scalajs-bootstrap/tree/master/test/frontend/src/main/scala/com/karasiq/bootstrap/test/frontend) 
-  * Use https://karasiq.github.io/scalajs-bootstrap/ (https://karasiq.github.io/scalajs-bootstrap/index-v4.html)
+  * Use https://karasiq.github.io/scalajs-bootstrap/ (https://karasiq.github.io/scalajs-bootstrap/index-v4)
   * Or run server with `sbt testServer/run`, then open http://127.0.0.1:9000 in your browser
 
 # License

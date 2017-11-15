@@ -29,9 +29,6 @@ trait Cards { self: RenderingContext with Icons with Utils ⇒
     def buttons(buttons: Modifier*): Tag
     def group(cards: Modifier*): Tag
 
-    /**
-      * Shortcut to PanelBuilder()
-      */
     def apply(panelId: String = Bootstrap.newId,
               header: Option[Modifier] = None,
               footer: Option[Modifier] = None,
