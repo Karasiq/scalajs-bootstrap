@@ -20,7 +20,7 @@ trait JSRenderingContext extends RenderingContext with JSBootstrapImplicits with
 object JSRenderingContext {
   @js.native
   @JSImport("bootstrap", JSImport.Namespace)
-  object jsModule extends js.Object
+  object bootstrapJS extends js.Object
 
   @js.native
   @JSImport("jquery", JSImport.Namespace)

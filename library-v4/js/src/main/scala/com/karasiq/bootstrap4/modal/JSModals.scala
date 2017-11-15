@@ -4,8 +4,6 @@ import scala.language.postfixOps
 import scala.scalajs.js
 import scala.scalajs.js.|
 
-import org.scalajs.jquery.jQuery
-
 import com.karasiq.bootstrap4.components.BootstrapComponents
 import com.karasiq.bootstrap4.context.JSRenderingContext
 
@@ -14,7 +12,7 @@ trait JSModals { self: JSRenderingContext with Modals with BootstrapComponents â
     def show(backdrop: Boolean | String = true, keyboard: Boolean = true,
              show: Boolean = true, events: Map[String, js.Any] = Map.empty): Unit = {
 
-      val dialog = jQuery(modal.renderTag().render)
+      val dialog = JSRenderingContext.jQuery(modal.renderTag().render)
       val options = js.Object().asInstanceOf[JSModalOptions]
       options.backdrop = backdrop
       options.keyboard = keyboard

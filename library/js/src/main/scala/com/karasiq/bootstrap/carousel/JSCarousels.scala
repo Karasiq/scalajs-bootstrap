@@ -3,7 +3,6 @@ package com.karasiq.bootstrap.carousel
 import scala.language.postfixOps
 import scala.scalajs.js
 
-import org.scalajs.jquery.jQuery
 import rx.Rx
 
 import com.karasiq.bootstrap.components.BootstrapComponents
@@ -35,7 +34,7 @@ trait JSCarousels extends UniversalCarousels { self: JSRenderingContext with Car
       options.pause = pause
       options.wrap = wrap
       options.keyboard = keyboard
-      jQuery(element).carousel(options)
+      JSRenderingContext.jQuery(element).carousel(options)
       element
     }
 

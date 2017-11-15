@@ -6,14 +6,13 @@ import com.karasiq.bootstrap4.context.JSRenderingContext
 
 trait JSNavigationBars { self: JSRenderingContext with NavigationBars ⇒
   implicit class JSNavigation(nav: NavComponent) {
-    import org.scalajs.jquery.jQuery
 
     /**
       * Selects tab by ID
       * @param id Tab ID
       */
     def selectTab(id: String): Unit = {
-      jQuery(s"a[data-target='#${nav.tabId(id)}']").tab("show")
+      JSRenderingContext.jQuery(s"a[data-target='#${nav.tabId(id)}']").tab("show")
     }
 
     /**
