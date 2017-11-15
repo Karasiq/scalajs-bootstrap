@@ -59,7 +59,7 @@ trait UniversalPageSelectors extends PageSelectors { self: RenderingContext ⇒
 
     def renderTag(md: ModifierT*): TagT = {
       val nav = tag("nav")
-      nav(Rx(ul(`class` := "pagination", Rx(pages() == 1).reactiveHide, md)(
+      nav(Rx(ul(`class` := "pagination justify-content-center", Rx(pages() == 1).reactiveHide, md)(
         previousPageButton,
         for(page ← 1 to pages()) yield pageButton(page),
         nextPageButton
