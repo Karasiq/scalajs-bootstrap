@@ -18,7 +18,7 @@ final class TestTable extends BootstrapComponent {
     val heading = Var(Seq[Modifier]("First", "Second", "Third"))
     val content = Var(for (i <- 1 to 45) yield TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := Callback.onClick { row ⇒
       reactiveColumn.update(reactiveColumn.now + 1)
-      row.classList.add("success")
+      row.classList.add(TableRowStyle.success.className)
     }))
 
     // Render table

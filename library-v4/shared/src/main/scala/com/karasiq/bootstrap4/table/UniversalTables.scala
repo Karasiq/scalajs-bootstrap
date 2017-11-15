@@ -17,14 +17,15 @@ trait UniversalTables { self: RenderingContext with BootstrapComponents with Tab
 
   trait UniversalTable extends AbstractTable with BootstrapHtmlComponent {
     lazy val tableHead: Rx[TagT] = Rx {
-      thead(tr(for (h <- heading()) yield th(h)))
+      val scope = attr("scope")
+      thead(tr(for (h ← heading()) yield th(h, scope := "col")))
     }
 
     lazy val tableBody: Rx[TagT] = Rx {
-      tbody(for (row <- content()) yield {
+      tbody(for (row ← content()) yield {
         tr(
           row.modifiers,
-          for (col <- row.columns) yield td(col)
+          for (col ← row.columns) yield td(col)
         )
       })
     }

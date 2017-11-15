@@ -78,7 +78,10 @@ final class TodoList extends BootstrapHtmlComponent {
         Seq[Modifier](buttons, GridSystem.col(2), textAlign.center)
       ),
       Rx(`class` := {
-        if (item().completed) "" else item().priority.style.styleClass.getOrElse("")
+        if (item().completed) "" else item().priority.style match {
+          case TableRowStyle.Default ⇒ ""
+          case style: TableRowStyle.Styled ⇒ style.className
+        }
       }).auto
     )
   }
@@ -96,6 +99,6 @@ final class TodoList extends BootstrapHtmlComponent {
         Card.button("trash".faFwIcon, onclick := Callback.onClick(_ ⇒ removeCompleted())),
         Card.button("flash".faFwIcon, onclick := Callback.onClick(_ ⇒ addTestData()))
       ))
-      .withBody(table.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, TableStyle.condensed))
+      .withBody(table.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, TableStyle.small))
   }
 }
