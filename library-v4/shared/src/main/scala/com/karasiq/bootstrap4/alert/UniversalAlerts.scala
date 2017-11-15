@@ -20,7 +20,7 @@ trait UniversalAlerts { self: RenderingContext with Alerts with Utils ⇒
   }
 
   class UniversalAlert(val style: AlertStyle) extends AbstractAlert {
-    private[this] val classes = Seq("alert", "alert-dismissible", "fade", "in")
+    private[this] val classes = Seq("alert", "alert-dismissible", "fade", "show")
 
     def closeButton: Tag = {
       button(`type` := "button", "close".addClass, `data-dismiss` := "alert",

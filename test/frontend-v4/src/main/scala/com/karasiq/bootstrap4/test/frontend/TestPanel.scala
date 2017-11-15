@@ -43,7 +43,7 @@ final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtm
         Card.button("minus".faFwIcon, onclick := Callback.onClick(_ ⇒ window.alert("Panel remove")))
       ))
       .withBody(
-        new TestProgressBar(ProgressBarStyle.success, 300 millis),
+        new TestProgressBar(Bootstrap.background.success, 200 millis),
         Navigation.tabs(
           NavigationTab("Simple buttons", Bootstrap.newId, "remove".faFwIcon, Card().withBody(
             GridSystem.mkRow(
