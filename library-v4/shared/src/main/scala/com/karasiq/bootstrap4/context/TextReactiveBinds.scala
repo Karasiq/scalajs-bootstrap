@@ -74,11 +74,7 @@ trait TextReactiveBinds extends ReactiveBinds { self: TextRenderingContext ⇒
   implicit def rxVisibility[E <: Element]: ReactiveWrite[E, ReactiveBinds.Visibility] = {
     new ReactiveWrite[E, ReactiveBinds.Visibility] {
       def bindWrite(element: E, property: ReactiveBinds.Visibility): Unit = {
-        if (!property.visible.now) {
-          addClass(element, "hide")
-        } else {
-          removeClass(element, "hide")
-        }
+        if (!property.visible.now) scalaTags.attrs.hidden.applyTo(element)
       }
     }
   }
