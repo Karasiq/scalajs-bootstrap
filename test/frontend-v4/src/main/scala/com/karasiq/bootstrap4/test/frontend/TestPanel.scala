@@ -38,10 +38,10 @@ final class TestPanel(panelTitle: String, style: CardStyle) extends BootstrapHtm
     val panelId = Bootstrap.newId
     val collapseBtnTitle = Var("ERROR")
     val panel = Card(panelId, style)
-      .withHeader(Card.title("euro".faFwIcon, Card.collapse(panelId, panelTitle, Bootstrap.nbsp, Bootstrap.badge("42")), Card.buttons(
+      .withHeader("euro".faFwIcon, Card.collapse(panelId, panelTitle, Bootstrap.nbsp, Bootstrap.badge("42")), Card.buttons(
         Card.button("plus".faFwIcon, onclick := Callback.onClick(_ ⇒ window.alert("Panel add"))),
         Card.button("minus".faFwIcon, onclick := Callback.onClick(_ ⇒ window.alert("Panel remove")))
-      )))
+      ))
       .withBody(
         new TestProgressBar(ProgressBarStyle.success, 300 millis),
         Navigation.tabs(

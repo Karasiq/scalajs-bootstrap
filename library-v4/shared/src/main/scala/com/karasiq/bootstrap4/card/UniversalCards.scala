@@ -13,7 +13,7 @@ trait UniversalCards extends Cards { self: RenderingContext with Icons with Util
   type Card = CardBuilder
   object Card extends CardFactory {
     def collapse(cardId: String, modifiers: Modifier*): Tag = {
-      span(cursor.pointer, `data-toggle` := "collapse", `data-target` := s"#$cardId-card-body", modifiers)
+      span(cursor.pointer, `data-toggle` := "collapse", `data-target` := s"#$cardId-card-content", modifiers)
     }
 
     def title(md: Modifier*): Tag = {
@@ -83,8 +83,10 @@ trait UniversalCards extends Cards { self: RenderingContext with Icons with Util
     def renderTag(md: Modifier*): TagT = {
       div("card".addClass, style, id := cardId)(
         for (h ← header) yield div("card-header".addClass, id := s"$cardId-card-header", h),
-        content,
-        md,
+        div(id := cardId + "-card-content", `class` := "collapse show")(
+          content,
+          md
+        ),
         for (f ← footer) yield div("card-footer".addClass, id := s"$cardId-card-footer", f)
       )
     }

@@ -1,5 +1,7 @@
 import sbt.Keys._
 
+import com.karasiq.scalajsbundler.compilers.{AssetCompilers, ConcatCompiler}
+
 // Versions
 val scalaTagsVersion = "0.6.2"
 val scalaRxVersion = "0.3.2"
@@ -69,14 +71,14 @@ lazy val testServerSettings = Seq(
     )
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
-  scalaJsBundlerInline in Compile := true,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage, fullOptJS in Compile in testPageV4),
+  scalaJsBundlerInline in Compile := false,
+  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage, fastOptJS in Compile in testPageV4),
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
     val jsDeps = Seq(
       // jQuery
-      Script from url("https://code.jquery.com/jquery-3.2.1.slim.min.js"),
+      Script from url("https://code.jquery.com/jquery-3.2.1.js"),
 
       // Font Awesome
       Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")
@@ -88,9 +90,9 @@ lazy val testServerSettings = Seq(
     )
 
     val bootstrap4 = Seq(
-      Script from url("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/popper.min.js"),
+      // Script from url("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/popper.min.js"),
       Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/css/bootstrap.css"),
-      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/js/bootstrap.js")
+      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/js/bootstrap.bundle.js")
     )
 
     val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
@@ -98,9 +100,13 @@ lazy val testServerSettings = Seq(
 
     Seq(
       Bundle("index", jsDeps, bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false, launcher = false).value),
-      Bundle("index-v4", jsDeps, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPageV4, fastOpt = false, launcher = false).value)
+      Bundle("index-v4", jsDeps, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPageV4, fastOpt = true, launcher = false).value)
     )
-  }
+  },
+  scalaJsBundlerCompilers in Compile := AssetCompilers {
+    case "text/javascript" ⇒
+      ConcatCompiler
+  }.<<=(AssetCompilers.default)
 )
 
 lazy val testPageSettings = Seq(
