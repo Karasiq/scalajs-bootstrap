@@ -4,11 +4,11 @@ Reactive [Scala.js](http://www.scala-js.org/) [bootstrap](https://getbootstrap.c
 # How to use
 Add line to your `build.sbt` (also requires `bootstrap.css` and `bootstrap.js` at runtime):
 ```scala
-// Scala.js 
-libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "2.1.4"
+// Bootstrap 3
+libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "2.1.6"
 
-// JVM 
-libraryDependencies += "com.github.karasiq" %% "scalajs-bootstrap" % "2.1.4"
+// Bootstrap 4 beta
+libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap-v4" % "2.1.6"
 ```
 
 Import bootstrap context:
@@ -18,7 +18,7 @@ import com.karasiq.bootstrap.Bootstrap.default._, scalaTags.all._
 
 # Examples
 * [Project test page](https://github.com/Karasiq/scalajs-bootstrap/tree/master/test/frontend/src/main/scala/com/karasiq/bootstrap/test/frontend) 
-  * Use https://karasiq.github.io/scalajs-bootstrap/
+  * Use https://karasiq.github.io/scalajs-bootstrap/ (https://karasiq.github.io/scalajs-bootstrap/index-v4.html)
   * Or run server with `sbt testServer/run`, then open http://127.0.0.1:9000 in your browser
 
 # License

@@ -1,7 +1,5 @@
 import sbt.Keys._
 
-import com.karasiq.scalajsbundler.compilers.{AssetCompilers, ConcatCompiler}
-
 // Versions
 val scalaTagsVersion = "0.6.2"
 val scalaRxVersion = "0.3.2"
@@ -9,7 +7,7 @@ val scalaRxVersion = "0.3.2"
 // Settings
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "2.1.5",
+  version := "2.1.6",
   isSnapshot := version.value.endsWith("SNAPSHOT"),
   scalaVersion := "2.11.8",
   crossScalaVersions := Seq("2.11.8", "2.12.1"),
@@ -71,8 +69,8 @@ lazy val testServerSettings = Seq(
     )
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
-  scalaJsBundlerInline in Compile := false,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage, fastOptJS in Compile in testPageV4),
+  scalaJsBundlerInline in Compile := true,
+  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(fullOptJS in Compile in testPage, fullOptJS in Compile in testPageV4),
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl.{Script, _}
 
@@ -100,13 +98,13 @@ lazy val testServerSettings = Seq(
 
     Seq(
       Bundle("index", jsDeps, bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false, launcher = false).value),
-      Bundle("index-v4", jsDeps, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPageV4, fastOpt = true, launcher = false).value)
+      Bundle("index-v4", jsDeps, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPageV4, fastOpt = false, launcher = false).value)
     )
-  },
+  } /*,
   scalaJsBundlerCompilers in Compile := AssetCompilers {
     case "text/javascript" ⇒
       ConcatCompiler
-  }.<<=(AssetCompilers.default)
+  }.<<=(AssetCompilers.default) */
 )
 
 lazy val testPageSettings = Seq(
@@ -201,4 +199,4 @@ lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
 
 lazy val root = (project in file("."))
   .settings(commonSettings, noPublishSettings)
-  .aggregate(libraryJS, libraryJVM)
+  .aggregate(libraryJS, libraryJVM, libraryV4JS, libraryV4JVM)
