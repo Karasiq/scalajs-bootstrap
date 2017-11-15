@@ -162,7 +162,7 @@ lazy val libraryV4 = (crossProject in file("library-v4"))
     })),
     npmDependencies in Compile ++= Seq(
       "jquery" -> "3.2.1",
-      "bootstrap" -> "4.0.0-beta2"
+      "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
     )
   )
   .jvmSettings(
