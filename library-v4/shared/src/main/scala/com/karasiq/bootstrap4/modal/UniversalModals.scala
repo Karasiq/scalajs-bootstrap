@@ -22,11 +22,11 @@ trait UniversalModals { self: RenderingContext with Utils with BootstrapComponen
     }
 
     def closeButton(title: String = "Close"): Tag = {
-      Bootstrap.button(this.dismiss, title)
+      Button(ButtonOutline.danger)(dismiss, title)
     }
 
     def button(md: Modifier*): Tag = {
-      Button(ButtonStyle.primary)(md)
+      Button(ButtonOutline.primary)(md)
     }
 
     def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = closeButton(),
@@ -39,10 +39,10 @@ trait UniversalModals { self: RenderingContext with Utils with BootstrapComponen
   trait UniversalModal extends AbstractModal with BootstrapHtmlComponent {
     def modalHeader: Tag = {
       div(`class` := "modal-header")(
+        h5(`class` := "modal-title", this.title),
         button(`type` := "button", `class` := "close", `data-dismiss` := "modal", aria.label := "Close")(
           span(aria.hidden := true, raw("&times;"))
-        ),
-        h4(`class` := "modal-title", this.title)
+        )
       )
     }
 
@@ -56,7 +56,7 @@ trait UniversalModals { self: RenderingContext with Utils with BootstrapComponen
 
     def modal: Tag = {
       div(`class` := "modal fade", tabindex := -1, role := "dialog", id := modalId, style)(
-        div(`class` := "modal-dialog", dialogStyle)(
+        div(`class` := "modal-dialog", role := "document", dialogStyle)(
           div(`class` := "modal-content", contentStyle)(
             modalHeader,
             modalBody,
