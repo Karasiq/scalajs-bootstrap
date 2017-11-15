@@ -13,7 +13,7 @@ object TestHtmlPage {
       base(href := "/"),
       meta(httpEquiv := "content-type", content := "text/html; charset=utf-8"),
       meta(name := "viewport", content := "width=device-width, initial-scale=1.0"),
-      script(src := "https://code.jquery.com/jquery-1.12.0.js"),
+      script(src := "https://code.jquery.com/jquery-3.2.1.js"),
       raw(bootstrapCdnLinks),
       scalaTags.tags2.style(raw(fontAwesomeCss)),
       script(raw(activateTooltipScript)),
@@ -31,7 +31,7 @@ object TestHtmlPage {
         .withBrand(rxText, href := "http://getbootstrap.com/components/#navbar")
         .withTabs(
           NavigationTab("Table", "table", "table".faFwIcon, this.createTable),
-          NavigationTab("Carousel", "carousel", "picture".glyphicon, this.createCarousel),
+          NavigationTab("Carousel", "carousel", "file-image-o".faFwIcon, this.createCarousel),
           NavigationTab("Buttons", "empty", "address-book".faFwIcon, Bootstrap.jumbotron(
             Bootstrap.button("Modal", testModal.toggle)
           ))
@@ -60,14 +60,9 @@ object TestHtmlPage {
 
   private[this] def bootstrapCdnLinks: String =
     """
-      |<!-- Latest compiled and minified CSS -->
-      |<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-      |
-      |<!-- Optional theme -->
-      |<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-      |
-      |<!-- Latest compiled and minified JavaScript -->
-      |<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      |<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+      |<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+      |<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
       |""".stripMargin
 
   private[this] def fontAwesomeCss: String =
