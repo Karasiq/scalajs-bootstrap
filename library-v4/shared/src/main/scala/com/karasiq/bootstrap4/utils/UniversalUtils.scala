@@ -253,9 +253,33 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
         val createModifier = className.addClass
       }
 
-      lazy val show = new ElementVisibility("show")
-      lazy val hidden = new ElementVisibility("hidden")
+      lazy val visible = new ElementVisibility("visible")
       lazy val invisible = new ElementVisibility("invisible")
+    }
+
+    class DisplayModifier private[bootstrap4](val size: Option[String], val styleName: String) extends AbstractDisplayModifier {
+      val className = size.fold("d-" + styleName)(screenSize ⇒ "d-" + screenSize + "-" + styleName)
+      val createModifier = className.addClass
+    }
+
+    class DisplayModifiers(size: Option[String]) extends AbstractDisplayModifiers {
+      protected def displayModifier(str: String): DisplayModifier = new DisplayModifier(size, str)
+
+      lazy val none = displayModifier("none")
+      lazy val inline = displayModifier("inline")
+      lazy val inlineBlock = displayModifier("inline-block")
+      lazy val block = displayModifier("block")
+      lazy val table = displayModifier("table")
+      lazy val tableCell = displayModifier("table-cell")
+      lazy val flex = displayModifier("flex")
+      lazy val inlineFlex = displayModifier("inline-flex")
+    }
+
+    object display extends DisplayModifiers(None) {
+      lazy val sm = new DisplayModifiers(Some("sm"))
+      lazy val md = new DisplayModifiers(Some("md"))
+      lazy val lg = new DisplayModifiers(Some("lg"))
+      lazy val xl = new DisplayModifiers(Some("xl"))
     }
 
     /**
