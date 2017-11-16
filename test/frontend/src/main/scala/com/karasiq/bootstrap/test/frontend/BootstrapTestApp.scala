@@ -13,8 +13,7 @@ import com.karasiq.bootstrap.context.JSRenderingContext
 
 object BootstrapTestApp {
   def main(args: Array[String]): Unit = {
-    JSRenderingContext.jQuery
-    JSRenderingContext.bootstrapJS
+    JSRenderingContext.useNpmImports()
     JSRenderingContext.jQuery(() ⇒ {
       // Table tab will appear after 3 seconds
       val tableVisible = Var(false)

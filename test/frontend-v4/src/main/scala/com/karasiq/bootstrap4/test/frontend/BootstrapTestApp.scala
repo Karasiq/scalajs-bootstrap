@@ -13,7 +13,7 @@ import com.karasiq.bootstrap4.context.JSRenderingContext
 
 object BootstrapTestApp {
   def main(args: Array[String]): Unit = {
-    JSRenderingContext.bootstrapJS
+    // JSRenderingContext.useNpmImports()
     JSRenderingContext.jQuery(() ⇒ {
       // Table tab will appear after 3 seconds
       val tableVisible = Var(false)
@@ -22,7 +22,7 @@ object BootstrapTestApp {
       // Show table tab in 3 seconds
       window.setTimeout(() ⇒ {
         tableVisible.update(true)
-        window.setTimeout(() => { tabTitle() = "Table" }, 1000)
+        window.setTimeout(() ⇒ { tabTitle() = "Table" }, 1000)
       }, 3000)
       
       val tabs = Var(Seq[NavigationTab](
