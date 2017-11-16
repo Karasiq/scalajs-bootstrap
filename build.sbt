@@ -92,7 +92,7 @@ lazy val testServerSettings = Seq(
 
     Seq(
       Bundle("index", bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsBundlerApplication(testPage, fastOpt = false).value),
-      Bundle("index-v4", jQuery, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsBundlerApplication(testPageV4, fastOpt = false).value)
+      Bundle("index-v4", jQuery, bootstrap4, Html from TestPageAssets.index, /* Style from TestPageAssets.style, */ fonts, scalaJsBundlerApplication(testPageV4, fastOpt = false).value)
     )
   }/* ,
   scalaJsBundlerCompilers in Compile := AssetCompilers {
