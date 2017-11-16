@@ -103,7 +103,13 @@ lazy val testServerSettings = Seq(
 
 lazy val testPageSettings = Seq(
   scalaJSUseMainModuleInitializer := true,
-  name := "scalajs-bootstrap-test-frontend"
+  name := "scalajs-bootstrap-test-frontend",
+  npmDevDependencies in Compile ++= Seq(
+    "webpack-merge" -> "4.1.0",
+    "imports-loader" -> "0.7.0",
+    "expose-loader" -> "0.7.1"
+  ),
+  webpackConfigFile := Some(baseDirectory.value / "webpack.config.js")
 )
 
 lazy val testPageV4Settings = Seq(

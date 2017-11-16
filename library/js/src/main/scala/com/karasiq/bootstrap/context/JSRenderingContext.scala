@@ -32,8 +32,8 @@ object JSRenderingContext {
 
   def useNpmImports(): Unit = {
     jQuery = imports.jQuery
-    js.Dynamic.global.jQuery = jQuery
-    js.Dynamic.global.$ = jQuery
+    // js.Dynamic.global.jQuery = jQuery
+    // js.Dynamic.global.$ = jQuery
     imports.bootstrap
   }
 }
