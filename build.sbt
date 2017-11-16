@@ -1,7 +1,5 @@
 import sbt.Keys._
 
-import com.karasiq.scalajsbundler.compilers.{AssetCompilers, ConcatCompiler}
-
 // Versions
 val scalaTagsVersion = "0.6.2"
 val scalaRxVersion = "0.3.2"
@@ -75,13 +73,7 @@ lazy val testServerSettings = Seq(
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl._
 
-    val jsDeps = Seq(
-      // jQuery
-      // Script from url("https://code.jquery.com/jquery-3.2.1.js"),
-
-      // Font Awesome
-      Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")
-    )
+    val jQuery = Seq(Script from url("https://code.jquery.com/jquery-3.2.1.js"))
 
     val bootstrap3 = Seq(
       Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/css/bootstrap.css")
@@ -90,22 +82,23 @@ lazy val testServerSettings = Seq(
 
     val bootstrap4 = Seq(
       // Script from url("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/popper.min.js"),
-      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/css/bootstrap.css")
-      //Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/js/bootstrap.bundle.js")
+      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/css/bootstrap.css"),
+      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/js/bootstrap.bundle.js")
     )
 
-    val fonts = fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
+    val fonts = Seq(Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")) ++
+      fontPackage("glyphicons-halflings-regular", "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular") ++
       fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
 
     Seq(
-      Bundle("index", jsDeps, bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPage, fastOpt = false, launcher = false).value),
-      Bundle("index-v4", jsDeps, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsApplication(testPageV4, fastOpt = false, launcher = false).value)
+      Bundle("index", bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsBundlerApplication(testPage, fastOpt = false).value),
+      Bundle("index-v4", jQuery, bootstrap4, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsBundlerApplication(testPageV4, fastOpt = false).value)
     )
-  },
+  }/* ,
   scalaJsBundlerCompilers in Compile := AssetCompilers {
     case "text/javascript" ⇒
       ConcatCompiler
-  }.<<=(AssetCompilers.default)
+  }.<<=(AssetCompilers.default) */
 )
 
 lazy val testPageSettings = Seq(
@@ -132,8 +125,8 @@ lazy val library = crossProject
       s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
     })),
     npmDependencies in Compile ++= Seq(
-      "jquery" -> "3.2.1",
-      "bootstrap" -> "3.3.7"
+      "jquery" → "~3.2.1",
+      "bootstrap" → "~3.3.7"
     )
   )
   .jvmSettings(
@@ -161,8 +154,8 @@ lazy val libraryV4 = (crossProject in file("library-v4"))
       s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
     })),
     npmDependencies in Compile ++= Seq(
-      "jquery" -> "3.2.1",
-      "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
+      "jquery" → "~3.2.1"
+      // "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
     )
   )
   .jvmSettings(
@@ -196,7 +189,7 @@ lazy val testSharedV4JVM = testSharedV4.jvm
 lazy val testServer = (project in file("test"))
   .settings(testServerSettings)
   .dependsOn(testSharedJVM)
-  .enablePlugins(com.karasiq.scalajsbundler.ScalaJSBundlerPlugin)
+  .enablePlugins(SJSAssetBundlerPlugin)
 
 lazy val testPage = (project in (file("test") / "frontend"))
   .settings(commonSettings, testPageSettings)

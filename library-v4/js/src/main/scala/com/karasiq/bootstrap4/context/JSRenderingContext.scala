@@ -18,11 +18,22 @@ trait JSRenderingContext extends RenderingContext with JSBootstrapImplicits with
 }
 
 object JSRenderingContext {
-  @js.native
-  @JSImport("bootstrap", JSImport.Namespace)
-  object bootstrapJS extends js.Object
+  object imports {
+    @js.native
+    @JSImport("jquery", JSImport.Namespace)
+    object jQuery extends JQueryStatic
 
-  @js.native
-  @JSImport("jquery", JSImport.Namespace)
-  object jQuery extends JQueryStatic
+    @js.native
+    @JSImport("bootstrap", JSImport.Namespace)
+    object bootstrap extends js.Object
+  }
+
+  var jQuery: JQueryStatic = org.scalajs.jquery.jQuery
+
+  def useNpmImports(): Unit = {
+    jQuery = imports.jQuery
+    js.Dynamic.global.jQuery = jQuery
+    js.Dynamic.global.$ = jQuery
+    imports.bootstrap
+  }
 }
