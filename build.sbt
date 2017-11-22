@@ -207,6 +207,6 @@ lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
   .dependsOn(testSharedV4JS)
 
-lazy val root = (project in file("."))
+lazy val `scalajs-bootstrap` = (project in file("."))
   .settings(commonSettings, noPublishSettings)
   .aggregate(libraryJS, libraryJVM, libraryV4JS, libraryV4JVM)
