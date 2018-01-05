@@ -37,7 +37,7 @@ final class TestTable extends BootstrapComponent {
 
     // Test reactive components
     sortableTable.pagedTable.pageSelector.currentPage() = 2
-    items() = items.now.reverse
+    items() = items.now.reverse :+ 123
     columns() = TableCols[Int](
       TableCol("Eins", identity, i ⇒ i),
       TableCol("Zwei", identity, i ⇒ i + 1),

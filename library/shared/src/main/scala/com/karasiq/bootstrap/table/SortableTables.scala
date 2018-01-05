@@ -1,10 +1,10 @@
-package com.karasiq.bootstrap4.table
+package com.karasiq.bootstrap.table
 
 import scala.language.{higherKinds, postfixOps}
 
 import rx._
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait SortableTables extends TableCols { self: RenderingContext with PagedTables ⇒
   import scalaTags.all._
