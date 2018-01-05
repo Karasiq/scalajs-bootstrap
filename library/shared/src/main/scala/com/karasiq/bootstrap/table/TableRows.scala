@@ -1,15 +1,12 @@
 package com.karasiq.bootstrap.table
 
 import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.ClassModifiers
+import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
 
-trait TableRows { self: RenderingContext with ClassModifiers ⇒
+trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._
 
-  trait TableRow {
-    def columns: Seq[Modifier]
-    def modifiers: Modifier
-  }
+  final case class TableRow(columns: Seq[Modifier], modifiers: Modifier*)
 
   sealed trait TableRowStyle extends ModifierFactory {
     def styleClass: Option[String]
@@ -18,28 +15,26 @@ trait TableRows { self: RenderingContext with ClassModifiers ⇒
 
   //noinspection TypeAnnotation
   object TableRowStyle {
-    private def style(s: String): TableRowStyle = new TableRowStyle {
-      override def styleClass: Option[String] = Some(s)
+    case object Default extends TableRowStyle {
+      val styleClass = None
     }
 
-    def default: TableRowStyle = new TableRowStyle {
-      override def styleClass: Option[String] = None
+    final case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier {
+      val styleClass = Some(styleName)
+      val className = styleName
     }
-    def active = style("active")
-    def success = style("success")
-    def warning = style("warning")
-    def danger = style("danger")
-    def info = style("info")
+
+    def default = Default
+    lazy val active = Styled("active")
+    lazy val success = Styled("success")
+    lazy val warning = Styled("warning")
+    lazy val danger = Styled("danger")
+    lazy val info = Styled("info")
   }
 
   object TableRow {
-    def apply(data: Seq[Modifier], ms: Modifier*): TableRow = new TableRow {
-      override def modifiers: Modifier = ms
-      override def columns: Seq[Modifier] = data
-    }
-
     def data(data: Modifier*): TableRow = {
-      apply(data)
+      new TableRow(data)
     }
   }
 }

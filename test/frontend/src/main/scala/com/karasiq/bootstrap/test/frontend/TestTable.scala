@@ -15,20 +15,35 @@ final class TestTable extends BootstrapComponent {
   override def render(md: ModifierT*): ModifierT = {
     // Table content
     val reactiveColumn = Var(2)
-    val heading = Var(Seq[Modifier]("First", "Second", "Third"))
-    val content = Var(for (i <- 1 to 45) yield TableRow(Seq(i, i + 1, Rx(i + reactiveColumn())), onclick := Callback.onClick { row ⇒
-      reactiveColumn.update(reactiveColumn.now + 1)
-      row.classList.add("success")
-    }))
+
+    val items = Var(1 to 45: Seq[Int])
+    val columns = Var(TableCols[Int](
+      TableCol("First", identity, i ⇒ i),
+      TableCol("Second", identity, i ⇒ i + 1),
+      TableCol("Third", identity, i ⇒ Rx(i + reactiveColumn()))
+    ))
 
     // Render table
-    val pagedTable = PagedTable(heading, content, 10)
-    val renderedTable = pagedTable.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, md).render
+    val sortableTable = SortableTable(
+      items,
+      columns,
+      (i: Int) ⇒ Seq(onclick := Callback.onClick { row ⇒
+        reactiveColumn.update(reactiveColumn.now + i)
+        row.classList.add(TableRowStyle.success.className)
+      })
+    )
+
+    val renderedTable = sortableTable.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, md).render
 
     // Test reactive components
-    pagedTable.pageSelector.currentPage() = 2
-    content.update(content.now.reverse)
-    heading.update(Seq("Eins", "Zwei", Rx("Drei " + reactiveColumn())))
+    sortableTable.pagedTable.pageSelector.currentPage() = 2
+    items() = items.now.reverse :+ 123
+    columns() = TableCols[Int](
+      TableCol("Eins", identity, i ⇒ i),
+      TableCol("Zwei", identity, i ⇒ i + 1),
+      TableCol(Rx("Drei " + reactiveColumn()), identity, i ⇒ Rx(i + reactiveColumn()))
+    )
+    sortableTable.setOrdering(columns.now(1))
     renderedTable
   }
 }
