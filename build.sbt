@@ -5,12 +5,14 @@ val scalaTagsVersion = "0.6.2"
 val scalaRxVersion = "0.3.2"
 
 // Settings
+scalaVersion := "2.12.3"
+
+crossScalaVersions := Seq("2.11.11", "2.12.3")
+
 lazy val commonSettings = Seq(
   organization := "com.github.karasiq",
-  version := "2.1.7",
-  isSnapshot := version.value.endsWith("SNAPSHOT"),
-  scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.11.8", "2.12.1")
+  version := "2.2.0",
+  isSnapshot := version.value.endsWith("SNAPSHOT")
 )
 
 lazy val publishSettings = Seq(
@@ -54,7 +56,7 @@ lazy val libraryV4Settings = Seq(
 )
 
 lazy val testServerSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
   name := "scalajs-bootstrap-test",
   resolvers += Resolver.sonatypeRepo("snapshots"),
   libraryDependencies ++= {
@@ -177,7 +179,7 @@ lazy val libraryV4JS = libraryV4.js
 lazy val libraryV4JVM = libraryV4.jvm
 
 lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
-  .settings(commonSettings, name := "scalajs-bootstrap-test-shared")
+  .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared")
   .dependsOn(library)
 
 lazy val testSharedJS = testShared.js
@@ -185,7 +187,7 @@ lazy val testSharedJS = testShared.js
 lazy val testSharedJVM = testShared.jvm
 
 lazy val testSharedV4 = (crossProject.crossType(CrossType.Pure) in file("test") / "shared-v4")
-  .settings(commonSettings, name := "scalajs-bootstrap-test-shared-v4")
+  .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared-v4")
   .dependsOn(libraryV4)
 
 lazy val testSharedV4JS = testSharedV4.js
@@ -193,17 +195,17 @@ lazy val testSharedV4JS = testSharedV4.js
 lazy val testSharedV4JVM = testSharedV4.jvm
 
 lazy val testServer = (project in file("test"))
-  .settings(testServerSettings)
+  .settings(testServerSettings, noPublishSettings)
   .dependsOn(testSharedJVM)
   .enablePlugins(SJSAssetBundlerPlugin)
 
 lazy val testPage = (project in (file("test") / "frontend"))
-  .settings(commonSettings, testPageSettings)
+  .settings(commonSettings, testPageSettings, noPublishSettings)
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
   .dependsOn(testSharedJS)
 
 lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
-  .settings(commonSettings, testPageV4Settings)
+  .settings(commonSettings, testPageV4Settings, noPublishSettings)
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
   .dependsOn(testSharedV4JS)
 
