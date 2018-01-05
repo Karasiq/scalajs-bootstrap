@@ -44,7 +44,7 @@ object TestHtmlPage {
 
     private[this] def createTable = {
       val table = PagedTable(Rx(Seq("Number", "Square")), Rx(TableRow(Seq(1, 1), Tooltip(b("First row")),
-        onclick := Callback.onClick(_ ⇒ println("Pseudo callback"))) +: (2 to 100).map(i ⇒ TableRow.data(i, i * i))))
+        onclick := Callback.onClick(_ ⇒ println("Pseudo callback"))) +: (2 to 100).map(i ⇒ TableRow(i, i * i))))
       table.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped)
     }
 
