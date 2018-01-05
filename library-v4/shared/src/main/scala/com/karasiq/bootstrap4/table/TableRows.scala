@@ -6,10 +6,7 @@ import com.karasiq.bootstrap4.utils.{ClassModifiers, Utils}
 trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._
 
-  trait TableRow {
-    def columns: Seq[Modifier]
-    def modifiers: Modifier
-  }
+  final case class TableRow(columns: Seq[Modifier], modifiers: Modifier*)
 
   sealed trait TableRowStyle extends StyleModifier {
     def styleName: String
@@ -18,7 +15,7 @@ trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   //noinspection TypeAnnotation
   object TableRowStyle {
     case object Default extends TableRowStyle {
-      def styleName = "default"
+      val styleName = "default"
       val createModifier = Bootstrap.noModifier
     }
 
@@ -40,13 +37,8 @@ trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   }
 
   object TableRow {
-    def apply(data: Seq[Modifier], ms: Modifier*): TableRow = new TableRow {
-      override def modifiers: Modifier = ms
-      override def columns: Seq[Modifier] = data
-    }
-
-    def data(data: Modifier*): TableRow = {
-      apply(data)
+    def apply(data1: Modifier, data: Modifier*): TableRow = {
+      new TableRow(data1 +: data)
     }
   }
 }
