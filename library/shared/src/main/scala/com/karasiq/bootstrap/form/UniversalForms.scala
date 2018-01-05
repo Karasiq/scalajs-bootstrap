@@ -20,8 +20,8 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
       form("form-inline".addClass, md)
     }
 
-    def submit(text: Modifier): SubmitT = {
-      button(`type` := "submit", Seq("btn", "btn-default").map(_.addClass), text)
+    def submit(md: Modifier*): SubmitT = {
+      button(`type` := "submit", Seq("btn", "btn-default").map(_.addClass), md)
     }
   }
 
