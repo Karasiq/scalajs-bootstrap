@@ -30,7 +30,7 @@ trait Forms { self: RenderingContext with Utils ⇒
     def apply(md: Modifier*): FormT
     def inline(md: Modifier*): InlineFormT
 
-    def submit(text: Modifier): SubmitT
+    def submit(md: Modifier*): SubmitT
   }
 
   trait AbstractFormInput extends BootstrapHtmlComponent {
