@@ -37,8 +37,8 @@ trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   }
 
   object TableRow {
-    def apply(data1: Modifier, data: Modifier*): TableRow = {
-      new TableRow(data1 +: data)
+    def data(data: Modifier*): TableRow = {
+      new TableRow(data)
     }
   }
 }

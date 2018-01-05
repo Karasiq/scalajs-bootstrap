@@ -6,21 +6,19 @@ import rx._
 
 import com.karasiq.bootstrap4.context.RenderingContext
 
-trait SortableTables extends TableCols { self: RenderingContext ⇒
+trait SortableTables extends TableCols { self: RenderingContext with PagedTables ⇒
   import scalaTags.all._
 
-  type SortableTable[T] <: AbstractSortableTable[T]
+  type SortableTable[T] <: AbstractSortableTable[T] with BootstrapHtmlComponent
   val SortableTable: AbstractSortableTableFactory
 
   trait AbstractSortableTableFactory {
-    def apply[T](items: Rx[Seq[T]], columns: GenTableCols[T] = Nil,
+    def apply[T](items: Rx[Seq[T]], columns: Rx[Seq[TableCol[T, _]]],
                  rowModifiers: T ⇒ Modifier = (_: T) ⇒ (),
                  filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)): SortableTable[T]
-
-    def apply[T](items: T*): SortableTable[T] = apply(Var(items))
   }
 
-  trait AbstractSortableTable[T] extends BootstrapHtmlComponent {
+  trait AbstractSortableTable[T] {
     def items: Rx[Seq[T]]
 
     def columns: Rx[GenTableCols[T]]
@@ -36,5 +34,7 @@ trait SortableTables extends TableCols { self: RenderingContext ⇒
       if (sortByColumn.now == column) reverseOrdering() = !reverseOrdering.now
       else sortByColumn() = column
     }
+
+    def pagedTable: PagedTable
   }
 }
