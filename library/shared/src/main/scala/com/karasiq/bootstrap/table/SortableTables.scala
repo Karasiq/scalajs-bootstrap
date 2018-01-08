@@ -5,8 +5,9 @@ import scala.language.{higherKinds, postfixOps}
 import rx._
 
 import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.Utils
 
-trait SortableTables extends TableCols { self: RenderingContext with PagedTables ⇒
+trait SortableTables extends TableCols { self: RenderingContext with PagedTables with Utils ⇒
   import scalaTags.all._
 
   type SortableTable[T] <: AbstractSortableTable[T] with BootstrapHtmlComponent
@@ -14,7 +15,7 @@ trait SortableTables extends TableCols { self: RenderingContext with PagedTables
 
   trait AbstractSortableTableFactory {
     def apply[T](items: Rx[Seq[T]], columns: Rx[Seq[TableCol[T, _]]],
-                 rowModifiers: T ⇒ Modifier = (_: T) ⇒ (),
+                 rowModifiers: T ⇒ Modifier = (_: T) ⇒ Bootstrap.noModifier,
                  filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)): SortableTable[T]
   }
 

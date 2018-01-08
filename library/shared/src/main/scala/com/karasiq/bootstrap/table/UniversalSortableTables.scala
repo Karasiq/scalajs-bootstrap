@@ -12,27 +12,28 @@ trait UniversalSortableTables extends SortableTables { self: RenderingContext wi
   import scalaTags.all._
 
   type SortableTable[T] = UniversalSortableTable[T]
+
   object SortableTable extends AbstractSortableTableFactory {
     def apply[T](items: Rx[Seq[T]], columns: Rx[Seq[TableCol[T, _]]],
-                 rowModifiers: T ⇒ Modifier = (_: T) ⇒ (),
+                 rowModifiers: T ⇒ Modifier = (_: T) ⇒ Bootstrap.noModifier,
                  filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)): SortableTable[T] = {
-      Builder(items, columns, rowModifiers, filterItem).createTable()
+      Builder(columns, rowModifiers, filterItem).createTable(items)
     }
 
-    final case class Builder[T](items: Rx[Seq[T]], columns: Rx[Seq[TableCol[T, _]]] = Var(Nil),
-                                rowModifiers: T ⇒ Modifier = (_: T) ⇒ (),
+    final case class Builder[T](columns: Rx[Seq[TableCol[T, _]]] = Var(Nil),
+                                rowModifiers: T ⇒ Modifier = (_: T) ⇒ Bootstrap.noModifier,
                                 filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)) {
 
-      def withItems(items: Rx[Seq[T]]) = copy(items)
-      def withItems(items: T*) = copy(Var(items))
       def withColumns(columns: Rx[Seq[TableCol[T, _]]]) = copy(columns = columns)
       def withColumns(columns: TableCol[T, _]*) = copy(columns = Var(columns.asInstanceOf[GenTableCols[T]]))
       def withRowModifiers(rowModifiers: T ⇒ Modifier) = copy(rowModifiers = rowModifiers)
       def withFilter(filterItem: (T, String) ⇒ Boolean) = copy(filterItem = filterItem)
 
-      def createTable(): SortableTable[T] = {
+      def createTable(items: Rx[Seq[T]]): SortableTable[T] = {
+        val _items = items
+
         new UniversalSortableTable[T] {
-          val items = Builder.this.items
+          val items = _items
 
           val columns = Builder.this.columns.asInstanceOf[Rx[GenTableCols[T]]]
           val sortByColumn = Var(columns.now.head)
@@ -43,9 +44,12 @@ trait UniversalSortableTables extends SortableTables { self: RenderingContext wi
           def rowModifiers(item: T): Modifier = Builder.this.rowModifiers(item)
         }
       }
+
+      def createTable(items: T*): SortableTable[T] = {
+        createTable(Var(items))
+      }
     }
   }
-
   trait UniversalSortableTable[T] extends AbstractSortableTable[T] with BootstrapHtmlComponent {
     protected lazy val hideFilterRx = Rx(items().lengthCompare(1) <= 0)
 
