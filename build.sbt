@@ -1,10 +1,14 @@
 import sbt.Keys._
 
+// -----------------------------------------------------------------------
 // Versions
+// -----------------------------------------------------------------------
 val scalaTagsVersion = "0.6.2"
 val scalaRxVersion = "0.3.2"
 
+// -----------------------------------------------------------------------
 // Settings
+// -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.11",
   organization := "com.github.karasiq",
@@ -26,10 +30,7 @@ lazy val publishSettings = Seq(
   pomIncludeRepository := { _ ⇒ false },
   licenses := Seq("The MIT License" → url("http://opensource.org/licenses/MIT")),
   homepage := Some(url("https://github.com/Karasiq/scalajs-bootstrap")),
-  pomExtra := <scm>
-    <url>git@github.com:Karasiq/scalajs-bootstrap.git</url>
-    <connection>scm:git:git@github.com:Karasiq/scalajs-bootstrap.git</connection>
-  </scm>
+  pomExtra :=
     <developers>
       <developer>
         <id>karasiq</id>
@@ -45,14 +46,117 @@ lazy val noPublishSettings = Seq(
   publishTo := Some(Resolver.file("Repo", file("target/repo")))
 )
 
-lazy val librarySettings = Seq(
-  name := "scalajs-bootstrap"
+// -----------------------------------------------------------------------
+// Library
+// -----------------------------------------------------------------------
+lazy val library = crossProject
+  .settings(commonSettings, publishSettings, name := "scalajs-bootstrap")
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
+    ),
+    scalacOptions += {
+      val local = file("").toURI
+      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
+      s"-P:scalajs:mapSourceURI:$local->$remote"
+    },
+    npmDependencies in Compile ++= Seq(
+      "jquery" → "~3.2.1",
+      "bootstrap" → "~3.3.7"
+    )
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %% "scalarx" % scalaRxVersion
+    )
+  )
+
+lazy val libraryJS = library.js
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
+
+lazy val libraryJVM = library.jvm
+
+lazy val libraryV4 = (crossProject in file("library-v4"))
+  .settings(commonSettings, publishSettings, name := "scalajs-bootstrap-v4")
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
+    ),
+    scalacOptions += {
+      val local = file("").toURI
+      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
+      s"-P:scalajs:mapSourceURI:$local->$remote"
+    },
+    npmDependencies in Compile ++= Seq(
+      "jquery" → "~3.2.1"
+      // "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
+    )
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
+      "com.lihaoyi" %% "scalarx" % scalaRxVersion
+    )
+  )
+
+lazy val libraryV4JS = libraryV4.js
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
+
+lazy val libraryV4JVM = libraryV4.jvm
+
+// -----------------------------------------------------------------------
+// Test page
+// -----------------------------------------------------------------------
+lazy val testPageSettings = Seq(
+  scalaJSUseMainModuleInitializer := true,
+  name := "scalajs-bootstrap-test-frontend",
+  npmDevDependencies in Compile ++= Seq(
+    "webpack-merge" -> "4.1.0",
+    "imports-loader" -> "0.7.0",
+    "expose-loader" -> "0.7.1"
+  ),
+  webpackConfigFile := Some(baseDirectory.value / "webpack.config.js")
 )
 
-lazy val libraryV4Settings = Seq(
-  name := "scalajs-bootstrap-v4"
+lazy val testPageV4Settings = Seq(
+  scalaJSUseMainModuleInitializer := true,
+  name := "scalajs-bootstrap-test-frontend-v4"
 )
 
+lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
+  .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared")
+  .dependsOn(library)
+
+lazy val testSharedJS = testShared.js
+
+lazy val testSharedJVM = testShared.jvm
+
+lazy val testSharedV4 = (crossProject.crossType(CrossType.Pure) in file("test") / "shared-v4")
+  .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared-v4")
+  .dependsOn(libraryV4)
+
+lazy val testSharedV4JS = testSharedV4.js
+
+lazy val testSharedV4JVM = testSharedV4.jvm
+
+lazy val testPage = (project in (file("test") / "frontend"))
+  .settings(commonSettings, testPageSettings, noPublishSettings)
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
+  .dependsOn(testSharedJS)
+
+lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
+  .settings(commonSettings, testPageV4Settings, noPublishSettings)
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
+  .dependsOn(testSharedV4JS)
+
+// -----------------------------------------------------------------------
+// Test server
+// -----------------------------------------------------------------------
 lazy val testServerSettings = Seq(
   scalaVersion := "2.11.11",
   name := "scalajs-bootstrap-test",
@@ -101,114 +205,14 @@ lazy val testServerSettings = Seq(
   }.<<=(AssetCompilers.default) */
 )
 
-lazy val testPageSettings = Seq(
-  scalaJSUseMainModuleInitializer := true,
-  name := "scalajs-bootstrap-test-frontend",
-  npmDevDependencies in Compile ++= Seq(
-    "webpack-merge" -> "4.1.0",
-    "imports-loader" -> "0.7.0",
-    "expose-loader" -> "0.7.1"
-  ),
-  webpackConfigFile := Some(baseDirectory.value / "webpack.config.js")
-)
-
-lazy val testPageV4Settings = Seq(
-  scalaJSUseMainModuleInitializer := true,
-  name := "scalajs-bootstrap-test-frontend-v4"
-)
-
-// Projects
-lazy val library = crossProject
-  .settings(commonSettings, librarySettings, publishSettings)
-  .jsSettings(
-    libraryDependencies ++= Seq(
-      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
-    ),
-    scalacOptions += {
-      val local = file("").toURI
-      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
-      s"-P:scalajs:mapSourceURI:$local->$remote"
-    },
-    npmDependencies in Compile ++= Seq(
-      "jquery" → "~3.2.1",
-      "bootstrap" → "~3.3.7"
-    )
-  )
-  .jvmSettings(
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %% "scalarx" % scalaRxVersion
-    )
-  )
-  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
-
-lazy val libraryJS = library.js
-
-lazy val libraryJVM = library.jvm
-
-lazy val libraryV4 = (crossProject in file("library-v4"))
-  .settings(commonSettings, libraryV4Settings, publishSettings)
-  .jsSettings(
-    libraryDependencies ++= Seq(
-      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
-    ),
-    scalacOptions += {
-      val local = file("").toURI
-      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
-      s"-P:scalajs:mapSourceURI:$local->$remote"
-    },
-    npmDependencies in Compile ++= Seq(
-      "jquery" → "~3.2.1"
-      // "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
-    )
-  )
-  .jvmSettings(
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %% "scalarx" % scalaRxVersion
-    )
-  )
-  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
-
-lazy val libraryV4JS = libraryV4.js
-
-lazy val libraryV4JVM = libraryV4.jvm
-
-lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
-  .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared")
-  .dependsOn(library)
-
-lazy val testSharedJS = testShared.js
-
-lazy val testSharedJVM = testShared.jvm
-
-lazy val testSharedV4 = (crossProject.crossType(CrossType.Pure) in file("test") / "shared-v4")
-  .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared-v4")
-  .dependsOn(libraryV4)
-
-lazy val testSharedV4JS = testSharedV4.js
-
-lazy val testSharedV4JVM = testSharedV4.jvm
-
 lazy val testServer = (project in file("test"))
   .settings(testServerSettings, noPublishSettings)
   .dependsOn(testSharedJVM)
   .enablePlugins(SJSAssetBundlerPlugin)
 
-lazy val testPage = (project in (file("test") / "frontend"))
-  .settings(commonSettings, testPageSettings, noPublishSettings)
-  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
-  .dependsOn(testSharedJS)
-
-lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
-  .settings(commonSettings, testPageV4Settings, noPublishSettings)
-  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
-  .dependsOn(testSharedV4JS)
-
+// -----------------------------------------------------------------------
+// Misc
+// -----------------------------------------------------------------------
 lazy val `scalajs-bootstrap` = (project in file("."))
   .settings(commonSettings, noPublishSettings)
   .aggregate(libraryJS, libraryJVM, libraryV4JS, libraryV4JVM)
