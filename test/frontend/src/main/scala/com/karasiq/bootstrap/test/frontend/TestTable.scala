@@ -24,14 +24,12 @@ final class TestTable extends BootstrapComponent {
     ))
 
     // Render table
-    val sortableTable = SortableTable(
-      items,
-      columns,
-      (i: Int) ⇒ Seq(onclick := Callback.onClick { row ⇒
+    val sortableTable = SortableTable.Builder(columns)
+      .withRowModifiers(i ⇒ onclick := Callback.onClick { row ⇒
         reactiveColumn.update(reactiveColumn.now + i)
         row.classList.add(TableRowStyle.success.className)
       })
-    )
+      .createTable(items)
 
     val renderedTable = sortableTable.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, md).render
 
