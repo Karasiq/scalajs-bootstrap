@@ -5,17 +5,15 @@ val scalaTagsVersion = "0.6.2"
 val scalaRxVersion = "0.3.2"
 
 // Settings
-scalaVersion := "2.12.3"
-
-crossScalaVersions := Seq("2.11.11", "2.12.3")
-
 lazy val commonSettings = Seq(
+  scalaVersion := "2.11.11",
   organization := "com.github.karasiq",
   version := "2.2.2-SNAPSHOT",
   isSnapshot := version.value.endsWith("SNAPSHOT")
 )
 
 lazy val publishSettings = Seq(
+  crossScalaVersions += "2.12.3",
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -128,10 +126,11 @@ lazy val library = crossProject
       "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
       "com.lihaoyi" %%% "scalarx" % scalaRxVersion
     ),
-    scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
-      val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
-      s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
-    })),
+    scalacOptions += {
+      val local = file("").toURI
+      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
+      s"-P:scalajs:mapSourceURI:$local->$remote"
+    },
     npmDependencies in Compile ++= Seq(
       "jquery" → "~3.2.1",
       "bootstrap" → "~3.3.7"
@@ -157,10 +156,11 @@ lazy val libraryV4 = (crossProject in file("library-v4"))
       "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
       "com.lihaoyi" %%% "scalarx" % scalaRxVersion
     ),
-    scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
-      val g = s"https://raw.githubusercontent.com/Karasiq/${name.value}"
-      s"-P:scalajs:mapSourceURI:${baseDirectory.value.toURI}->$g/v${version.value}/"
-    })),
+    scalacOptions += {
+      val local = file("").toURI
+      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
+      s"-P:scalajs:mapSourceURI:$local->$remote"
+    },
     npmDependencies in Compile ++= Seq(
       "jquery" → "~3.2.1"
       // "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
