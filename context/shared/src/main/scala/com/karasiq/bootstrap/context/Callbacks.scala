@@ -1,9 +1,7 @@
-package com.karasiq.bootstrap.utils
+package com.karasiq.bootstrap.context
 
 import scala.language.postfixOps
 import scalatags.generic.AttrValue
-
-import com.karasiq.bootstrap.context.RenderingContext
 
 trait Callbacks { self: RenderingContext ⇒
   type Callback

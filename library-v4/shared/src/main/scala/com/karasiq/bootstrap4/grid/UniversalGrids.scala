@@ -2,8 +2,7 @@ package com.karasiq.bootstrap4.grid
 
 import scala.language.implicitConversions
 
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.ClassModifiers
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 
 trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
   import scalaTags.all._

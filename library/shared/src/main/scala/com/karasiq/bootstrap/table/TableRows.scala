@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap.table
 
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
+import com.karasiq.bootstrap.utils.Utils
 
 trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._

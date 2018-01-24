@@ -5,8 +5,8 @@ import scala.language.{implicitConversions, postfixOps}
 import rx.{Rx, Var}
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
+import com.karasiq.bootstrap.utils.Utils
 
 trait UniversalForms { self: RenderingContext with Forms with Utils with BootstrapComponents with ClassModifiers ⇒
   import scalaTags.all._

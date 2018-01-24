@@ -3,8 +3,6 @@ package com.karasiq.bootstrap.context
 import scala.language.postfixOps
 import scalatags.generic.{Attr, AttrValue}
 
-import com.karasiq.bootstrap.utils.Callbacks
-
 trait TextCallbacks extends Callbacks { self: RenderingContext ⇒
   type Callback = Unit
 

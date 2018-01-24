@@ -3,8 +3,8 @@ package com.karasiq.bootstrap.buttons
 import scala.language.postfixOps
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
+import com.karasiq.bootstrap.utils.Utils
 
 trait Buttons extends ButtonStyles with ButtonGroups with ButtonStates { self: RenderingContext with BootstrapComponents with ClassModifiers with Utils ⇒
   import scalaTags.all._

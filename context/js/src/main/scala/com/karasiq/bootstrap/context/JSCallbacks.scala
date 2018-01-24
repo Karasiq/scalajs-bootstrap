@@ -7,8 +7,6 @@ import scalatags.generic.{Attr, AttrValue}
 import org.scalajs.dom
 import org.scalajs.dom.raw.MouseEvent
 
-import com.karasiq.bootstrap.utils.Callbacks
-
 trait JSCallbacks extends Callbacks { self: JSRenderingContext ⇒
   type Callback = js.Function
   type ClickElement = dom.html.Element

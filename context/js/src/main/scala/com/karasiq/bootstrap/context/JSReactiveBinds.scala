@@ -5,8 +5,6 @@ import scala.scalajs.js
 
 import org.scalajs.dom
 
-import com.karasiq.bootstrap.utils.ClassModifiers
-
 trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with ClassModifiers ⇒
   import ReactiveBinds._
   protected type Event = dom.Event

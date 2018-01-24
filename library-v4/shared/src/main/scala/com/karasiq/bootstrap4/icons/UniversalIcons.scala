@@ -3,8 +3,7 @@ package com.karasiq.bootstrap4.icons
 import scala.language.implicitConversions
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.ClassModifiers
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 
 trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers with BootstrapComponents ⇒
   import scalaTags.all._

@@ -5,10 +5,10 @@ import scala.language.{implicitConversions, postfixOps}
 import rx.Rx
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap.grid.Grids
 import com.karasiq.bootstrap.icons.Icons
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.utils.Utils
 
 trait NavigationBars extends NavigationBarStyles { self: RenderingContext with Icons with Grids with Utils with BootstrapComponents with ClassModifiers ⇒
   import scalaTags.all._
