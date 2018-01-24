@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.buttons
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait ButtonStyles { self: RenderingContext with Utils ⇒

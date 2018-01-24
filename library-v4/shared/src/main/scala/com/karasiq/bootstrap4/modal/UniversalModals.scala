@@ -1,9 +1,10 @@
 package com.karasiq.bootstrap4.modal
 
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.ClassModifiers
 import com.karasiq.bootstrap4.buttons.Buttons
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
-import com.karasiq.bootstrap4.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap4.utils.Utils
 
 trait UniversalModals { self: RenderingContext with Utils with BootstrapComponents with ClassModifiers with Buttons with Modals with ModalStyles ⇒
   import scalaTags.all._

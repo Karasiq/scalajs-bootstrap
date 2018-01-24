@@ -2,9 +2,10 @@ package com.karasiq.bootstrap4.navbar
 
 import scala.language.postfixOps
 
-import com.karasiq.bootstrap4.context.JSRenderingContext
+import com.karasiq.bootstrap.context.JSRenderingContext
+import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
 
-trait JSNavigationBars { self: JSRenderingContext with NavigationBars ⇒
+trait JSNavigationBars { self: JSRenderingContext with NavigationBars with BootstrapJQueryContext⇒
   implicit class JSNavigation(nav: NavComponent) {
 
     /**
@@ -12,7 +13,7 @@ trait JSNavigationBars { self: JSRenderingContext with NavigationBars ⇒
       * @param id Tab ID
       */
     def selectTab(id: String): Unit = {
-      JSRenderingContext.jQuery(s"a[data-target='#${nav.tabId(id)}']").tab("show")
+      jQuery(s"a[data-target='#${nav.tabId(id)}']").tab("show")
     }
 
     /**

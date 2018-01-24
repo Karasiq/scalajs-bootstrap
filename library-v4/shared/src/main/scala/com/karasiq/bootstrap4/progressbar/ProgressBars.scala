@@ -4,8 +4,8 @@ import scala.language.postfixOps
 
 import rx.Rx
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.{ReactiveBinds, ReactiveImplicits, RenderingContext}
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.{ReactiveBinds, ReactiveImplicits, RenderingContext}
 
 trait ProgressBars extends ProgressBarStyles { self: RenderingContext with BootstrapComponents with ReactiveBinds with ReactiveImplicits ⇒
 

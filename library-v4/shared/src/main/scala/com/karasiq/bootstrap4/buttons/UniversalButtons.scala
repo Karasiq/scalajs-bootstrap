@@ -2,9 +2,9 @@ package com.karasiq.bootstrap4.buttons
 
 import scala.language.postfixOps
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
-import com.karasiq.bootstrap4.utils.ClassModifiers
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.ClassModifiers
 
 trait UniversalButtons extends UniversalButtonStates with UniversalButtonGroups { self: RenderingContext with BootstrapComponents with ClassModifiers with Buttons ⇒
   import scalaTags.all._

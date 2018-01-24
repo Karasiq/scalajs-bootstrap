@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.dropdown
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait Dropdowns { self: RenderingContext ⇒
   import scalaTags.all._

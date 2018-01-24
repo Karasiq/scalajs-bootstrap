@@ -2,7 +2,7 @@ package com.karasiq.bootstrap4.table
 
 import rx._
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.form.Forms
 import com.karasiq.bootstrap4.grid.Grids
 import com.karasiq.bootstrap4.icons.Icons

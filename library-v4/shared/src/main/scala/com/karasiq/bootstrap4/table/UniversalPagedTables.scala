@@ -2,8 +2,8 @@ package com.karasiq.bootstrap4.table
 
 import rx.{Rx, Var}
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.pagination.PageSelectors
 import com.karasiq.bootstrap4.utils.Utils
 
@@ -24,8 +24,8 @@ trait UniversalPagedTables extends PagedTables { self: RenderingContext with Boo
   }
 
   protected final class UniversalStaticPagedTableImpl(val heading: Rx[Seq[Modifier]],
-                                                          val allContent: Rx[Seq[TableRow]],
-                                                          val rowsPerPage: Int)
+                                                      val allContent: Rx[Seq[TableRow]],
+                                                      val rowsPerPage: Int)
     extends UniversalPagedTable with AbstractStaticPagedTable {
 
     val currentPage = Var(1)

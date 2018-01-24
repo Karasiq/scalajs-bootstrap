@@ -4,7 +4,7 @@ import scala.language.{higherKinds, postfixOps}
 
 import rx._
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait SortableTables extends TableCols { self: RenderingContext with PagedTables with Utils ⇒

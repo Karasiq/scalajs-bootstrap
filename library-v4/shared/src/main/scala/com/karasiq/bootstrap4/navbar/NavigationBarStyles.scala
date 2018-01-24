@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.navbar
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait NavigationBarStyles { self: RenderingContext ⇒
   import scalaTags.all._

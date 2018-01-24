@@ -2,8 +2,8 @@ package com.karasiq.bootstrap4.popover
 
 import scala.language.postfixOps
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.tooltip.Tooltips
 import com.karasiq.bootstrap4.utils.Utils
 

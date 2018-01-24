@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.progressbar
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait ProgressBarStyles { self: RenderingContext ⇒
   import scalaTags.all._

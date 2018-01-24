@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.card
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.grid.Grids
 import com.karasiq.bootstrap4.icons.Icons
 import com.karasiq.bootstrap4.utils.Utils

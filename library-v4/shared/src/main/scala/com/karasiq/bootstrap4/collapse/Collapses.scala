@@ -1,7 +1,7 @@
 package com.karasiq.bootstrap4.collapse
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait Collapses { self: RenderingContext with Utils with BootstrapComponents ⇒

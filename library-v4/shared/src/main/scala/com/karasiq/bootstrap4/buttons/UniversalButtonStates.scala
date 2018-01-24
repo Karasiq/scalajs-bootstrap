@@ -2,8 +2,8 @@ package com.karasiq.bootstrap4.buttons
 
 import rx.Var
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait UniversalButtonStates { self: RenderingContext with ButtonStates with BootstrapComponents ⇒
   import scalaTags.all._

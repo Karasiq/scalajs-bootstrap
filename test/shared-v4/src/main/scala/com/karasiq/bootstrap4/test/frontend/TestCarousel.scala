@@ -1,8 +1,8 @@
 package com.karasiq.bootstrap4.test.frontend
 
+import com.karasiq.bootstrap.components.generic.GenComponent
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.carousel.Carousels
-import com.karasiq.bootstrap4.components.generic.GenComponent
-import com.karasiq.bootstrap4.context.RenderingContext
 
 object TestCarousel {
   type RC = RenderingContext with Carousels

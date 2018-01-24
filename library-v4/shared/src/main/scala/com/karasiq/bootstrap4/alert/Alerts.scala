@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.alert
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait Alerts extends AlertStyles { self: RenderingContext ⇒
   import scalaTags.all._

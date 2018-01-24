@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.buttons
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait ButtonGroups extends ButtonGroupStyles { self: RenderingContext with Buttons with Utils ⇒

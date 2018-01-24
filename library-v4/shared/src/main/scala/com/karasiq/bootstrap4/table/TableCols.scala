@@ -2,7 +2,7 @@ package com.karasiq.bootstrap4.table
 
 import scala.language.implicitConversions
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait TableCols { self: RenderingContext ⇒
   import scalaTags.all._
