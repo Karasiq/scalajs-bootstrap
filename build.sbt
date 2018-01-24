@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.11",
   crossScalaVersions := Seq(scalaVersion.value, "2.12.3"),
   organization := "com.github.karasiq",
-  version := "2.2.3",
+  version := "2.3.0",
   isSnapshot := version.value.endsWith("SNAPSHOT")
 )
 
@@ -228,4 +228,4 @@ lazy val testServer = (project in file("test"))
 // -----------------------------------------------------------------------
 lazy val `scalajs-bootstrap` = (project in file("."))
   .settings(commonSettings, noPublishSettings)
-  .aggregate(libraryJS, libraryJVM, libraryV4JS, libraryV4JVM)
+  .aggregate(contextLibraryJS, contextLibraryJVM, jQueryLibrary, libraryJS, libraryJVM, libraryV4JS, libraryV4JVM)
