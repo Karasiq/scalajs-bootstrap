@@ -1,10 +1,8 @@
-package com.karasiq.bootstrap.utils
+package com.karasiq.bootstrap.context
 
 import scala.language.postfixOps
 import scalatags.Escaping
 import scalatags.text.Builder.ValueSource
-
-import com.karasiq.bootstrap.context.TextRenderingContext
 
 trait TextClassModifiers extends ClassModifiers { self: TextRenderingContext ⇒
   def addClass(element: Element, className: String): Unit = {

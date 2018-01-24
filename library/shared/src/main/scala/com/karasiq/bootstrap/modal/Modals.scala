@@ -2,8 +2,8 @@ package com.karasiq.bootstrap.modal
 
 import com.karasiq.bootstrap.buttons.Buttons
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
+import com.karasiq.bootstrap.utils.Utils
 
 trait Modals extends ModalStyles { self: RenderingContext with Utils with BootstrapComponents with ClassModifiers with Buttons ⇒
   import scalaTags.all._

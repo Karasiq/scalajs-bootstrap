@@ -5,7 +5,7 @@ import java.util.UUID
 import scala.language.postfixOps
 
 import com.karasiq.bootstrap.buttons.Buttons
-import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap.icons.Icons
 
 //noinspection TypeAnnotation

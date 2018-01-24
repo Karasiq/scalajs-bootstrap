@@ -5,9 +5,8 @@ import scala.language.postfixOps
 import rx._
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap.pagination.PageSelectors
-import com.karasiq.bootstrap.utils.ClassModifiers
 
 trait PagedTables { self: RenderingContext with BootstrapComponents with Tables with PageSelectors with ClassModifiers ⇒
   import scalaTags.all._

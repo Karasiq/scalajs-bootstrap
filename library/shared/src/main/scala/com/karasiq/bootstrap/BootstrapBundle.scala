@@ -7,7 +7,7 @@ import com.karasiq.bootstrap.buttons.{Buttons, UniversalButtons}
 import com.karasiq.bootstrap.carousel.{Carousels, UniversalCarousels}
 import com.karasiq.bootstrap.collapse.{Collapses, UniversalCollapses}
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap.dropdown.{Dropdowns, UniversalDropdowns}
 import com.karasiq.bootstrap.form.{Forms, UniversalForms}
 import com.karasiq.bootstrap.grid.{Grids, UniversalGrids}
@@ -20,7 +20,7 @@ import com.karasiq.bootstrap.popover.Popovers
 import com.karasiq.bootstrap.progressbar.{ProgressBars, UniversalProgressBars}
 import com.karasiq.bootstrap.table._
 import com.karasiq.bootstrap.tooltip.Tooltips
-import com.karasiq.bootstrap.utils.{ClassModifiers, UniversalUtils, Utils}
+import com.karasiq.bootstrap.utils.{UniversalUtils, Utils}
 
 // Abstract components
 trait BootstrapBundle extends RenderingContext with BootstrapComponents with ClassModifiers with Alerts with Buttons

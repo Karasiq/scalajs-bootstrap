@@ -4,7 +4,6 @@ import scala.language.postfixOps
 import scalatags.generic
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.utils.{Callbacks, ClassModifiers}
 
 trait RenderingContext extends ReactiveBinds with ReactiveImplicits with Callbacks
   with BootstrapComponents with ClassModifiers {

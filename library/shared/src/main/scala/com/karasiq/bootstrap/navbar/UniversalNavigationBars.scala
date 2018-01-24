@@ -3,10 +3,10 @@ package com.karasiq.bootstrap.navbar
 import rx.Rx
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap.grid.Grids
 import com.karasiq.bootstrap.icons.Icons
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.utils.Utils
 
 trait UniversalNavigationBars { self: RenderingContext with Icons with Grids with Utils with BootstrapComponents with ClassModifiers with NavigationBars with NavigationBarStyles ⇒
   import scalaTags.all._

@@ -5,8 +5,7 @@ import scala.language.{implicitConversions, postfixOps}
 import rx.Rx
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.ClassModifiers
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap4.grid.Grids
 import com.karasiq.bootstrap4.icons.Icons
 import com.karasiq.bootstrap4.utils.Utils

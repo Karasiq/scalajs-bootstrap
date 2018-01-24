@@ -1,8 +1,7 @@
-package com.karasiq.bootstrap.utils
+package com.karasiq.bootstrap.context
 
 import rx.Rx
 
-import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.context.ReactiveBinds.Modify
 
 trait ClassModifiers { self: RenderingContext ⇒

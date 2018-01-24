@@ -3,8 +3,7 @@ package com.karasiq.bootstrap4
 import scala.language.postfixOps
 
 import com.karasiq.bootstrap.components.BootstrapComponents
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.ClassModifiers
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap4.alert.{Alerts, UniversalAlerts}
 import com.karasiq.bootstrap4.buttons.{Buttons, UniversalButtons}
 import com.karasiq.bootstrap4.card.{Cards, UniversalCards}

@@ -1,7 +1,6 @@
 package com.karasiq.bootstrap4.table
 
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.ClassModifiers
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap4.utils.Utils
 
 trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒

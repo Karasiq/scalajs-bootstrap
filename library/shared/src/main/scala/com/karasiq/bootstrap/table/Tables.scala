@@ -4,8 +4,8 @@ import scala.language.postfixOps
 
 import rx.{Rx, Var}
 
-import com.karasiq.bootstrap.context.RenderingContext
-import com.karasiq.bootstrap.utils.{ClassModifiers, Utils}
+import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
+import com.karasiq.bootstrap.utils.Utils
 
 trait Tables extends TableRows with TableStyles { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._
