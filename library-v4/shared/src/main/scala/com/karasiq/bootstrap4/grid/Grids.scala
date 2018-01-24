@@ -2,7 +2,7 @@ package com.karasiq.bootstrap4.grid
 
 import scala.language.{implicitConversions, postfixOps}
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait Grids { self: RenderingContext ⇒
   import scalaTags.all._

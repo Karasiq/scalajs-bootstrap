@@ -4,7 +4,7 @@ import scala.language.{implicitConversions, postfixOps}
 
 import rx.{Rx, Var}
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait Forms { self: RenderingContext with Utils ⇒

@@ -2,7 +2,7 @@ package com.karasiq.bootstrap4.pagination
 
 import rx.{Rx, Var}
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait PageSelectors { self: RenderingContext ⇒
   type PageSelector <: AbstractPageSelector with BootstrapHtmlComponent

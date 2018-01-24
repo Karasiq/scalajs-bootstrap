@@ -2,8 +2,9 @@ package com.karasiq.bootstrap.tooltip
 
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.JSRenderingContext
+import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
 
-trait JSTooltips { self: JSRenderingContext with BootstrapComponents with Tooltips ⇒
+trait JSTooltips { self: JSRenderingContext with BootstrapComponents with Tooltips with BootstrapJQueryContext ⇒
   import scalaTags.all._
 
   type Tooltip = JSTooltip
@@ -28,7 +29,7 @@ trait JSTooltips { self: JSRenderingContext with BootstrapComponents with Toolti
         set(options.template, jsOptions.template = _)
         set(options.trigger, jsOptions.trigger = _)
         set(options.viewport, jsOptions.viewport = _)
-        JSRenderingContext.jQuery(t).tooltip(jsOptions)
+        jQuery(t).tooltip(jsOptions)
       }
     }
 

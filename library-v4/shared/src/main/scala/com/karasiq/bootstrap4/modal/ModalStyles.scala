@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.modal
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait ModalStyles { self: RenderingContext with Utils ⇒

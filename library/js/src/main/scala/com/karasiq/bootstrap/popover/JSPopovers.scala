@@ -4,9 +4,10 @@ import scala.language.postfixOps
 
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.JSRenderingContext
+import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
 import com.karasiq.bootstrap.tooltip.Tooltips
 
-trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popovers with Tooltips ⇒
+trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popovers with Tooltips with BootstrapJQueryContext ⇒
   import scalaTags.all._
 
   class JSPopover(val options: PopoverOptions) extends Popover {
@@ -25,7 +26,7 @@ trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popove
         set(options.template, jsOptions.template = _)
         set(options.trigger, jsOptions.trigger = _)
         set(options.viewport, jsOptions.viewport = _)
-        JSRenderingContext.jQuery(t).popover(jsOptions)
+        jQuery(t).popover(jsOptions)
       }
     }
 

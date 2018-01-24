@@ -4,8 +4,9 @@ import java.util.UUID
 
 import scala.language.postfixOps
 
+import com.karasiq.bootstrap.context.RenderingContext
+import com.karasiq.bootstrap.utils.ClassModifiers
 import com.karasiq.bootstrap4.buttons.Buttons
-import com.karasiq.bootstrap4.context.RenderingContext
 import com.karasiq.bootstrap4.icons.Icons
 
 //noinspection TypeAnnotation

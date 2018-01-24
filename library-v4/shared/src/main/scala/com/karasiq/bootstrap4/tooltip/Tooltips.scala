@@ -2,8 +2,8 @@ package com.karasiq.bootstrap4.tooltip
 
 import scala.language.{implicitConversions, postfixOps}
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
 
 trait Tooltips extends TooltipStyles { self: RenderingContext with BootstrapComponents ⇒
   import scalaTags.all._

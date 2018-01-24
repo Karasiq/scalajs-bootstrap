@@ -3,8 +3,9 @@ import sbt.Keys._
 // -----------------------------------------------------------------------
 // Versions
 // -----------------------------------------------------------------------
-val scalaTagsVersion = "0.6.2"
-val scalaRxVersion = "0.3.2"
+val ScalaTagsVersion = "0.6.2"
+val ScalaRxVersion = "0.3.2"
+val ScalaJSJQueryVersion = "0.9.1"
 
 // -----------------------------------------------------------------------
 // Settings
@@ -47,65 +48,78 @@ lazy val noPublishSettings = Seq(
 )
 
 // -----------------------------------------------------------------------
-// Library
+// Context library
 // -----------------------------------------------------------------------
-lazy val library = crossProject
-  .settings(commonSettings, publishSettings, name := "scalajs-bootstrap")
-  .jsSettings(
+lazy val contextLibrary = (crossProject in file("context"))
+  .settings(
+    commonSettings,
+    publishSettings,
+    name := "scalajs-bootstrap-context",
     libraryDependencies ++= Seq(
-      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
-    ),
-    scalacOptions += {
-      val local = file("").toURI
-      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
-      s"-P:scalajs:mapSourceURI:$local->$remote"
-    },
-    npmDependencies in Compile ++= Seq(
-      "jquery" → "~3.2.1",
-      "bootstrap" → "~3.3.7"
-    )
-  )
-  .jvmSettings(
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %% "scalarx" % scalaRxVersion
+      "com.lihaoyi" %%% "scalatags" % ScalaTagsVersion,
+      "com.lihaoyi" %%% "scalarx" % ScalaRxVersion
     )
   )
 
+lazy val contextLibraryJS = contextLibrary.js
+
+lazy val contextLibraryJVM = contextLibrary.jvm
+
+// -----------------------------------------------------------------------
+// JQuery library
+// -----------------------------------------------------------------------
+lazy val jQueryLibrary = (crossProject in file("jquery"))
+  .settings(
+    commonSettings,
+    name := "scalajs-bootstrap-jquery"
+  )
+  .jvmSettings(noPublishSettings)
+  .jsSettings(
+    publishSettings,
+    libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % ScalaJSJQueryVersion,
+    npmDependencies in Compile += "jquery" → "~3.2.1"
+  )
+  .jsConfigure(_.enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin))
+
+lazy val jQueryLibraryJS = jQueryLibrary.js
+
+lazy val jQueryLibraryJVM = jQueryLibrary.jvm
+
+// -----------------------------------------------------------------------
+// Library
+// -----------------------------------------------------------------------
+lazy val jsLibrarySettings = Seq(
+  libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % ScalaJSJQueryVersion,
+  scalacOptions += {
+    val local = file("").toURI
+    val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
+    s"-P:scalajs:mapSourceURI:$local->$remote"
+  }
+)
+
+lazy val library = crossProject
+  .settings(commonSettings, publishSettings, name := "scalajs-bootstrap")
+  .jsSettings(
+    jsLibrarySettings,
+    npmDependencies in Compile += "bootstrap" → "~3.3.7"
+  )
+  .dependsOn(contextLibrary, jQueryLibrary)
+  .jsConfigure(_.enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin))
+
 lazy val libraryJS = library.js
-  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
 lazy val libraryJVM = library.jvm
 
 lazy val libraryV4 = (crossProject in file("library-v4"))
   .settings(commonSettings, publishSettings, name := "scalajs-bootstrap-v4")
   .jsSettings(
-    libraryDependencies ++= Seq(
-      "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-      "com.lihaoyi" %%% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %%% "scalarx" % scalaRxVersion
-    ),
-    scalacOptions += {
-      val local = file("").toURI
-      val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
-      s"-P:scalajs:mapSourceURI:$local->$remote"
-    },
-    npmDependencies in Compile ++= Seq(
-      "jquery" → "~3.2.1"
-      // "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
-    )
+    jsLibrarySettings
+    // npmDependencies in Compile += "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
   )
-  .jvmSettings(
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatags" % scalaTagsVersion,
-      "com.lihaoyi" %% "scalarx" % scalaRxVersion
-    )
-  )
+  .dependsOn(contextLibrary, jQueryLibrary)
+  .jsConfigure(_.enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin))
 
 lazy val libraryV4JS = libraryV4.js
-  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
 lazy val libraryV4JVM = libraryV4.jvm
 
@@ -173,7 +187,11 @@ lazy val testServerSettings = Seq(
   },
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
   scalaJsBundlerInline in Compile := true,
-  scalaJsBundlerCompile in Compile <<= (scalaJsBundlerCompile in Compile).dependsOn(webpack in fullOptJS in Compile in testPage, webpack in fullOptJS in Compile in testPageV4),
+  scalaJsBundlerCompile in Compile := {
+    (webpack in fullOptJS in Compile in testPage).value
+    (webpack in fullOptJS in Compile in testPageV4).value
+    (scalaJsBundlerCompile in Compile).value
+  },
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl._
 

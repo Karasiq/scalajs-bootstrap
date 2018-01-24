@@ -4,8 +4,8 @@ import scala.language.postfixOps
 
 import rx.Rx
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.icons.Icons
 import com.karasiq.bootstrap4.utils.Utils
 

@@ -9,12 +9,10 @@ import rx._
 import com.karasiq.bootstrap4.Bootstrap.default._
 import scalaTags.all._
 
-import com.karasiq.bootstrap4.context.JSRenderingContext
-
 object BootstrapTestApp {
   def main(args: Array[String]): Unit = {
     // JSRenderingContext.useNpmImports()
-    JSRenderingContext.jQuery(() ⇒ {
+    jQuery(() ⇒ {
       // Table tab will appear after 3 seconds
       val tableVisible = Var(false)
       val tabTitle = Var("Wait...")

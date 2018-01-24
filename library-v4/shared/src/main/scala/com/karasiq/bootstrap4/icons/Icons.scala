@@ -1,6 +1,6 @@
 package com.karasiq.bootstrap4.icons
 
-import com.karasiq.bootstrap4.context.RenderingContext
+import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.utils.Utils
 
 trait Icons { self: RenderingContext with Utils ⇒

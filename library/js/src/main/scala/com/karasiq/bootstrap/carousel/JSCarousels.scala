@@ -8,9 +8,10 @@ import rx.Rx
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.JSRenderingContext
 import com.karasiq.bootstrap.icons.Icons
+import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
 import com.karasiq.bootstrap.utils.Utils
 
-trait JSCarousels extends UniversalCarousels { self: JSRenderingContext with Carousels with Utils with Icons with BootstrapComponents ⇒
+trait JSCarousels extends UniversalCarousels { self: JSRenderingContext with Carousels with Utils with Icons with BootstrapComponents with BootstrapJQueryContext ⇒
   import scalaTags.all._
 
   type Carousel = JSCarousel
@@ -34,7 +35,7 @@ trait JSCarousels extends UniversalCarousels { self: JSRenderingContext with Car
       options.pause = pause
       options.wrap = wrap
       options.keyboard = keyboard
-      JSRenderingContext.jQuery(element).carousel(options)
+      jQuery(element).carousel(options)
       element
     }
 

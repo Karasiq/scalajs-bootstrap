@@ -2,8 +2,8 @@ package com.karasiq.bootstrap4.progressbar
 
 import rx.Rx
 
-import com.karasiq.bootstrap4.components.BootstrapComponents
-import com.karasiq.bootstrap4.context.{ReactiveImplicits, RenderingContext}
+import com.karasiq.bootstrap.components.BootstrapComponents
+import com.karasiq.bootstrap.context.{ReactiveImplicits, RenderingContext}
 
 trait UniversalProgressBars { self: RenderingContext with BootstrapComponents with ReactiveImplicits with ProgressBars ⇒
   import scalaTags.all._

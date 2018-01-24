@@ -2,8 +2,6 @@ package com.karasiq.bootstrap
 
 import rx._
 
-import com.karasiq.bootstrap.context.{JSBootstrapBundle, TextBootstrapBundle}
-
 /**
   * Global context
   */
