@@ -68,22 +68,15 @@ lazy val contextLibraryJVM = contextLibrary.jvm
 // -----------------------------------------------------------------------
 // JQuery library
 // -----------------------------------------------------------------------
-lazy val jQueryLibrary = (crossProject in file("jquery"))
+lazy val jQueryLibrary = (project in file("jquery"))
   .settings(
     commonSettings,
-    name := "scalajs-bootstrap-jquery"
-  )
-  .jvmSettings(noPublishSettings)
-  .jsSettings(
     publishSettings,
+    name := "scalajs-bootstrap-jquery",
     libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % ScalaJSJQueryVersion,
     npmDependencies in Compile += "jquery" → "~3.2.1"
   )
-  .jsConfigure(_.enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin))
-
-lazy val jQueryLibraryJS = jQueryLibrary.js
-
-lazy val jQueryLibraryJVM = jQueryLibrary.jvm
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
 // -----------------------------------------------------------------------
 // Library
@@ -103,10 +96,11 @@ lazy val library = crossProject
     jsLibrarySettings,
     npmDependencies in Compile += "bootstrap" → "~3.3.7"
   )
-  .dependsOn(contextLibrary, jQueryLibrary)
-  .jsConfigure(_.enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin))
+  .dependsOn(contextLibrary)
 
 lazy val libraryJS = library.js
+  .dependsOn(jQueryLibrary)
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
 lazy val libraryJVM = library.jvm
 
@@ -116,10 +110,11 @@ lazy val libraryV4 = (crossProject in file("library-v4"))
     jsLibrarySettings
     // npmDependencies in Compile += "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
   )
-  .dependsOn(contextLibrary, jQueryLibrary)
-  .jsConfigure(_.enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin))
+  .dependsOn(contextLibrary)
 
 lazy val libraryV4JS = libraryV4.js
+  .dependsOn(jQueryLibrary)
+  .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
 lazy val libraryV4JVM = libraryV4.jvm
 
@@ -188,9 +183,9 @@ lazy val testServerSettings = Seq(
   mainClass in Compile := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
   scalaJsBundlerInline in Compile := true,
   scalaJsBundlerCompile in Compile := {
-    (webpack in fullOptJS in Compile in testPage).value
-    (webpack in fullOptJS in Compile in testPageV4).value
-    (scalaJsBundlerCompile in Compile).value
+    (scalaJsBundlerCompile in Compile)
+      .dependsOn(webpack in fullOptJS in Compile in testPage, webpack in fullOptJS in Compile in testPageV4)
+      .value 
   },
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl._
