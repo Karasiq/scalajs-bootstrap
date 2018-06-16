@@ -128,12 +128,11 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
       lazy val light = new TextStyle("light")
       lazy val dark = new TextStyle("dark")
       lazy val white = new TextStyle("white")
-
-      /**
-        * Utilize the `.text-hide` class or mixin to help replace an element's text content with a background image.
-        * @see [[http://getbootstrap.com/css/#helper-classes-image-replacement]]
-        */
       lazy val hide = new TextStyle("hide")
+      lazy val monospace = new TextStyle("monospace")
+      lazy val body = new TextStyle("body")
+      lazy val `black-50%` = new TextStyle("black-50")
+      lazy val `white-50%` = new TextStyle("white-50")
     }
 
     /**
