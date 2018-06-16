@@ -261,7 +261,7 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
       val createModifier = className.addClass
     }
 
-    class DisplayModifiers(size: Option[String]) extends AbstractDisplayModifiers {
+    class DisplayModifiers private[bootstrap4](size: Option[String]) extends AbstractDisplayModifiers {
       protected def displayModifier(str: String): DisplayModifier = new DisplayModifier(size, str)
 
       lazy val none = displayModifier("none")
@@ -279,6 +279,17 @@ trait UniversalUtils { self: RenderingContext with Icons with Buttons with Class
       lazy val md = new DisplayModifiers(Some("md"))
       lazy val lg = new DisplayModifiers(Some("lg"))
       lazy val xl = new DisplayModifiers(Some("xl"))
+    }
+
+    class ShadowModifier private[bootstrap4](val styleName: String) extends AbstractShadowModifier {
+      val createModifier: ModifierT = if (styleName.isEmpty) "shadow" else "shadow-" + styleName
+    }
+
+    object shadow extends AbstractShadowModifiers {
+      def none = new ShadowModifier("none")
+      def small = new ShadowModifier("sm")
+      def regular = new ShadowModifier("")
+      def large = new ShadowModifier("lg")
     }
 
     /**
