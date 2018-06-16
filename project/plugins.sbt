@@ -12,6 +12,6 @@ addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.13.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.7")
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.8")
 
 libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.6.2"
