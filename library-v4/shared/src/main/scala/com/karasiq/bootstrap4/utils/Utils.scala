@@ -214,7 +214,14 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
       * Utilize the `.text-hide` class or mixin to help replace an element's text content with a background image.
       * @see [[http://getbootstrap.com/css/#helper-classes-image-replacement]]
       */
+    @deprecated("Deprecated .text-hide—you’ll see a warning during compilation—as it’s a dated and undocumented feature.", "4.1")
     def hide: AbstractTextStyle
+
+    // See https://blog.getbootstrap.com/2018/04/09/bootstrap-4-1/
+    def monospace: AbstractTextStyle
+    def body: AbstractTextStyle
+    def `black-50%`: AbstractTextStyle
+    def `white-50%`: AbstractTextStyle
   }
 
   /**
