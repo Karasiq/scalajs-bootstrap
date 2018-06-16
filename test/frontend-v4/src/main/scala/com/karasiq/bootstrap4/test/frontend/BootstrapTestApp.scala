@@ -9,9 +9,11 @@ import rx._
 import com.karasiq.bootstrap4.Bootstrap.default._
 import scalaTags.all._
 
+import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
+
 object BootstrapTestApp {
   def main(args: Array[String]): Unit = {
-    // JSRenderingContext.useNpmImports()
+    BootstrapJQueryContext.useNpmImports()
     jQuery(() ⇒ {
       // Table tab will appear after 3 seconds
       val tableVisible = Var(false)
