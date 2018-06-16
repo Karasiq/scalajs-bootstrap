@@ -40,6 +40,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     val pull: AbstractPullModifiers
     val visibility: AbstractVisibilityModifiers
     val display: AbstractDisplayModifiers
+    val shadow: AbstractShadowModifiers
 
     /**
       * Generates unique element ID
@@ -151,6 +152,7 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
   trait AbstractPullModifier extends StyleModifier
   trait AbstractVisibilityModifier extends StyleModifier
   trait AbstractDisplayModifier extends StyleModifier
+  trait AbstractShadowModifier extends StyleModifier
 
   /**
     * Add classes to an `img` element to easily style images in any project.
@@ -316,6 +318,18 @@ trait Utils { self: RenderingContext with Icons with Buttons with ClassModifiers
     def tableCell: AbstractDisplayModifier
     def flex: AbstractDisplayModifier
     def inlineFlex: AbstractDisplayModifier
+  }
+
+  /**
+    * Add or remove shadows to elements with `box-shadow` utilities.
+    * @since 4.1
+    * @see [[https://getbootstrap.com/docs/4.1/utilities/shadows/]]
+    */
+  trait AbstractShadowModifiers {
+    def none: AbstractShadowModifier
+    def small: AbstractShadowModifier
+    def regular: AbstractShadowModifier
+    def large: AbstractShadowModifier
   }
 }
 
