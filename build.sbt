@@ -14,7 +14,6 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.11",
   crossScalaVersions := Seq(scalaVersion.value, "2.12.3"),
   organization := "com.github.karasiq",
-  version := "2.3.1",
   isSnapshot := version.value.endsWith("SNAPSHOT")
 )
 
@@ -45,6 +44,30 @@ lazy val noPublishSettings = Seq(
   publishArtifact := false,
   publishArtifact in makePom := false,
   publishTo := Some(Resolver.file("Repo", file("target/repo")))
+)
+
+lazy val releaseSettings = Seq(
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  releaseProcess := {
+    import ReleaseTransformations._
+
+    Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      publishArtifacts,
+      // releaseStepCommand("publishSigned"),
+      releaseStepCommand("sonatypeRelease"),
+      commitReleaseVersion,
+      tagRelease,
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
+  }
 )
 
 // -----------------------------------------------------------------------
@@ -107,8 +130,11 @@ lazy val libraryJVM = library.jvm
 lazy val libraryV4 = (crossProject in file("library-v4"))
   .settings(commonSettings, publishSettings, name := "scalajs-bootstrap-v4")
   .jsSettings(
-    jsLibrarySettings
-    // npmDependencies in Compile += "bootstrap" -> "4.0.0" // TODO: No matching version found for bootstrap@4.0.0-beta2
+    jsLibrarySettings,
+    npmDependencies in Compile ++= Seq(
+      "popper.js" → "^1.14.3",
+      "bootstrap" → "~4.1.1"
+    )
   )
   .dependsOn(contextLibrary)
 
@@ -190,7 +216,7 @@ lazy val testServerSettings = Seq(
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl._
 
-    val jQuery = Seq(Script from url("https://code.jquery.com/jquery-3.2.1.js"))
+    // val jQuery = Seq(Script from url("https://code.jquery.com/jquery-3.2.1.js"))
 
     val bootstrap3 = Seq(
       Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v3.3.7/dist/css/bootstrap.css")
@@ -198,9 +224,9 @@ lazy val testServerSettings = Seq(
     )
 
     val bootstrap4 = Seq(
+      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.1.1/dist/css/bootstrap.css")
       // Script from url("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/popper.min.js"),
-      Style from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/css/bootstrap.css"),
-      Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.0.0-beta.2/dist/js/bootstrap.bundle.js")
+      // Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.1.1/dist/js/bootstrap.bundle.js")
     )
 
     val fonts = Seq(Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")) ++
@@ -209,7 +235,7 @@ lazy val testServerSettings = Seq(
 
     Seq(
       Bundle("index", bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsBundlerApplication(testPage, fastOpt = false).value),
-      Bundle("index-v4", jQuery, bootstrap4, Html from TestPageAssets.index, /* Style from TestPageAssets.style, */ fonts, scalaJsBundlerApplication(testPageV4, fastOpt = false).value)
+      Bundle("index-v4", bootstrap4, Html from TestPageAssets.index, /* Style from TestPageAssets.style, */ fonts, scalaJsBundlerApplication(testPageV4, fastOpt = false).value)
     )
   }/* ,
   scalaJsBundlerCompilers in Compile := AssetCompilers {
