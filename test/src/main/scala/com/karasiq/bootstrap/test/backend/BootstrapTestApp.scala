@@ -20,7 +20,7 @@ object BootstrapTestApp extends App {
   final class AppHandler extends Actor with HttpService {
     override def receive: Actor.Receive = runRoute {
       get {
-        compressResponse() {
+        /* compressResponse() */ {
           // Server-rendered page
           path("serverside.html") {
             complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`text/html`), TestHtmlPage())))
