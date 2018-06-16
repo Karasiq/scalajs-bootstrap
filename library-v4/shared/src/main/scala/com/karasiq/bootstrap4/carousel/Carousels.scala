@@ -26,5 +26,6 @@ trait Carousels { self: RenderingContext with Utils ⇒
     def apply(content: Modifier*): Carousel = apply(Var(content))
 
     def slide(image: String, content: Modifier*): Modifier
+    def fade: Modifier = "carousel-fade".addClass
   }
 }
