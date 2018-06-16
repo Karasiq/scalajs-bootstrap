@@ -17,5 +17,6 @@ trait TableStyles { self: RenderingContext with Utils ⇒
     lazy val hover = new TableStyle("hover")
     lazy val bordered = new TableStyle("bordered")
     lazy val small = new TableStyle("sm")
+    lazy val borderless = new TableStyle("borderless")
   }
 }
