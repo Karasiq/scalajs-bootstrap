@@ -22,16 +22,16 @@ trait ReactiveImplicits { self: RenderingContext ⇒
   }
 
   implicit class RxVariableOps[T](value: Var[T]) {
-    def reactiveRead(event: String, f: Element ⇒ T)(implicit read: ReactiveRead[Element, EventListener[Element, T]]): Modifier = {
-      readModifier(EventListener[Element, T](event, (e, _) ⇒ value() = f(e)))
+    def reactiveRead[EV](event: String, f: (Element, EV) ⇒ T)(implicit read: ReactiveRead[Element, EventListener[Element, EV]]): Modifier = {
+      readModifier(EventListener[Element, EV](event, (el, ev) ⇒ value() = f(el,ev)))
     }
 
-    def reactiveReadWrite(event: String, read: Element ⇒ T, write: (Element, T) ⇒ Unit)
-                         (implicit rb: ReactiveRead[Element, EventListener[Element, T]],
-                          wb: ReactiveWrite[Element, Modify[Element, T]]): Modifier = new Modifier {
+    def reactiveReadWrite[EV](event: String, read: (Element, EV) ⇒ T, write: (Element, T) ⇒ Unit)
+                             (implicit rb: ReactiveRead[Element, EventListener[Element, EV]],
+                              wb: ReactiveWrite[Element, Modify[Element, T]]): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         writeModifier(ReactiveBinds.Modify(value, write)).applyTo(t)
-        reactiveRead(event, read)
+        reactiveRead(event, read).applyTo(t)
       }
     }
 
