@@ -31,6 +31,7 @@ trait Grids { self: RenderingContext ⇒
   trait AbstractColumn extends ModifierFactory {
     def size: Int
     def asDiv: Tag
+    def apply(md: ModifierT*): Tag = this.asDiv.apply(md:_*)
   }
 
   trait AbstractColumnFactory {
