@@ -54,8 +54,8 @@ final class TestPanel(panelTitle: String, style: PanelStyle) extends BootstrapHt
             ),
             GridSystem.mkRow(Collapse(collapseBtnTitle)(
               GridSystem.row(
-                GridSystem.col(6).asDiv(Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Callback.onClick(_ ⇒ window.alert("Test 1"))), Dropdown.item("Test 2"))),
-                GridSystem.col(6).asDiv(Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Callback.onClick(_ ⇒ window.alert("Test 3"))), Dropdown.item("Test 4")))
+                GridSystem.col(6)(Dropdown("Dropdown", Dropdown.item("Test 1", onclick := Callback.onClick(_ ⇒ window.alert("Test 1"))), Dropdown.item("Test 2"))),
+                GridSystem.col(6)(Dropdown.dropup("Dropup", Dropdown.item("Test 3", onclick := Callback.onClick(_ ⇒ window.alert("Test 3"))), Dropdown.item("Test 4")))
               )
             ))
           )),
