@@ -4,7 +4,7 @@ import sbt.Keys._
 // Versions
 // -----------------------------------------------------------------------
 val ScalaTagsVersion = "0.6.2"
-val ScalaRxVersion = "0.3.2"
+val ScalaRxVersion = "0.4.0"
 val ScalaJSJQueryVersion = "0.9.1"
 
 // -----------------------------------------------------------------------
