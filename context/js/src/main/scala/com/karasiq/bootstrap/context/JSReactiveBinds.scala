@@ -35,7 +35,7 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
     def bindWrite(parent: E, property: BindNode[N]): Unit = {
       val elRx = property.value.map(identity)
       var oldElement = property.value.now.render
-      elRx.triggerLater {
+      elRx.triggerLater ({
         val element = oldElement
         if (isElementAvailable(element) && isElementAvailable(element.parentNode)) {
           val newElement = elRx.now.render
@@ -44,7 +44,7 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
         } else {
           elRx.kill()
         }
-      }
+      }: Unit)
       parent.appendChild(oldElement)
     }
   }
