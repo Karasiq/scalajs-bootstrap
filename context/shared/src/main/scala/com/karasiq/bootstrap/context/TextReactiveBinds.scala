@@ -56,6 +56,16 @@ trait TextReactiveBinds extends ReactiveBinds { self: TextRenderingContext ⇒
     }
   }
 
+  implicit def rxFormValueDouble[E <: Element]: ReactiveRW[E, ReactiveBinds.FormValue[Double]] = {
+    new ReactiveRW[E, FormValue[Double]] {
+      def bindWrite(element: E, property: FormValue[Double]): Unit = {
+        element.setAttr("value", GenericAttrValueSource(property.value.now.toString))
+      }
+
+      def bindRead(element: E, property: FormValue[Double]): Unit = ()
+    }
+  }
+
   implicit def rxFormValueBoolean[E <: Element]: ReactiveRW[E, ReactiveBinds.FormValue[Boolean]] = {
     new ReactiveRW[E, FormValue[Boolean]] {
       def bindWrite(element: E, property: FormValue[Boolean]): Unit = {

@@ -37,6 +37,7 @@ trait ReactiveBinds { self: RenderingContext ⇒
   implicit def rxBindNode[E <: Element, N: Renderable]: ReactiveWrite[E, BindNode[N]]
   implicit def rxFormValue[E <: Element]: ReactiveRW[E, FormValue[String]]
   implicit def rxFormValueInt[E <: Element]: ReactiveRW[E, FormValue[Int]]
+  implicit def rxFormValueDouble[E <: Element]: ReactiveRW[E, FormValue[Double]]
   implicit def rxFormValueBoolean[E <: Element]: ReactiveRW[E, FormValue[Boolean]]
   implicit def rxFormValueStrings[E <: Element]: ReactiveRW[E, FormValue[Seq[String]]]
   implicit def rxVisibility[E <: Element]: ReactiveWrite[E, Visibility]
