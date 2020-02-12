@@ -56,11 +56,10 @@ lazy val releaseSettings = Seq(
     Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
-      runClean,
+      // runClean,
       // runTest,
       setReleaseVersion,
-      // publishArtifacts,
-      releaseStepCommandAndRemaining("+publishSigned"),
+      releaseStepCommandAndRemaining("publishSigned"),
       // releaseStepCommandAndRemaining("sonatypeRelease"),
       commitReleaseVersion,
       tagRelease,
