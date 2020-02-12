@@ -1,4 +1,5 @@
 import sbt.Keys._
+import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // -----------------------------------------------------------------------
 // Versions
@@ -60,12 +61,12 @@ lazy val releaseSettings = Seq(
       setReleaseVersion,
       // publishArtifacts,
       releaseStepCommandAndRemaining("+publishSigned"),
-      releaseStepCommandAndRemaining("sonatypeRelease"),
+      // releaseStepCommandAndRemaining("sonatypeRelease"),
       commitReleaseVersion,
       tagRelease,
       setNextVersion,
       commitNextVersion,
-      pushChanges
+      // pushChanges
     )
   }
 )
@@ -73,7 +74,7 @@ lazy val releaseSettings = Seq(
 // -----------------------------------------------------------------------
 // Context library
 // -----------------------------------------------------------------------
-lazy val contextLibrary = (crossProject in file("context"))
+lazy val contextLibrary = (crossProject(JSPlatform, JVMPlatform) in file("context"))
   .settings(
     commonSettings,
     publishSettings,
@@ -97,7 +98,7 @@ lazy val jQueryLibrary = (project in file("jquery"))
     publishSettings,
     name := "scalajs-bootstrap-jquery",
     libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % ScalaJSJQueryVersion,
-    npmDependencies in Compile += "jquery" → "~3.2.1"
+    npmDependencies in Compile += "jquery" → "~3.4.1"
   )
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
@@ -113,11 +114,12 @@ lazy val jsLibrarySettings = Seq(
   }
 )
 
-lazy val library = crossProject
+lazy val library = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings, publishSettings, name := "scalajs-bootstrap")
   .jsSettings(
     jsLibrarySettings,
-    npmDependencies in Compile += "bootstrap" → "~3.3.7"
+    npmDependencies in Compile += "bootstrap" → "~3.4.1",
+    version in webpack := "4.41.6"
   )
   .dependsOn(contextLibrary)
 
@@ -127,14 +129,15 @@ lazy val libraryJS = library.js
 
 lazy val libraryJVM = library.jvm
 
-lazy val libraryV4 = (crossProject in file("library-v4"))
+lazy val libraryV4 = (crossProject(JSPlatform, JVMPlatform) in file("library-v4"))
   .settings(commonSettings, publishSettings, name := "scalajs-bootstrap-v4")
   .jsSettings(
     jsLibrarySettings,
     npmDependencies in Compile ++= Seq(
       "popper.js" → "^1.14.3",
-      "bootstrap" → "~4.1.1"
-    )
+      "bootstrap" → "~4.4.1"
+    ),
+    version in webpack := "4.41.6"
   )
   .dependsOn(contextLibrary)
 
@@ -151,9 +154,9 @@ lazy val testPageSettings = Seq(
   scalaJSUseMainModuleInitializer := true,
   name := "scalajs-bootstrap-test-frontend",
   npmDevDependencies in Compile ++= Seq(
-    "webpack-merge" -> "4.1.0",
-    "imports-loader" -> "0.7.0",
-    "expose-loader" -> "0.7.1"
+    "webpack-merge" -> "~4.2.2",
+    "imports-loader" -> "~0.8.0",
+    "expose-loader" -> "~0.7.5"
   ),
   webpackConfigFile := Some(baseDirectory.value / "webpack.config.js")
 )
@@ -163,7 +166,7 @@ lazy val testPageV4Settings = Seq(
   name := "scalajs-bootstrap-test-frontend-v4"
 )
 
-lazy val testShared = (crossProject.crossType(CrossType.Pure) in file("test") / "shared")
+lazy val testShared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("test") / "shared")
   .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared")
   .dependsOn(library)
 
@@ -171,7 +174,7 @@ lazy val testSharedJS = testShared.js
 
 lazy val testSharedJVM = testShared.jvm
 
-lazy val testSharedV4 = (crossProject.crossType(CrossType.Pure) in file("test") / "shared-v4")
+lazy val testSharedV4 = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("test") / "shared-v4")
   .settings(commonSettings, noPublishSettings, name := "scalajs-bootstrap-test-shared-v4")
   .dependsOn(libraryV4)
 
@@ -211,7 +214,7 @@ lazy val testServerSettings = Seq(
   scalaJsBundlerCompile in Compile := {
     (scalaJsBundlerCompile in Compile)
       .dependsOn(webpack in fullOptJS in Compile in testPage, webpack in fullOptJS in Compile in testPageV4)
-      .value 
+      .value
   },
   scalaJsBundlerAssets in Compile ++= {
     import com.karasiq.scalajsbundler.dsl._
@@ -237,7 +240,7 @@ lazy val testServerSettings = Seq(
       Bundle("index", bootstrap3, Html from TestPageAssets.index, Style from TestPageAssets.style, fonts, scalaJsBundlerApplication(testPage, fastOpt = false).value),
       Bundle("index-v4", bootstrap4, Html from TestPageAssets.index, /* Style from TestPageAssets.style, */ fonts, scalaJsBundlerApplication(testPageV4, fastOpt = false).value)
     )
-  }/* ,
+  } /* ,
   scalaJsBundlerCompilers in Compile := AssetCompilers {
     case "text/javascript" ⇒
       ConcatCompiler

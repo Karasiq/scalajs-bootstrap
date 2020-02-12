@@ -1,12 +1,17 @@
 package com.karasiq.bootstrap.context
 
+import org.scalajs.dom
+import org.scalajs.dom.html.Input
+
 import scala.language.{implicitConversions, postfixOps}
 import scala.scalajs.js
+import scala.util.{Success, Try}
 
-import org.scalajs.dom
+trait JSReactiveBinds extends ReactiveBinds {
+  self: JSRenderingContext with ClassModifiers ⇒
 
-trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with ClassModifiers ⇒
   import ReactiveBinds._
+
   protected type Event = dom.Event
 
   implicit def rxEventListener[EL <: Element, EV <: Event]: ReactiveRead[EL, EventListener[EL, EV]] = new ReactiveRead[EL, EventListener[EL, EV]] {
@@ -35,7 +40,7 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
     def bindWrite(parent: E, property: BindNode[N]): Unit = {
       val elRx = property.value.map(identity)
       var oldElement = property.value.now.render
-      elRx.triggerLater ({
+      elRx.triggerLater({
         val element = oldElement
         if (isElementAvailable(element) && isElementAvailable(element.parentNode)) {
           val newElement = elRx.now.render
@@ -54,15 +59,18 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
                                                          write: (dom.html.Input, T) ⇒ Unit)
     extends ReactiveRW[E, FormValue[T]] {
 
+    private[this] def safeRead(e: Element): Try[T] =
+      Try(read(e.asInstanceOf[Input])).filter(v => v != null && !js.isUndefined(v))
+
     def bindRead(element: E, property: FormValue[T]): Unit = {
       rxEventListener[E, Event].bindRead(element, EventListener(event,
-        (e, _) ⇒ property.value() = read(e.asInstanceOf[dom.html.Input])))
+        (e, _) ⇒ safeRead(e).foreach(property.value() = _)))
     }
 
     def bindWrite(element: E, property: FormValue[T]): Unit = {
       rxModify[E, T].bindWrite(element, Modify(property.value, { (e, v) ⇒
         val input = e.asInstanceOf[dom.html.Input]
-        if (read(input) != v) write(input, v)
+        if (safeRead(input) != Success(v)) write(input, v)
       }))
     }
   }
@@ -73,6 +81,10 @@ trait JSReactiveBinds extends ReactiveBinds { self: JSRenderingContext with Clas
 
   implicit def rxFormValueInt[E <: Element]: ReactiveRW[E, FormValue[Int]] = {
     new FormValueRW("input", _.valueAsNumber, _.valueAsNumber = _)
+  }
+
+  implicit def rxFormValueDouble[E <: Element]: ReactiveRW[E, FormValue[Double]] = {
+    new FormValueRW("input", _.value.toDouble, (e, d) => e.value = d.toString)
   }
 
   implicit def rxFormValueBoolean[E <: Element]: ReactiveRW[E, FormValue[Boolean]] = {
