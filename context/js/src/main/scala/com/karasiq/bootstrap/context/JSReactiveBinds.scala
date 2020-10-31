@@ -80,7 +80,7 @@ trait JSReactiveBinds extends ReactiveBinds {
   }
 
   implicit def rxFormValueInt[E <: Element]: ReactiveRW[E, FormValue[Int]] = {
-    new FormValueRW("input", _.valueAsNumber, _.valueAsNumber = _)
+    new FormValueRW("input", _.valueAsNumber.toInt, (input, value) => input.valueAsNumber = value.toDouble)
   }
 
   implicit def rxFormValueDouble[E <: Element]: ReactiveRW[E, FormValue[Double]] = {
@@ -97,7 +97,7 @@ trait JSReactiveBinds extends ReactiveBinds {
       select.options.collect {
         case opt if opt.selected ⇒
           opt.value
-      }
+      }.toSeq
     }, (e, v) ⇒ {
       val select = e.asInstanceOf[dom.html.Select]
       select.options.foreach { opt ⇒

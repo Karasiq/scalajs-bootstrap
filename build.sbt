@@ -4,16 +4,18 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 // -----------------------------------------------------------------------
 // Versions
 // -----------------------------------------------------------------------
-val ScalaTagsVersion = "0.6.2"
-val ScalaRxVersion = "0.4.0"
-val ScalaJSJQueryVersion = "0.9.1"
+val ScalaTagsVersion = "0.9.2"
+val ScalaRxVersion = "0.4.1"
+val ScalaJSJQueryVersion = "0.9.6"
+
+val ScalaVersion = "2.11.12"
 
 // -----------------------------------------------------------------------
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.11",
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.3"),
+  scalaVersion := ScalaVersion,
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.12", "2.13.3"),
   organization := "com.github.karasiq",
   isSnapshot := version.value.endsWith("SNAPSHOT")
 )
@@ -78,10 +80,31 @@ lazy val contextLibrary = (crossProject(JSPlatform, JVMPlatform) in file("contex
     commonSettings,
     publishSettings,
     name := "scalajs-bootstrap-context",
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "scalatags" % ScalaTagsVersion,
-      "com.lihaoyi" %%% "scalarx" % ScalaRxVersion
-    )
+    libraryDependencies ++= (scalaBinaryVersion.value match {
+      case "2.11" =>
+        Seq(
+          "com.lihaoyi" %%% "scalatags" % "0.6.8",
+          "com.lihaoyi" %%% "scalarx" % "0.4.0"
+        )
+      case _ =>
+        Seq(
+          "com.lihaoyi" %%% "scalatags" % ScalaTagsVersion,
+          "com.lihaoyi" %%% "scalarx" % ScalaRxVersion
+        )
+    }),
+    Compile / unmanagedSourceDirectories ++= {
+      val sharedSourceDir = baseDirectory.value.getParentFile / "shared" / "src" / "main"
+      scalaBinaryVersion.value match {
+        case "2.13" =>
+          Seq(sharedSourceDir / "scala-2.12_2.13")
+        case "2.12" =>
+          Seq(sharedSourceDir / "scala-2.12_2.13")
+        case "2.11" =>
+          Seq(sharedSourceDir / "scala-2.11_2.12")
+        case _ =>
+          Seq.empty
+      }
+    },
   )
 
 lazy val contextLibraryJS = contextLibrary.js
@@ -133,8 +156,8 @@ lazy val libraryV4 = (crossProject(JSPlatform, JVMPlatform) in file("library-v4"
   .jsSettings(
     jsLibrarySettings,
     npmDependencies in Compile ++= Seq(
-      "popper.js" → "^1.14.3",
-      "bootstrap" → "~4.4.1"
+      "popper.js" → "^1.16.1",
+      "bootstrap" → "~4.5.3"
     ),
     version in webpack := "4.41.6"
   )
@@ -195,7 +218,7 @@ lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
 // Test server
 // -----------------------------------------------------------------------
 lazy val testServerSettings = Seq(
-  scalaVersion := "2.11.11",
+  scalaVersion := ScalaVersion,
   name := "scalajs-bootstrap-test",
   resolvers += Resolver.sonatypeRepo("snapshots"),
   libraryDependencies ++= {
