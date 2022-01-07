@@ -1,4 +1,10 @@
+import scala.annotation.nowarn
+
+import sbt.{Def, Project}
 import scalatags.Text.all._
+
+import com.karasiq.scalajsbundler.dsl._
+import com.karasiq.scalajsbundler.ScalaJSBundler.PageContent
 
 object TestPageAssets {
   def index: String = {
@@ -46,5 +52,23 @@ object TestPageAssets {
       |    margin-top: 50px;
       |}
     """.stripMargin
+  }
+
+  // TODO: Move to the bundler
+  @nowarn
+  def sourceMap(project: Project, fastOpt: Boolean = false): Def.Initialize[PageContent] = Def.setting {
+    import sbt.{project ⇒ _, _}
+    import sbt.Keys.{name, scalaVersion, target}
+
+    val nameValue    = (name in project).value
+    val targetValue  = (target in project).value
+    val versionValue = (scalaVersion in project).value
+
+    val output = targetValue / s"scala-${CrossVersion.binaryScalaVersion(versionValue)}" / "scalajs-bundler" / "main"
+    val sourceMapName =
+      if (fastOpt) s"$nameValue-fastopt-bundle.js.map"
+      else s"$nameValue-opt-bundle.js.map"
+
+    Static(s"scripts/$sourceMapName") from (output / sourceMapName)
   }
 }

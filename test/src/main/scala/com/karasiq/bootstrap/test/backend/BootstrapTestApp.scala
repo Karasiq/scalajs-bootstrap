@@ -1,56 +1,49 @@
 package com.karasiq.bootstrap.test.backend
 
-import java.util.concurrent.TimeUnit
-
-import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.io.StdIn
 import scala.language.postfixOps
 
-import akka.actor._
-import akka.io.IO
-import akka.pattern.ask
+import akka.actor.typed.ActorSystem
+import akka.actor.typed.scaladsl.Behaviors
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.server.Directives._
 import akka.util.Timeout
-import spray.can.Http
-import spray.http._
-import spray.routing.HttpService
 
 import com.karasiq.bootstrap.test.frontend.TestHtmlPage
 
 object BootstrapTestApp extends App {
-  final class AppHandler extends Actor with HttpService {
-    override def receive: Actor.Receive = runRoute {
-      get {
-        /* compressResponse() */ {
-          // Server-rendered page
-          path("serverside.html") {
-            complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`text/html`), TestHtmlPage())))
-          } ~
-          // Index page
-          (pathSingleSlash & respondWithMediaType(MediaTypes.`text/html`)) {
-            getFromResource("webapp/index.html")
-          } ~
-          // Other resources
-          getFromResourceDirectory("webapp")
-        }
-      }
-    }
-
-    override def actorRefFactory: ActorRefFactory = context
-  }
 
   def startup(): Unit = {
     implicit val timeout = Timeout(20 seconds)
 
-    implicit val actorSystem = ActorSystem("bootstrap-test")
+    implicit val actorSystem = ActorSystem(Behaviors.empty, "bootstrap-test")
+    import actorSystem.executionContext
 
-    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {
-      override def run(): Unit = {
-        Await.result(actorSystem.terminate(), FiniteDuration(5, TimeUnit.MINUTES))
+    Runtime.getRuntime.addShutdownHook(new Thread(() => actorSystem.terminate()))
+
+    val route =
+      get {
+        // Server-rendered page
+        path("serverside.html") {
+          complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/html(UTF-8)`, TestHtmlPage())))
+        } ~
+          // Index page
+          pathEndOrSingleSlash {
+            getFromResource("webapp/index.html", ContentTypes.`text/html(UTF-8)`)
+          } ~
+          // Other resources
+          getFromResourceDirectory("webapp")
       }
-    }))
 
-    val service = actorSystem.actorOf(Props[AppHandler], "webService")
-    IO(Http) ? Http.Bind(service, interface = "localhost", port = 9000)
+    val bindingFuture = Http().newServerAt("localhost", 9000).bind(route)
+
+    println(s"Server now online. Please navigate to http://localhost:9000\nPress RETURN to stop...")
+    StdIn.readLine() // let it run until user presses return
+    bindingFuture
+      .flatMap(_.unbind())                      // trigger unbinding from the port
+      .onComplete(_ => actorSystem.terminate()) // and shutdown when done
   }
 
   startup()

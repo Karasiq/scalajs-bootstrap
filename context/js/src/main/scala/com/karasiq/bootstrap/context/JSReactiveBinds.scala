@@ -7,6 +7,7 @@ import scala.language.{implicitConversions, postfixOps}
 import scala.scalajs.js
 import scala.util.{Success, Try}
 
+//noinspection ConvertExpressionToSAM
 trait JSReactiveBinds extends ReactiveBinds {
   self: JSRenderingContext with ClassModifiers ⇒
 
@@ -38,7 +39,7 @@ trait JSReactiveBinds extends ReactiveBinds {
 
   implicit def rxBindNode[E <: Element, N: Renderable]: ReactiveWrite[E, BindNode[N]] = new ReactiveWrite[E, BindNode[N]] {
     def bindWrite(parent: E, property: BindNode[N]): Unit = {
-      val elRx = property.value.map(identity)
+      val elRx       = property.value.map(identity)
       var oldElement = property.value.now.render
       elRx.triggerLater({
         val element = oldElement
@@ -54,24 +55,27 @@ trait JSReactiveBinds extends ReactiveBinds {
     }
   }
 
-  private[this] final class FormValueRW[E <: Element, T](event: String,
-                                                         read: dom.html.Input ⇒ T,
-                                                         write: (dom.html.Input, T) ⇒ Unit)
-    extends ReactiveRW[E, FormValue[T]] {
+  private[this] final class FormValueRW[E <: Element, T](event: String, read: dom.html.Input ⇒ T, write: (dom.html.Input, T) ⇒ Unit)
+      extends ReactiveRW[E, FormValue[T]] {
 
     private[this] def safeRead(e: Element): Try[T] =
       Try(read(e.asInstanceOf[Input])).filter(v => v != null && !js.isUndefined(v))
 
     def bindRead(element: E, property: FormValue[T]): Unit = {
-      rxEventListener[E, Event].bindRead(element, EventListener(event,
-        (e, _) ⇒ safeRead(e).foreach(property.value() = _)))
+      rxEventListener[E, Event].bindRead(element, EventListener(event, (e, _) ⇒ safeRead(e).foreach(property.value() = _)))
     }
 
     def bindWrite(element: E, property: FormValue[T]): Unit = {
-      rxModify[E, T].bindWrite(element, Modify(property.value, { (e, v) ⇒
-        val input = e.asInstanceOf[dom.html.Input]
-        if (safeRead(input) != Success(v)) write(input, v)
-      }))
+      rxModify[E, T].bindWrite(
+        element,
+        Modify(
+          property.value,
+          { (e, v) ⇒
+            val input = e.asInstanceOf[dom.html.Input]
+            if (safeRead(input) != Success(v)) write(input, v)
+          }
+        )
+      )
     }
   }
 
@@ -80,11 +84,11 @@ trait JSReactiveBinds extends ReactiveBinds {
   }
 
   implicit def rxFormValueInt[E <: Element]: ReactiveRW[E, FormValue[Int]] = {
-    new FormValueRW("input", _.valueAsNumber, _.valueAsNumber = _)
+    new FormValueRW("input", _.valueAsNumber.toInt, _.valueAsNumber = _)
   }
 
   implicit def rxFormValueDouble[E <: Element]: ReactiveRW[E, FormValue[Double]] = {
-    new FormValueRW("input", _.value.toDouble, (e, d) => e.value = d.toString)
+    new FormValueRW("input", _.valueAsNumber, _.valueAsNumber = _)
   }
 
   implicit def rxFormValueBoolean[E <: Element]: ReactiveRW[E, FormValue[Boolean]] = {
@@ -92,18 +96,22 @@ trait JSReactiveBinds extends ReactiveBinds {
   }
 
   implicit def rxFormValueStrings[E <: Element]: ReactiveRW[E, FormValue[Seq[String]]] = {
-    new FormValueRW("change", { e ⇒
-      val select = e.asInstanceOf[dom.html.Select]
-      select.options.collect {
-        case opt if opt.selected ⇒
-          opt.value
+    new FormValueRW(
+      "change",
+      { e ⇒
+        val select = e.asInstanceOf[dom.html.Select]
+        select.options.collect {
+          case opt if opt.selected ⇒
+            opt.value
+        }.toVector
+      },
+      (e, v) ⇒ {
+        val select = e.asInstanceOf[dom.html.Select]
+        select.options.foreach { opt ⇒
+          opt.selected = v.contains(opt.value)
+        }
       }
-    }, (e, v) ⇒ {
-      val select = e.asInstanceOf[dom.html.Select]
-      select.options.foreach { opt ⇒
-        opt.selected = v.contains(opt.value)
-      }
-    })
+    )
   }
 
   implicit def rxFormValueFiles[E <: Element]: ReactiveRead[E, FormValue[Seq[dom.File]]] = {
@@ -113,20 +121,26 @@ trait JSReactiveBinds extends ReactiveBinds {
   implicit def rxVisibility[E <: Element]: ReactiveWrite[E, Visibility] = new ReactiveWrite[E, Visibility] {
     def bindWrite(element: E, property: Visibility): Unit = {
       // var oldDisplay = "block"
-      rxModify[Element, Boolean].bindWrite(element, Modify(property.visible, { (e, isVisible) ⇒
-        /* val htmlElement = e.asInstanceOf[html.Element]
+      rxModify[Element, Boolean].bindWrite(
+        element,
+        Modify(
+          property.visible,
+          { (e, isVisible) ⇒
+            /* val htmlElement = e.asInstanceOf[html.Element]
         if (!isVisible) {
           if (htmlElement.style.display != "none") oldDisplay = htmlElement.style.display
           htmlElement.style.display = "none"
         } else if (htmlElement.style.display == "none") {
           htmlElement.style.display = oldDisplay
         } */
-        if (!isVisible) {
-          addClass(element, "hide")
-        } else {
-          removeClass(element, "hide")
-        }
-      }))
+            if (!isVisible) {
+              addClass(element, "hide")
+            } else {
+              removeClass(element, "hide")
+            }
+          }
+        )
+      )
     }
   }
 

@@ -6,30 +6,30 @@ import com.karasiq.bootstrap.utils.Utils
 trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._
 
-  final case class TableRow(columns: Seq[Modifier], modifiers: Modifier*)
+  case class TableRow(columns: Seq[Modifier], modifiers: Modifier*)
 
   sealed trait TableRowStyle extends ModifierFactory {
     def styleClass: Option[String]
     override final def createModifier: ModifierT = styleClass.map(_.addClass)
   }
 
-  //noinspection TypeAnnotation
+  // noinspection TypeAnnotation
   object TableRowStyle {
     case object Default extends TableRowStyle {
       val styleClass = None
     }
 
-    final case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier {
+    case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier {
       val styleClass = Some(styleName)
-      val className = styleName
+      val className  = styleName
     }
 
-    def default = Default
-    lazy val active = Styled("active")
+    def default      = Default
+    lazy val active  = Styled("active")
     lazy val success = Styled("success")
     lazy val warning = Styled("warning")
-    lazy val danger = Styled("danger")
-    lazy val info = Styled("info")
+    lazy val danger  = Styled("danger")
+    lazy val info    = Styled("info")
   }
 
   object TableRow {

@@ -19,7 +19,7 @@ trait UniversalSortableTables extends SortableTables { self: RenderingContext wi
       Builder(columns, rowModifiers, filterItem).createTable(items)
     }
 
-    final case class Builder[T](columns: Rx[Seq[TableCol[T, _]]] = Var(Nil),
+    case class Builder[T](columns: Rx[Seq[TableCol[T, _]]] = Var(Nil),
                                 rowModifiers: T ⇒ Modifier = (_: T) ⇒ Bootstrap.noModifier,
                                 filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)) {
 

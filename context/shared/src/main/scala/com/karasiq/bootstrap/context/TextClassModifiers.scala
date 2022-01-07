@@ -13,14 +13,14 @@ trait TextClassModifiers extends ClassModifiers { self: TextRenderingContext ⇒
     modifyClasses(element, _ - className)
   }
 
-  private[this] final case class ClassesValueSource(classes: Set[String]) extends ValueSource {
-    def appendAttrValue(strb: StringBuilder): Unit = {
+  private[this] case class ClassesValueSource(classes: Set[String]) extends ValueSource {
+    def appendAttrValue(writer: java.io.Writer): Unit = {
       if (classes.nonEmpty) {
         val iterator = classes.iterator
-        Escaping.escape(iterator.next(), strb)
+        Escaping.escape(iterator.next(), writer)
         while (iterator.hasNext) {
-          strb += ' '
-          Escaping.escape(iterator.next(), strb)
+          writer.write(" ")
+          Escaping.escape(iterator.next(), writer)
         }
       }
     }

@@ -1,14 +1,14 @@
-# scalajs-bootstrap [![Build Status](https://travis-ci.org/Karasiq/scalajs-bootstrap.svg?branch=master)](https://travis-ci.org/Karasiq/scalajs-bootstrap) [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.karasiq/scalajs-bootstrap_sjs0.6_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.karasiq/scalajs-bootstrap_sjs0.6_2.12)
+# scalajs-bootstrap [![Build Status](https://travis-ci.org/Karasiq/scalajs-bootstrap.svg?branch=master)](https://travis-ci.org/Karasiq/scalajs-bootstrap) [![Scala.js](http://scala-js.org/assets/badges/scalajs-1.8.0.svg)](http://scala-js.org) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.karasiq/scalajs-bootstrap_sjs1_2.13/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.karasiq/scalajs-bootstrap_sjs1_2.13)
 Reactive [Scala.js](http://www.scala-js.org/) [bootstrap](https://getbootstrap.com/) components
 
 # How to use
 Add line to your `build.sbt` (also requires `bootstrap.css` and `bootstrap.js` at runtime):
 ```scala
 // Bootstrap 3
-libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "2.3.5"
+libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap" % "%version%"
 
-// Bootstrap 4 beta
-libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap-v4" % "2.3.5"
+// Bootstrap 4
+libraryDependencies += "com.github.karasiq" %%% "scalajs-bootstrap-v4" % "%version%"
 ```
 
 Import bootstrap context:

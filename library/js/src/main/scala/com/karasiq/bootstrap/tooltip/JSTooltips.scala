@@ -22,7 +22,7 @@ trait JSTooltips { self: JSRenderingContext with BootstrapComponents with Toolti
         jsOptions.animation = options.animation
         jsOptions.html = options.html
         jsOptions.placement = options.placement.toString
-        jsOptions.title = options.title.render
+        jsOptions.title = options.title.toString
         set(options.container, jsOptions.container = _)
         set(options.delay, jsOptions.delay = _)
         set(options.selector, jsOptions.selector = _)
