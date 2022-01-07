@@ -2,8 +2,6 @@ name: Build project
 
 on:
   pull_request:
-    branches:
-      - master
 
 jobs:
   publish:
