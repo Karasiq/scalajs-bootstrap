@@ -11,7 +11,8 @@ on:
       - v[0-9].[0-9]+.[0-9]+
 
 jobs:
-  release:
+  publish:
+    name: Publish libraries
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -45,9 +46,11 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         run: |
           if [[ "${{github.event_name}}" == "pull_request" ]]; then
+            ref="${{github.head_ref}}"
+            echo "$(pwd)"
             git fetch --prune --unshallow
             git checkout "$ref"
-            version=$(./setversion.sh "${{ github.event.number }}")
+            version=$(./setversion.sh "PR${{ github.event.number }}")
           elif [[ "${{github.ref}}" == "refs/tags/"* ]]; then
             version=$(./setversion.sh release)
           else
@@ -81,10 +84,14 @@ jobs:
           echo '#! /bin/sh
                 gpg --pinentry-mode loopback $@' > gpg.sh
           chmod +x gpg.sh
+          SCALAJS_VERSION=0.6.33 sbt 'set Global/PgpKeys.gpgCommand := (baseDirectory.value / "gpg.sh").getAbsolutePath;
+                         set ThisBuild/version := "${{ env.version }}";
+                         set pgpPassphrase := Some("${{ secrets.OSSRH_GPG_PASSPHRASE }}".toCharArray);
+                         +publishSigned'
           sbt 'set Global/PgpKeys.gpgCommand := (baseDirectory.value / "gpg.sh").getAbsolutePath;
                set ThisBuild/version := "${{ env.version }}";
                set pgpPassphrase := Some("${{ secrets.OSSRH_GPG_PASSPHRASE }}".toCharArray);
-               publishSigned'
+               +publishSigned'
           if [[ "${{ env.skip_publish }}" != "true" ]]; then
             sbt sonatypeRelease
           fi

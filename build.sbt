@@ -11,21 +11,23 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 // Versions
 // -----------------------------------------------------------------------
 val ScalaTagsVersion     = "0.11.0"
-val ScalaRxVersion       = "0.4.3"
-val ScalaJsDomVersion    = "2.0.0"
-val ScalaJSJQueryVersion = "3.2.0"
+val ScalaRxVersion       = if (ProjectDefs.scalaJSIs06) "0.4.1" else "0.4.3"
+val ScalaJsDomVersion    = if (ProjectDefs.scalaJSIs06) "1.0.0" else "2.0.0"
+val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 
 // -----------------------------------------------------------------------
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  scalaVersion       := "2.13.7",
-  crossScalaVersions := Seq("2.12.15", scalaVersion.value),
-  organization       := "com.github.karasiq",
-  isSnapshot         := version.value.endsWith("SNAPSHOT"),
-  dependencyOverrides ++= Seq(
-    "org.scala-js" %%% "scalajs-dom" % ScalaJsDomVersion
-  )
+  ThisBuild / version       := "2.4.0",
+  ThisBuild / versionScheme := Some("pvp"),
+  scalaVersion              := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
+  crossScalaVersions := {
+    if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
+    else Seq("2.12.15", scalaVersion.value)
+  },
+  organization := "com.github.karasiq",
+  isSnapshot   := version.value.endsWith("SNAPSHOT")
 )
 
 lazy val publishSettings = Seq(
@@ -66,9 +68,18 @@ lazy val contextLibrary = (crossProject(JSPlatform, JVMPlatform) in file("contex
     publishSettings,
     name := "scalajs-bootstrap-context",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "scalatags" % ScalaTagsVersion,
-      "com.lihaoyi" %%% "scalarx"   % ScalaRxVersion
-    )
+      "com.lihaoyi" %%% "scalatags" % ScalaTagsVersion
+    ),
+    libraryDependencies ++= (scalaBinaryVersion.value match {
+      case "2.11" ⇒
+        Seq(
+          "com.lihaoyi" %%% "scalarx" % "0.4.0"
+        )
+      case _ ⇒
+        Seq(
+          "com.lihaoyi" %%% "scalarx" % ScalaRxVersion
+        )
+    })
   )
 
 lazy val contextLibraryJS = contextLibrary.js
@@ -79,17 +90,31 @@ lazy val contextLibraryJVM = contextLibrary.jvm
 // JQuery library
 // -----------------------------------------------------------------------
 lazy val jsLibrarySettings = Seq(
-  libraryDependencies ++= Seq(
-    "io.udash"     %%% "udash-jquery" % ScalaJSJQueryVersion,
-    "org.scala-js" %%% "scalajs-dom"  % ScalaJsDomVersion
-  ),
+  libraryDependencies ++= (scalaBinaryVersion.value match {
+    case "2.11" ⇒
+      Seq(
+        "io.udash"     %%% "udash-jquery" % "3.0.1",
+        "org.scala-js" %%% "scalajs-dom"  % ScalaJsDomVersion
+      )
+    case _ if ProjectDefs.scalaJSIs06 ⇒
+      Seq(
+        "io.udash"     %%% "udash-jquery" % "3.0.2",
+        "org.scala-js" %%% "scalajs-dom"  % ScalaJsDomVersion
+      )
+
+    case _ ⇒
+      Seq(
+        "io.udash"     %%% "udash-jquery" % ScalaJSJQueryVersion,
+        "org.scala-js" %%% "scalajs-dom"  % ScalaJsDomVersion
+      )
+  }),
   scalacOptions += {
     val local  = file("").toURI
     val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
     s"-P:scalajs:mapSourceURI:$local->$remote"
   },
-  Compile / webpack / webpackEmitSourceMaps := true,
-  Compile / webpack / version               := "4.46.0"
+  Compile / webpackEmitSourceMaps := true,
+  Compile / webpack / version     := "4.46.0"
 )
 
 lazy val jQueryLibrary = (project in file("jquery"))
@@ -124,8 +149,8 @@ lazy val libraryV4 = (crossProject(JSPlatform, JVMPlatform) in file("library-v4"
   .jsSettings(
     jsLibrarySettings,
     Compile / npmDependencies ++= Seq(
-      "popper.js" → "^1.14.3",
-      "bootstrap" → "~4.4.1"
+      "popper.js" → "^1.16.1",
+      "bootstrap" → "~4.5.3"
     )
   )
   .dependsOn(contextLibrary)
@@ -143,9 +168,9 @@ lazy val testPageSettings = Seq(
   scalaJSUseMainModuleInitializer := true,
   name                            := "scalajs-bootstrap-test-frontend",
   Compile / npmDevDependencies ++= Seq(
-    "webpack-merge"  -> "~4.2.2",
-    "imports-loader" -> "~0.8.0",
-    "expose-loader"  -> "~0.7.5"
+    "webpack-merge"  → "~4.2.2",
+    "imports-loader" → "~0.8.0",
+    "expose-loader"  → "~0.7.5"
   ),
   webpackConfigFile := Some(baseDirectory.value / "webpack.config.js")
 )
