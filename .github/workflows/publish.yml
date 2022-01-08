@@ -27,7 +27,8 @@ jobs:
             ~/.sbt/boot
             ~/.cache/coursier
             **/target
-          key: bootstrap-${{ hashFiles('**/build.sbt') }}
+            !target/sonatype-staging
+          key: bootstrap-sbt
       - name: Check event source
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true

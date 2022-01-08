@@ -1,11 +1,11 @@
 package com.karasiq.bootstrap.context
 
-import org.scalajs.dom
-import org.scalajs.dom.html.Input
-
 import scala.language.{implicitConversions, postfixOps}
 import scala.scalajs.js
 import scala.util.{Success, Try}
+
+import org.scalajs.dom
+import org.scalajs.dom.html.Input
 
 //noinspection ConvertExpressionToSAM
 trait JSReactiveBinds extends ReactiveBinds {
@@ -55,11 +55,11 @@ trait JSReactiveBinds extends ReactiveBinds {
     }
   }
 
-  private[this] final class FormValueRW[E <: Element, T](event: String, read: dom.html.Input ⇒ T, write: (dom.html.Input, T) ⇒ Unit)
+  private[this] final case class FormValueRW[E <: Element, T](event: String, read: dom.html.Input ⇒ T, write: (dom.html.Input, T) ⇒ Unit)
       extends ReactiveRW[E, FormValue[T]] {
 
     private[this] def safeRead(e: Element): Try[T] =
-      Try(read(e.asInstanceOf[Input])).filter(v => v != null && !js.isUndefined(v))
+      Try(read(e.asInstanceOf[Input])).filter(v ⇒ v != null && !js.isUndefined(v))
 
     def bindRead(element: E, property: FormValue[T]): Unit = {
       rxEventListener[E, Event].bindRead(element, EventListener(event, (e, _) ⇒ safeRead(e).foreach(property.value() = _)))
@@ -80,23 +80,38 @@ trait JSReactiveBinds extends ReactiveBinds {
   }
 
   implicit def rxFormValue[E <: Element]: ReactiveRW[E, FormValue[String]] = {
-    new FormValueRW("input", _.value, _.value = _)
+    FormValueRW(
+      "input",
+      _.value match {
+        case s: String if !js.isUndefined(s) ⇒ s
+        case _                               ⇒ ""
+      },
+      _.value = _
+    )
   }
 
   implicit def rxFormValueInt[E <: Element]: ReactiveRW[E, FormValue[Int]] = {
-    new FormValueRW("input", _.valueAsNumber.toInt, _.valueAsNumber = _)
+    FormValueRW(
+      "input",
+      e ⇒ Try(e.value.toInt).getOrElse(0),
+      _.valueAsNumber = _
+    )
   }
 
   implicit def rxFormValueDouble[E <: Element]: ReactiveRW[E, FormValue[Double]] = {
-    new FormValueRW("input", _.valueAsNumber, _.valueAsNumber = _)
+    FormValueRW(
+      "input",
+      e ⇒ Try(e.value.toDouble).getOrElse(Double.NaN),
+      _.valueAsNumber = _
+    )
   }
 
   implicit def rxFormValueBoolean[E <: Element]: ReactiveRW[E, FormValue[Boolean]] = {
-    new FormValueRW("change", _.checked, _.checked = _)
+    FormValueRW("change", _.checked, _.checked = _)
   }
 
   implicit def rxFormValueStrings[E <: Element]: ReactiveRW[E, FormValue[Seq[String]]] = {
-    new FormValueRW(
+    FormValueRW(
       "change",
       { e ⇒
         val select = e.asInstanceOf[dom.html.Select]
@@ -115,7 +130,7 @@ trait JSReactiveBinds extends ReactiveBinds {
   }
 
   implicit def rxFormValueFiles[E <: Element]: ReactiveRead[E, FormValue[Seq[dom.File]]] = {
-    new FormValueRW("change", _.files, (_, _) ⇒ ())
+    FormValueRW("change", _.files, (_, _) ⇒ ())
   }
 
   implicit def rxVisibility[E <: Element]: ReactiveWrite[E, Visibility] = new ReactiveWrite[E, Visibility] {

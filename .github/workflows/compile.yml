@@ -20,7 +20,8 @@ jobs:
             ~/.sbt/boot
             ~/.cache/coursier
             **/target
-          key: bootstrap-${{ hashFiles('**/build.sbt') }}
+            !target/sonatype-staging
+          key: bootstrap-sbt
       - name: Build project
         run: |
           sbt +compile testServer/compile

@@ -2,6 +2,8 @@ package com.karasiq.bootstrap.popover
 
 import scala.language.postfixOps
 
+import org.scalajs.dom
+
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.JSRenderingContext
 import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
@@ -11,13 +13,14 @@ trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popove
   import scalaTags.all._
 
   class JSPopover(val options: PopoverOptions) extends Popover {
+    //noinspection ConvertExpressionToSAM
     def toggle: Modifier = new Modifier {
       def applyTo(t: Element): Unit = {
         val jsOptions = scalajs.js.Object().asInstanceOf[JSPopoverOptions]
-        def set(value: String, f: String ⇒ Unit) = if (value.nonEmpty) f(value)
+        def set(value: String, f: String ⇒ Unit): Unit = if (value.nonEmpty) f(value)
         jsOptions.animation = options.animation
         jsOptions.content = options.content.render
-        jsOptions.title = options.title.toString
+        jsOptions.title = options.title.toString // Reactive title doesn't work
         jsOptions.html = options.html
         jsOptions.placement = options.placement.toString
         set(options.container, jsOptions.container = _)

@@ -19,9 +19,10 @@ val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  ThisBuild / version       := "2.4.0",
-  ThisBuild / versionScheme := Some("pvp"),
-  scalaVersion              := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
+  ThisBuild / git.useGitDescribe       := true,
+  ThisBuild / git.uncommittedSignifier := Some("DIRTY"),
+  ThisBuild / versionScheme            := Some("pvp"),
+  scalaVersion                         := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
   crossScalaVersions := {
     if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
     else Seq("2.12.15", scalaVersion.value)
@@ -47,14 +48,14 @@ lazy val publishSettings = Seq(
   licenses               := Seq("The MIT License" → url("http://opensource.org/licenses/MIT")),
   homepage               := Some(url("https://github.com/Karasiq/scalajs-bootstrap")),
   scmInfo := Some(ScmInfo(new URL("https://github.com/Karasiq/scalajs-bootstrap"), "scm:git:git@github.com:Karasiq/scalajs-bootstrap.git")),
-  pomExtra :=
-    <developers>
-      <developer>
-        <id>karasiq</id>
-        <name>Piston Karasiq</name>
-        <url>https://github.com/Karasiq</url>
-      </developer>
-    </developers>
+  developers := List(
+    Developer(
+      "Karasiq",
+      "Piston Karasiq",
+      "karasiq.gh.cru5k@simplelogin.co",
+      new URL("https://github.com/Karasiq")
+    )
+  )
 )
 
 lazy val noPublishSettings = Seq(
@@ -127,7 +128,7 @@ lazy val jQueryLibrary = (project in file("jquery"))
     jsLibrarySettings,
     publishSettings,
     name                                 := "scalajs-bootstrap-jquery",
-    Compile / npmDependencies += "jquery" → "~3.4.1"
+    Compile / npmDependencies += "jquery" → "~3.6.0"
   )
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
