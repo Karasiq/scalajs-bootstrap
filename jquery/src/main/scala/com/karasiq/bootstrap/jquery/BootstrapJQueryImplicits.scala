@@ -2,7 +2,7 @@ package com.karasiq.bootstrap.jquery
 
 import scala.language.implicitConversions
 
-import org.scalajs.jquery.JQuery
+import com.karasiq.bootstrap.jquery.JQueryContext.JQuery
 
 trait BootstrapJQueryImplicits {
   implicit def implicitBootstrapJQuery(jq: JQuery): BootstrapJQuery = {

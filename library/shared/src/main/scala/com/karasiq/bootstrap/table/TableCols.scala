@@ -7,7 +7,7 @@ import com.karasiq.bootstrap.context.RenderingContext
 trait TableCols { self: RenderingContext ⇒
   import scalaTags.all._
 
-  final case class TableCol[T, V](name: Modifier, extract: T ⇒ V, render: T ⇒ Modifier)(implicit val ord: Ordering[V])
+  case class TableCol[T, V](name: Modifier, extract: T ⇒ V, render: T ⇒ Modifier)(implicit val ord: Ordering[V])
   object TableCol {
     implicit def toGenTableCol[T](c: TableCol[T, _]) = c.asInstanceOf[GenTableCol[T]]
   }

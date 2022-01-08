@@ -17,7 +17,7 @@ trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popove
         def set(value: String, f: String ⇒ Unit) = if (value.nonEmpty) f(value)
         jsOptions.animation = options.animation
         jsOptions.content = options.content.render
-        jsOptions.title = options.title.render
+        jsOptions.title = options.title.toString
         jsOptions.html = options.html
         jsOptions.placement = options.placement.toString
         set(options.container, jsOptions.container = _)

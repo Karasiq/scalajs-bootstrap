@@ -12,8 +12,8 @@ object BootstrapJQueryContext {
     object bootstrap extends js.Object
   }
 
+  //noinspection ScalaUnusedExpression
   def useNpmImports(): Unit = {
-    JQueryContext.useNpmImport()
     imports.bootstrap
   }
 }

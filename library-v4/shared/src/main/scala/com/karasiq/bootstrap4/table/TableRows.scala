@@ -6,7 +6,7 @@ import com.karasiq.bootstrap4.utils.Utils
 trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
   import scalaTags.all._
 
-  final case class TableRow(columns: Seq[Modifier], modifiers: Modifier*)
+  case class TableRow(columns: Seq[Modifier], modifiers: Modifier*)
 
   sealed trait TableRowStyle extends StyleModifier {
     def styleName: String
@@ -19,7 +19,7 @@ trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
       val createModifier = Bootstrap.noModifier
     }
 
-    final case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier  {
+    case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier  {
       val className = s"table-$styleName"
       val createModifier = className.addClass
     }

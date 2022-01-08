@@ -1,0 +1,1 @@
+Get-ChildItem -Path "$((Get-Item .).FullName)" -Include 'target' -Recurse | Remove-Item -Force -Recurse
