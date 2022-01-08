@@ -93,5 +93,6 @@ jobs:
                set pgpPassphrase := Some("${{ secrets.OSSRH_GPG_PASSPHRASE }}".toCharArray);
                +publishSigned'
           if [[ "${{ env.skip_publish }}" != "true" ]]; then
-            sbt sonatypeRelease
+            sbt 'set ThisBuild/version := "${{ env.version }}";
+                 sonatypeBundleRelease'
           fi

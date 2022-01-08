@@ -39,10 +39,14 @@ lazy val publishSettings = Seq(
     else
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
+  sonatypeSessionName    := s"scalajs-bootstrap v${version.value}",
+  publishConfiguration   := publishConfiguration.value.withOverwrite(true),
+  publishTo              := sonatypePublishToBundle.value,
   Test / publishArtifact := false,
   pomIncludeRepository   := { _ ⇒ false },
   licenses               := Seq("The MIT License" → url("http://opensource.org/licenses/MIT")),
   homepage               := Some(url("https://github.com/Karasiq/scalajs-bootstrap")),
+  scmInfo := Some(ScmInfo(new URL("https://github.com/Karasiq/scalajs-bootstrap"), "scm:git:git@github.com:Karasiq/scalajs-bootstrap.git")),
   pomExtra :=
     <developers>
       <developer>
