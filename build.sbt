@@ -1,8 +1,7 @@
-import sbt.Keys._
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
 import com.karasiq.scalajsbundler.compilers.{AssetCompilers, ConcatCompiler}
 import com.karasiq.scalajsbundler.dsl.Mimes
+import sbt.Keys._
+import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // Reload on .sbt change
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -32,7 +31,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val publishSettings = Seq(
-  publishMavenStyle := true,
+  publishMavenStyle      := true,
   sonatypeSessionName    := s"scalajs-bootstrap v${version.value}",
   publishConfiguration   := publishConfiguration.value.withOverwrite(true),
   publishTo              := sonatypePublishToBundle.value,
@@ -112,7 +111,8 @@ lazy val jsLibrarySettings = Seq(
     s"-P:scalajs:mapSourceURI:$local->$remote"
   },
   Compile / webpackEmitSourceMaps := true,
-  Compile / webpack / version     := "4.46.0"
+  Compile / webpack / version     := "5.74.0",
+  Compile / npmExtraArgs += "--legacy-peer-deps"
 )
 
 lazy val jQueryLibrary = (project in file("jquery"))
@@ -121,7 +121,7 @@ lazy val jQueryLibrary = (project in file("jquery"))
     jsLibrarySettings,
     publishSettings,
     name                                 := "scalajs-bootstrap-jquery",
-    Compile / npmDependencies += "jquery" → "~3.6.0"
+    Compile / npmDependencies += "jquery" → "*"
   )
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
@@ -132,7 +132,7 @@ lazy val library = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings, publishSettings, name := "scalajs-bootstrap")
   .jsSettings(
     jsLibrarySettings,
-    Compile / npmDependencies += "bootstrap" → "~3.4.1"
+    Compile / npmDependencies += "bootstrap" → "^3.4.1"
   )
   .dependsOn(contextLibrary)
 
@@ -147,8 +147,8 @@ lazy val libraryV4 = (crossProject(JSPlatform, JVMPlatform) in file("library-v4"
   .jsSettings(
     jsLibrarySettings,
     Compile / npmDependencies ++= Seq(
-      "popper.js" → "^1.16.1",
-      "bootstrap" → "~4.5.3"
+      "popper.js" → "* 1.16.1",
+      "bootstrap" → "^4.5.3"
     )
   )
   .dependsOn(contextLibrary)
@@ -170,12 +170,14 @@ lazy val testPageSettings = Seq(
     "imports-loader" → "~0.8.0",
     "expose-loader"  → "~0.7.5"
   ),
-  webpackConfigFile := Some(baseDirectory.value / "webpack.config.js")
+  webpackConfigFile := Some(baseDirectory.value / "webpack.config.js"),
+  Compile / npmExtraArgs += "--legacy-peer-deps"
 )
 
 lazy val testPageV4Settings = Seq(
   scalaJSUseMainModuleInitializer := true,
-  name                            := "scalajs-bootstrap-test-frontend-v4"
+  name                            := "scalajs-bootstrap-test-frontend-v4",
+  Compile / npmExtraArgs += "--legacy-peer-deps"
 )
 
 lazy val testShared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("test") / "shared")
@@ -210,7 +212,7 @@ lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
 lazy val testServerSettings = Seq(
   scalaVersion := "2.13.7",
   name         := "scalajs-bootstrap-test",
-  resolvers += Resolver.sonatypeRepo("snapshots"),
+  resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
   libraryDependencies ++= {
     val akkaV     = "2.6.18"
     val akkaHttpV = "10.2.7"
