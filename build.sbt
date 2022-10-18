@@ -5,6 +5,14 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // Reload on .sbt change
 Global / onChangedBuildSource := ReloadOnSourceChanges
+enablePlugins(GitVersioning)
+
+ThisBuild / git.useGitDescribe       := true
+ThisBuild / git.uncommittedSignifier := Some("SNAPSHOT")
+ThisBuild / versionScheme            := Some("pvp")
+ThisBuild / isSnapshot := {
+  git.gitCurrentTags.value.isEmpty || git.gitUncommittedChanges.value || version.value.endsWith("-SNAPSHOT")
+}
 
 // -----------------------------------------------------------------------
 // Versions
@@ -18,16 +26,12 @@ val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  ThisBuild / git.useGitDescribe       := true,
-  ThisBuild / git.uncommittedSignifier := Some("DIRTY"),
-  ThisBuild / versionScheme            := Some("pvp"),
   scalaVersion                         := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
   crossScalaVersions := {
     if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
     else Seq("2.12.15", scalaVersion.value)
   },
-  organization := "com.github.karasiq",
-  isSnapshot   := version.value.endsWith("SNAPSHOT")
+  organization := "com.github.karasiq"
 )
 
 lazy val publishSettings = Seq(

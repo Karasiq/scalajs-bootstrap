@@ -63,8 +63,10 @@ jobs:
           echo $version
           echo "::set-env name=version::$version"
           if [[ ${{github.ref}} != "refs/tags/"* ]]; then
-            echo Deploy will be skipped
-            echo '::set-env name=skip_publish::true'
+            echo Deploying as snapshot
+            echo '::set-env name=is_snapshot::true'
+          else
+            echo '::set-env name=is_snapshot::false'
           fi
       - name: Install GPG key
         run: |
@@ -87,13 +89,15 @@ jobs:
           chmod +x gpg.sh
           SCALAJS_VERSION=0.6.33 sbt 'set Global/PgpKeys.gpgCommand := (baseDirectory.value / "gpg.sh").getAbsolutePath;
                          set ThisBuild/version := "${{ env.version }}";
+                         set ThisBuild/isSnapshot := ${{ env.is_snapshot }};
                          set pgpPassphrase := Some("${{ secrets.OSSRH_GPG_PASSPHRASE }}".toCharArray);
                          +publishSigned'
           sbt 'set Global/PgpKeys.gpgCommand := (baseDirectory.value / "gpg.sh").getAbsolutePath;
                set ThisBuild/version := "${{ env.version }}";
+               set ThisBuild/isSnapshot := ${{ env.is_snapshot }};
                set pgpPassphrase := Some("${{ secrets.OSSRH_GPG_PASSPHRASE }}".toCharArray);
                +publishSigned'
-          if [[ "${{ env.skip_publish }}" != "true" ]]; then
+          if [[ "${{ env.is_snapshot }}" == "false" ]]; then
             sbt 'set ThisBuild/version := "${{ env.version }}";
                  sonatypeBundleRelease'
           fi
