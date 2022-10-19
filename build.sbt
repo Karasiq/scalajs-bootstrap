@@ -26,7 +26,7 @@ val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  scalaVersion                         := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
+  scalaVersion := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
   crossScalaVersions := {
     if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
     else Seq("2.12.15", scalaVersion.value)
@@ -43,7 +43,12 @@ lazy val publishSettings = Seq(
   pomIncludeRepository   := { _ ⇒ false },
   licenses               := Seq("The MIT License" → url("http://opensource.org/licenses/MIT")),
   homepage               := Some(url("https://github.com/Karasiq/scalajs-bootstrap")),
-  scmInfo := Some(ScmInfo(new URL("https://github.com/Karasiq/scalajs-bootstrap"), "scm:git:git@github.com:Karasiq/scalajs-bootstrap.git")),
+  scmInfo := Some(
+    ScmInfo(
+      new URL("https://github.com/Karasiq/scalajs-bootstrap"),
+      "scm:git:git@github.com:Karasiq/scalajs-bootstrap.git"
+    )
+  ),
   developers := List(
     Developer(
       "Karasiq",
@@ -109,11 +114,11 @@ lazy val jsLibrarySettings = Seq(
         "org.scala-js" %%% "scalajs-dom"  % ScalaJsDomVersion
       )
   }),
-  scalacOptions += {
+  /* scalacOptions += {
     val local  = file("").toURI
     val remote = s"https://raw.githubusercontent.com/Karasiq/scalajs-bootstrap/${git.gitHeadCommit.value.get}/"
     s"-P:scalajs:mapSourceURI:$local->$remote"
-  },
+  },*/
   Compile / webpackEmitSourceMaps := true,
   Compile / webpack / version     := "5.74.0",
   Compile / npmExtraArgs += "--legacy-peer-deps"
@@ -124,8 +129,7 @@ lazy val jQueryLibrary = (project in file("jquery"))
     commonSettings,
     jsLibrarySettings,
     publishSettings,
-    name                                 := "scalajs-bootstrap-jquery",
-    Compile / npmDependencies += "jquery" → "*"
+    name := "scalajs-bootstrap-jquery"
   )
   .enablePlugins(scalajsbundler.sbtplugin.ScalaJSBundlerPlugin)
 
@@ -151,7 +155,6 @@ lazy val libraryV4 = (crossProject(JSPlatform, JVMPlatform) in file("library-v4"
   .jsSettings(
     jsLibrarySettings,
     Compile / npmDependencies ++= Seq(
-      "popper.js" → "* 1.16.1",
       "bootstrap" → "^4.5.3"
     )
   )
@@ -255,12 +258,16 @@ lazy val testServerSettings = Seq(
         // Script from url("https://raw.githubusercontent.com/twbs/bootstrap/v4.1.1/dist/js/bootstrap.bundle.js")
       )
 
-      val fonts = Seq(Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")) ++
-        fontPackage(
-          "glyphicons-halflings-regular",
-          "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular"
-        ) ++
-        fontPackage("fontawesome-webfont", "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont")
+      val fonts =
+        Seq(Style from url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/css/font-awesome.css")) ++
+          fontPackage(
+            "glyphicons-halflings-regular",
+            "https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/dist/fonts/glyphicons-halflings-regular"
+          ) ++
+          fontPackage(
+            "fontawesome-webfont",
+            "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/fonts/fontawesome-webfont"
+          )
 
       Seq(
         Bundle(
