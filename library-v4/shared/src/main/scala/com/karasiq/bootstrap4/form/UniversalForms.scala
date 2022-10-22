@@ -1,9 +1,7 @@
 package com.karasiq.bootstrap4.form
 
 import scala.language.{implicitConversions, postfixOps}
-
-import rx.{Rx, Var}
-
+import rx.{Obs, Rx, Var}
 import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap4.utils.Utils
@@ -27,7 +25,7 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
 
   object FormInput extends FormInputFactory {
     def ofType(inputType: String, label: Modifier, md: Modifier*): Tag = {
-      new FormGenericInput(label, inputType).renderTag(md:_*)
+      new FormGenericInput(label, inputType).renderTag(md: _*)
     }
 
     def file(label: Modifier, md: Modifier*): InputT = {
@@ -35,15 +33,20 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
 
     def textArea(title: Modifier, md: Modifier*): InputT = {
-      new FormTextArea(title).renderTag(md:_*)
+      new FormTextArea(title).renderTag(md: _*)
     }
 
     def checkbox(label: Modifier, md: Modifier*): InputT = {
-      new FormCheckbox(label).renderTag(md:_*)
+      new FormCheckbox(label).renderTag(md: _*)
     }
 
-    def radio(title: Modifier, radioName: String, radioValue: String,
-              initialState: Boolean = false, radioId: String = Bootstrap.newId): FormRadio = {
+    def radio(
+        title: Modifier,
+        radioName: String,
+        radioValue: String,
+        initialState: Boolean = false,
+        radioId: String = Bootstrap.newId
+    ): FormRadio = {
       new FormRadio(title, radioName, radioValue, initialState, radioId)
     }
 
@@ -60,7 +63,6 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
   }
 
-
   object FormInputGroup extends FormInputGroupFactory {
     def createInput(tpe: String, md: Modifier*): InputT = {
       input(`type` := tpe, "form-control".addClass, id := Bootstrap.newId, md)
@@ -75,23 +77,24 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
   }
 
-  final class FormGenericInput(val inputLabel: Modifier,
-                               val inputType: String = "text",
-                               val inputId: String = Bootstrap.newId)
-    extends BootstrapHtmlComponent {
+  final class FormGenericInput(
+      val inputLabel: Modifier,
+      val inputType: String = "text",
+      val inputId: String = Bootstrap.newId
+  ) extends BootstrapHtmlComponent {
 
     override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-$inputType-input"
       div("form-group".addClass)(
-        label(`for` := controlId, inputLabel),
+        label(`for`                           := controlId, inputLabel),
         input("form-control".addClass, `type` := inputType, id := controlId, md)
       )
     }
   }
 
-  final class FormCheckbox(val inputLabel: Modifier,
-                           val inputId: String = Bootstrap.newId)
-    extends AbstractFormInput with BootstrapHtmlComponent {
+  final class FormCheckbox(val inputLabel: Modifier, val inputId: String = Bootstrap.newId)
+      extends AbstractFormInput
+      with BootstrapHtmlComponent {
 
     val inputType = "checkbox"
 
@@ -107,28 +110,41 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
   }
 
-  class FormRadio(val title: Modifier, val radioName: String, val radioValue: String,
-                  val isDefaultOption: Boolean = false, val radioId: String = Bootstrap.newId)
-    extends AbstractFormRadio with BootstrapHtmlComponent {
+  class FormRadio(
+      val title: Modifier,
+      val radioName: String,
+      val radioValue: String,
+      val isDefaultOption: Boolean = false,
+      val radioId: String = Bootstrap.newId
+  ) extends AbstractFormRadio
+      with BootstrapHtmlComponent {
 
     override def renderTag(md: ModifierT*): TagT = {
       div(`class` := "form-check")(
         label(
           `class` := "form-check-label",
-          input(`class` := "form-check-input", `type` := "radio", name := radioName, id := radioId, value := radioValue, md),
+          input(
+            `class` := "form-check-input",
+            `type`  := "radio",
+            name    := radioName,
+            id      := radioId,
+            value   := radioValue,
+            md
+          ),
           title
         )
       )
     }
   }
 
-  class FormRadioGroup(final val radioList: Rx[Seq[AbstractFormRadio]],
-                       val inputId: String = Bootstrap.newId) extends AbstractFormRadioGroup {
+  class FormRadioGroup(final val radioList: Rx[Seq[AbstractFormRadio]], val inputId: String = Bootstrap.newId)
+      extends AbstractFormRadioGroup {
 
     final val value: Var[String] = Var(initialValue.getOrElse(""))
 
     private[this] def initialValue = {
-      radioList.now.find(_.isDefaultOption)
+      radioList.now
+        .find(_.isDefaultOption)
         .orElse(radioList.now.headOption)
         .map(_.radioValue)
     }
@@ -150,13 +166,23 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
   }
 
-  class FormSelect(selectLabel: Modifier,
-                   val allowMultiple: Boolean,
-                   val options: FormSelectOptions,
-                   val inputId: String = Bootstrap.newId)
-                   extends AbstractFormSelect {
+  class FormSelect(
+      selectLabel: Modifier,
+      val allowMultiple: Boolean,
+      val options: FormSelectOptions,
+      val inputId: String = Bootstrap.newId
+  ) extends AbstractFormSelect {
 
-    final val selected: Var[Seq[String]] = Var(options.values.now.headOption.map(_.value).toSeq)
+    final val selected: Var[Seq[String]] =
+      if (allowMultiple) Var(Nil)
+      else Var(options.values.now.headOption.map(_.value).toSeq)
+
+    private[this] val setInitialValue: Obs =
+      if (!allowMultiple && selected.now.isEmpty) options.values.filter(_.nonEmpty).triggerLater { values ⇒
+        this.selected() = values.headOption.map(_.value).toSeq
+        setInitialValue.kill
+      }
+      else null
 
     override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-select-input"
@@ -172,14 +198,14 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
     }
   }
 
-  class FormTextArea(val textAreaLabel: Modifier, val inputId: String = Bootstrap.newId) extends BootstrapHtmlComponent {
+  class FormTextArea(val textAreaLabel: Modifier, val inputId: String = Bootstrap.newId)
+      extends BootstrapHtmlComponent {
     override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-textarea-input"
       div("form-group".addClass)(
-        label(`for` := controlId, textAreaLabel),
+        label(`for`                          := controlId, textAreaLabel),
         textarea("form-control".addClass, id := controlId, md)
       )
     }
   }
 }
-

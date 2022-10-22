@@ -2,6 +2,8 @@ logLevel := Level.Warn
 
 // resolvers += Resolver.sonatypeRepo("snapshots")
 
+addSbtPlugin("org.jetbrains.scala"               % "sbt-ide-settings"         % "1.1.1")
+
 addSbtPlugin("com.thoughtworks.sbt-scala-js-map" % "sbt-scala-js-map" % "4.1.1+9-562f62a2")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % ProjectDefs.ScalaJSVersion)

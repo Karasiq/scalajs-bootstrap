@@ -5,14 +5,16 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // Reload on .sbt change
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
+// Git versioning
 enablePlugins(GitVersioning)
 
 ThisBuild / git.useGitDescribe       := true
-ThisBuild / git.uncommittedSignifier := Some("SNAPSHOT")
+ThisBuild / git.uncommittedSignifier := None
 ThisBuild / versionScheme            := Some("pvp")
-ThisBuild / isSnapshot := {
-  git.gitCurrentTags.value.isEmpty || git.gitUncommittedChanges.value || version.value.endsWith("-SNAPSHOT")
-}
+
+def _isSnapshotByGit = Def.setting(git.gitCurrentTags.value.isEmpty || git.gitUncommittedChanges.value)
+ThisBuild / version := (ThisBuild / version).value + (if (_isSnapshotByGit.value) "-SNAPSHOT" else "")
 
 // -----------------------------------------------------------------------
 // Versions
