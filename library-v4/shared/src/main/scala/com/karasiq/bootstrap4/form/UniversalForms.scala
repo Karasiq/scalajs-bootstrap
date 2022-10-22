@@ -177,12 +177,14 @@ trait UniversalForms { self: RenderingContext with Forms with Utils with Bootstr
       if (allowMultiple) Var(Nil)
       else Var(options.values.now.headOption.map(_.value).toSeq)
 
-    private[this] val setInitialValue: Obs =
-      if (!allowMultiple && selected.now.isEmpty) options.values.filter(_.nonEmpty).triggerLater { values ⇒
-        this.selected() = values.headOption.map(_.value).toSeq
-        setInitialValue.kill
-      }
-      else null
+    options.values.triggerLater { values ⇒
+      val available = values.view.map(_.value)
+      if (!allowMultiple && selected.now.isEmpty && available.nonEmpty)
+        this.selected() = available.headOption.toSeq
+
+      lazy val isAvailable = available.toSet
+      selected.update(_.filter(isAvailable))
+    }
 
     override def renderTag(md: ModifierT*): TagT = {
       val controlId = s"$inputId-form-select-input"
