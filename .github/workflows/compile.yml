@@ -2,6 +2,7 @@ name: Build project
 
 on:
   pull_request:
+  push:
 
 jobs:
   publish:
@@ -9,10 +10,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
       - name: Cache SBT
         uses: actions/cache@v2
         with:
@@ -24,4 +25,5 @@ jobs:
           key: bootstrap-sbt
       - name: Build project
         run: |
-          sbt +compile testServer/compile
+          sbt -J-DSCALAJS_VERSION=0.6.33 '+compile; testServer/compile'
+          sbt '+compile; testServer/compile'
