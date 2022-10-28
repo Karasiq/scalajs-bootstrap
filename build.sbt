@@ -31,7 +31,7 @@ lazy val commonSettings = Seq(
   scalaVersion := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
   crossScalaVersions := {
     if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
-    else Seq("2.12.15", scalaVersion.value)
+    else Seq("2.12.12", scalaVersion.value)
   },
   organization := "com.github.karasiq"
 )
@@ -122,7 +122,7 @@ lazy val jsLibrarySettings = Seq(
     s"-P:scalajs:mapSourceURI:$local->$remote"
   },*/
   Compile / webpackEmitSourceMaps := true,
-  Compile / webpack / version     := "5.74.0",
+  // Compile / webpack / version     := "5.74.0",
   Compile / npmExtraArgs += "--legacy-peer-deps"
 )
 
