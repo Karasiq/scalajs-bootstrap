@@ -1,4 +1,4 @@
-name: Publish maven packages
+name: Create snapshot/release
 
 on:
   pull_request:
@@ -101,3 +101,59 @@ jobs:
             sbt 'set ThisBuild/version := "${{ env.version }}";
                  sonatypeBundleRelease'
           fi
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commitMode: true
+          configurationJson: |
+            {
+              "template": "#{{CHANGELOG}}\n\n### ✨ Uncategorized\n#{{UNCATEGORIZED}}",
+              "categories": [
+                {
+                  "title": "## 🚀 Features",
+                  "labels": ["feature", "features"]
+                },
+                {
+                  "title": "## 🐛 Fixes",
+                  "labels": ["fix", "fixes"]
+                },
+                {
+                  "title": "## 🧪 Other",
+                  "labels": ["other"]
+                },
+                {
+                    "title": "## 📦 Dependencies",
+                    "labels": ["dependencies"]
+                }
+              ],
+              "sort": "ASC",
+              "pr_template": "- #{{TITLE}}",
+              "empty_template": "- no changes",
+              "label_extractor": [
+                {
+                  "pattern": "\\[(.*)\\].*",
+                  "target": "$1"
+                }
+              ],
+              "transformers": [
+                {
+                  "pattern": "\\[.*\\] (.*)",
+                  "target": "$1"
+                }
+              ],
+              "max_tags_to_fetch": 200,
+              "max_pull_requests": 200,
+              "max_back_track_time_days": 365
+            }
+
+      - name: Create Release
+        uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
