@@ -12,15 +12,15 @@ trait ModalStyles { self: RenderingContext with Utils ⇒
     val createModifier = Bootstrap.noModifier
   }
 
-  final class CustomModalDialogSize private[modal](size: String) extends ModalDialogSize {
+  final class CustomModalDialogSize private[modal] (size: String) extends ModalDialogSize {
     val className: String = size
-    val createModifier = className.addClass
+    val createModifier    = className.addClass
   }
 
-  //noinspection TypeAnnotation
+  // noinspection TypeAnnotation
   object ModalDialogSize {
     val default = DefaultModalDialogSize
-    val small = new CustomModalDialogSize("modal-sm")
-    val large = new CustomModalDialogSize("modal-lg")
+    val small   = new CustomModalDialogSize("modal-sm")
+    val large   = new CustomModalDialogSize("modal-lg")
   }
 }

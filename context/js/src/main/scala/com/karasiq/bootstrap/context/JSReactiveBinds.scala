@@ -15,14 +15,15 @@ trait JSReactiveBinds extends ReactiveBinds {
 
   protected type Event = dom.Event
 
-  implicit def rxEventListener[EL <: Element, EV <: Event]: ReactiveRead[EL, EventListener[EL, EV]] = new ReactiveRead[EL, EventListener[EL, EV]] {
-    def bindRead(element: EL, property: EventListener[EL, EV]): Unit = {
-      val function = js.ThisFunction.fromFunction2 { (el: EL, ev: EV) ⇒
-        property.callback(el, ev)
+  implicit def rxEventListener[EL <: Element, EV <: Event]: ReactiveRead[EL, EventListener[EL, EV]] =
+    new ReactiveRead[EL, EventListener[EL, EV]] {
+      def bindRead(element: EL, property: EventListener[EL, EV]): Unit = {
+        val function = js.ThisFunction.fromFunction2 { (el: EL, ev: EV) ⇒
+          property.callback(el, ev)
+        }
+        element.asInstanceOf[js.Dynamic].addEventListener(property.`type`, function)
       }
-      element.asInstanceOf[js.Dynamic].addEventListener(property.`type`, function)
     }
-  }
 
   implicit def rxModify[E <: Element, T]: ReactiveWrite[E, Modify[E, T]] = new ReactiveWrite[E, Modify[E, T]] {
     def bindWrite(element: E, property: Modify[E, T]): Unit = {
@@ -37,32 +38,39 @@ trait JSReactiveBinds extends ReactiveBinds {
     }
   }
 
-  implicit def rxBindNode[E <: Element, N: Renderable]: ReactiveWrite[E, BindNode[N]] = new ReactiveWrite[E, BindNode[N]] {
-    def bindWrite(parent: E, property: BindNode[N]): Unit = {
-      val elRx       = property.value.map(identity)
-      var oldElement = property.value.now.render
-      elRx.triggerLater({
-        val element = oldElement
-        if (isElementAvailable(element) && isElementAvailable(element.parentNode)) {
-          val newElement = elRx.now.render
-          oldElement = newElement
-          element.parentNode.replaceChild(newElement, element)
-        } else {
-          elRx.kill()
-        }
-      }: Unit)
-      parent.appendChild(oldElement)
+  implicit def rxBindNode[E <: Element, N: Renderable]: ReactiveWrite[E, BindNode[N]] =
+    new ReactiveWrite[E, BindNode[N]] {
+      def bindWrite(parent: E, property: BindNode[N]): Unit = {
+        val elRx       = property.value.map(identity)
+        var oldElement = property.value.now.render
+        elRx.triggerLater({
+          val element = oldElement
+          if (isElementAvailable(element) && isElementAvailable(element.parentNode)) {
+            val newElement = elRx.now.render
+            oldElement = newElement
+            element.parentNode.replaceChild(newElement, element)
+          } else {
+            elRx.kill()
+          }
+        }: Unit)
+        parent.appendChild(oldElement)
+      }
     }
-  }
 
-  private[this] final case class FormValueRW[E <: Element, T](event: String, read: dom.html.Input ⇒ T, write: (dom.html.Input, T) ⇒ Unit)
-      extends ReactiveRW[E, FormValue[T]] {
+  private[this] final case class FormValueRW[E <: Element, T](
+      event: String,
+      read: dom.html.Input ⇒ T,
+      write: (dom.html.Input, T) ⇒ Unit
+  ) extends ReactiveRW[E, FormValue[T]] {
 
     private[this] def safeRead(e: Element): Try[T] =
       Try(read(e.asInstanceOf[Input])).filter(v ⇒ v != null && !js.isUndefined(v))
 
     def bindRead(element: E, property: FormValue[T]): Unit = {
-      rxEventListener[E, Event].bindRead(element, EventListener(event, (e, _) ⇒ safeRead(e).foreach(property.value() = _)))
+      rxEventListener[E, Event].bindRead(
+        element,
+        EventListener(event, (e, _) ⇒ safeRead(e).foreach(property.value() = _))
+      )
     }
 
     def bindWrite(element: E, property: FormValue[T]): Unit = {
