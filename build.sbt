@@ -30,7 +30,7 @@ val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 lazy val commonSettings = Seq(
   scalaVersion := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
   crossScalaVersions := {
-    if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
+    if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.17", scalaVersion.value)
     else Seq("2.12.12", scalaVersion.value)
   },
   organization := "com.github.karasiq"
