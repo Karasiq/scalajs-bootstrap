@@ -2,7 +2,7 @@ logLevel := Level.Warn
 
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % ProjectDefs.ScalaJSVersion)
 addSbtPlugin("com.github.karasiq" % "sbt-scalajs-bundler"      % "1.2.2")
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.1.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.2.0")
 
 addSbtPlugin("org.jetbrains.scala" % "sbt-ide-settings" % "1.1.1")
 addSbtPlugin("com.github.sbt"      % "sbt-git"          % "2.0.0")
