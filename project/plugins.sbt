@@ -15,4 +15,4 @@ if (ProjectDefs.scalaJSIs06) {
   addSbtPlugin("ch.epfl.scala"                     % "sbt-scalajs-bundler" % "0.21.1")
 }
 
-libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.11.0"
+libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.11.1"
