@@ -23,7 +23,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
       val indexes = content().indices
       ol(`class` := "carousel-indicators")(
         mkIndicator(indexes.head)(`class` := "active"),
-        for (i <- indexes.tail) yield mkIndicator(i)
+        for (i ← indexes.tail) yield mkIndicator(i)
       )
     }
 
@@ -31,7 +31,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
       val data = content()
       div(`class` := "carousel-inner", role := "listbox")(
         div(`class` := "item active", data.head),
-        for (slide <- data.tail) yield div(`class` := "item", slide)
+        for (slide ← data.tail) yield div(`class` := "item", slide)
       )
     }
 
@@ -43,7 +43,12 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
           Bootstrap.icon("chevron-left"),
           span(`class` := "sr-only", "Previous")
         ),
-        a(`class` := "right carousel-control", href := s"#$carouselElementId", role := "button", `data-slide` := "next")(
+        a(
+          `class`      := "right carousel-control",
+          href         := s"#$carouselElementId",
+          role         := "button",
+          `data-slide` := "next"
+        )(
           Bootstrap.icon("chevron-right"),
           span(`class` := "sr-only", "Next")
         )
@@ -51,7 +56,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
     }
 
     def render(md: Modifier*): Modifier = {
-      carousel(`data-ride` := "carousel")(md:_*)
+      carousel(`data-ride` := "carousel")(md: _*)
     }
   }
 
@@ -59,7 +64,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
     def slide(image: String, content: Modifier*): Modifier = {
       Seq(
         img(src := image),
-        div(`class` := "carousel-caption")(content:_*)
+        div(`class` := "carousel-caption")(content: _*)
       )
     }
   }

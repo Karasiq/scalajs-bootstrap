@@ -9,7 +9,8 @@ import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap4.icons.Icons
 import com.karasiq.bootstrap4.utils.Utils
 
-trait TextCarousels extends UniversalCarousels { self: RenderingContext with Carousels with Utils with Icons with BootstrapComponents ⇒
+trait TextCarousels extends UniversalCarousels {
+  self: RenderingContext with Carousels with Utils with Icons with BootstrapComponents ⇒
   import scalaTags.all._
 
   type Carousel = UniversalCarousel

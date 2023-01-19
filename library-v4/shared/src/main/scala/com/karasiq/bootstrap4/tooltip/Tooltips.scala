@@ -11,9 +11,18 @@ trait Tooltips extends TooltipStyles { self: RenderingContext with BootstrapComp
   type Tooltip <: AbstractTooltip
   val Tooltip: TooltipFactory
 
-  case class TooltipOptions(animation: Boolean = true, container: String = "", delay: String = "",
-                            html: Boolean = false, placement: TooltipPlacement = TooltipPlacement.right, selector: String = "", template: String = "",
-                            title: Frag = "", trigger: String = "", viewport: String = "") {
+  case class TooltipOptions(
+      animation: Boolean = true,
+      container: String = "",
+      delay: String = "",
+      html: Boolean = false,
+      placement: TooltipPlacement = TooltipPlacement.right,
+      selector: String = "",
+      template: String = "",
+      title: Frag = "",
+      trigger: String = "",
+      viewport: String = ""
+  ) {
     def toStrings: Seq[(String, String)] = {
       def opt[T](name: String, value: T, default: T) = Option(name → value).filterNot(_._2 == default)
       Seq(
@@ -35,11 +44,11 @@ trait Tooltips extends TooltipStyles { self: RenderingContext with BootstrapComp
     def options: TooltipOptions
   }
 
-  /**
-    * Inspired by the excellent jQuery.tipsy plugin written by Jason Frame;
-    * Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage.
-    * Tooltips with zero-length titles are never displayed.
-    * @see [[http://getbootstrap.com/javascript/#tooltips]]
+  /** Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't
+    * rely on images, use CSS3 for animations, and data-attributes for local title storage. Tooltips with zero-length
+    * titles are never displayed.
+    * @see
+    *   [[http://getbootstrap.com/javascript/#tooltips]]
     */
   trait TooltipFactory {
     def apply(content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): AbstractTooltip
