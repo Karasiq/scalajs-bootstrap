@@ -52,15 +52,18 @@ trait UniversalCards extends Cards { self: RenderingContext with Icons with Util
       div(`class` := "card-group", cards)
     }
 
-    def apply(panelId: String = Bootstrap.newId,
-              header: Option[Modifier] = None,
-              footer: Option[Modifier] = None,
-              content: Seq[Modifier] = Nil): CardBuilder = {
+    def apply(
+        panelId: String = Bootstrap.newId,
+        header: Option[Modifier] = None,
+        footer: Option[Modifier] = None,
+        content: Seq[Modifier] = Nil
+    ): CardBuilder = {
       CardBuilder(panelId, header, footer, content)
     }
   }
 
-  case class CardBuilder(cardId: String, header: Option[Modifier], footer: Option[Modifier], content: Seq[Modifier]) extends AbstractCard {
+  case class CardBuilder(cardId: String, header: Option[Modifier], footer: Option[Modifier], content: Seq[Modifier])
+      extends AbstractCard {
     def withId(newId: String): CardBuilder = {
       copy(cardId = newId)
     }
@@ -78,7 +81,7 @@ trait UniversalCards extends Cards { self: RenderingContext with Icons with Util
     }
 
     def withBody(content: Modifier*): CardBuilder = {
-      withContent(Card.body(content:_*))
+      withContent(Card.body(content: _*))
     }
 
     def renderTag(md: Modifier*): TagT = {

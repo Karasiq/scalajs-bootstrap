@@ -16,10 +16,11 @@ trait Carousels { self: RenderingContext with Utils ⇒
     def content: Rx[Seq[Modifier]]
   }
 
-  /**
-    * A slideshow component for cycling through elements, like a carousel.
-    * @note Nested carousels are not supported.
-    * @see [[http://getbootstrap.com/javascript/#carousel]]
+  /** A slideshow component for cycling through elements, like a carousel.
+    * @note
+    *   Nested carousels are not supported.
+    * @see
+    *   [[http://getbootstrap.com/javascript/#carousel]]
     */
   trait CarouselFactory {
     def apply(data: Rx[Seq[Modifier]], id: String = Bootstrap.newId): Carousel

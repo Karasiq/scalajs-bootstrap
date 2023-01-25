@@ -15,18 +15,31 @@ trait UniversalPageSelectors extends PageSelectors { self: RenderingContext ⇒
   }
 
   class UniversalPageSelector(val pages: Rx[Int], val currentPage: Var[Int])
-    extends AbstractPageSelector with BootstrapHtmlComponent {
+      extends AbstractPageSelector
+      with BootstrapHtmlComponent {
 
     def previousLink: TagT = {
-      a(`class` := "page-link", href := "#", aria.label := "Previous", onclick := Callback.onClick { _ ⇒
-        if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
-      }, span(aria.hidden := true, raw("&laquo;")))
+      a(
+        `class`    := "page-link",
+        href       := "#",
+        aria.label := "Previous",
+        onclick := Callback.onClick { _ ⇒
+          if (currentPage.now > 1) currentPage.update(currentPage.now - 1)
+        },
+        span(aria.hidden := true, raw("&laquo;"))
+      )
     }
 
     def nextLink: TagT = {
-      a(`class` := "page-link", href := "#", aria.label := "Next", onclick := Callback.onClick { _ ⇒
-        if (currentPage.now < pages.now) currentPage.update(currentPage.now + 1)
-      }, span(aria.hidden := true, raw("&raquo;")))
+      a(
+        `class`    := "page-link",
+        href       := "#",
+        aria.label := "Next",
+        onclick := Callback.onClick { _ ⇒
+          if (currentPage.now < pages.now) currentPage.update(currentPage.now + 1)
+        },
+        span(aria.hidden := true, raw("&raquo;"))
+      )
     }
 
     def pageLink(page: Int): TagT = {
@@ -59,11 +72,15 @@ trait UniversalPageSelectors extends PageSelectors { self: RenderingContext ⇒
 
     def renderTag(md: ModifierT*): TagT = {
       val nav = tag("nav")
-      nav(Rx(ul(`class` := "pagination justify-content-center", Rx(pages() == 1).reactiveHide, md)(
-        previousPageButton,
-        for(page ← 1 to pages()) yield pageButton(page),
-        nextPageButton
-      )))
+      nav(
+        Rx(
+          ul(`class` := "pagination justify-content-center", Rx(pages() == 1).reactiveHide, md)(
+            previousPageButton,
+            for (page ← 1 to pages()) yield pageButton(page),
+            nextPageButton
+          )
+        )
+      )
     }
   }
 }
