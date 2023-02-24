@@ -11,7 +11,8 @@ import com.karasiq.bootstrap.icons.Icons
 import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
 import com.karasiq.bootstrap.utils.Utils
 
-trait JSCarousels extends UniversalCarousels { self: JSRenderingContext with Carousels with Utils with Icons with BootstrapComponents with BootstrapJQueryContext ⇒
+trait JSCarousels extends UniversalCarousels {
+  self: JSRenderingContext with Carousels with Utils with Icons with BootstrapComponents with BootstrapJQueryContext ⇒
   import scalaTags.all._
 
   type Carousel = JSCarousel
@@ -26,9 +27,13 @@ trait JSCarousels extends UniversalCarousels { self: JSRenderingContext with Car
   }
 
   class JSCarousel(carouselId: String, content: Rx[Seq[Modifier]]) extends UniversalCarousel(carouselId, content) {
-    def create(interval: Int = 5000, pause: String = "hover",
-               wrap: Boolean = true, keyboard: Boolean = true,
-               modifiers: Modifier = Bootstrap.noModifier): Element = {
+    def create(
+        interval: Int = 5000,
+        pause: String = "hover",
+        wrap: Boolean = true,
+        keyboard: Boolean = true,
+        modifiers: Modifier = Bootstrap.noModifier
+    ): Element = {
       val element = carousel(modifiers).render
       val options = js.Object().asInstanceOf[JSCarouselOptions]
       options.interval = interval
