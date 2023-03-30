@@ -17,7 +17,7 @@ trait Dropdowns { self: RenderingContext ⇒
     def dropup: Tag
 
     def renderTag(md: ModifierT*): TagT = {
-      this.dropdown(md:_*)
+      this.dropdown(md: _*)
     }
   }
 
@@ -25,13 +25,12 @@ trait Dropdowns { self: RenderingContext ⇒
     def apply(title: Modifier, items: Modifier*): Dropdown
     def link(targetId: String, md: Modifier*): Tag
 
-    def dropup(title: Modifier, items: Modifier*): Tag = apply(title, items:_*).dropup
-    def item(md: Modifier*): Tag = this.link("javascript:void(0);", md:_*)
+    def dropup(title: Modifier, items: Modifier*): Tag = apply(title, items: _*).dropup
+    def item(md: Modifier*): Tag                       = this.link("javascript:void(0);", md: _*)
 
-    /**
-      * For plaintext dropdown items
+    /** For plaintext dropdown items
       * @since 4.1
       */
-    def `item-text`: Modifier = "dropdown-item-text".addClass 
+    def `item-text`: Modifier = "dropdown-item-text".addClass
   }
 }

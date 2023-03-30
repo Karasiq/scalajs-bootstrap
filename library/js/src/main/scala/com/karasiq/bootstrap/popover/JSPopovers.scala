@@ -9,14 +9,15 @@ import com.karasiq.bootstrap.context.JSRenderingContext
 import com.karasiq.bootstrap.jquery.BootstrapJQueryContext
 import com.karasiq.bootstrap.tooltip.Tooltips
 
-trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popovers with Tooltips with BootstrapJQueryContext ⇒
+trait JSPopovers {
+  self: JSRenderingContext with BootstrapComponents with Popovers with Tooltips with BootstrapJQueryContext ⇒
   import scalaTags.all._
 
   class JSPopover(val options: PopoverOptions) extends Popover {
-    //noinspection ConvertExpressionToSAM
+    // noinspection ConvertExpressionToSAM
     def toggle: Modifier = new Modifier {
       def applyTo(t: Element): Unit = {
-        val jsOptions = scalajs.js.Object().asInstanceOf[JSPopoverOptions]
+        val jsOptions                                  = scalajs.js.Object().asInstanceOf[JSPopoverOptions]
         def set(value: String, f: String ⇒ Unit): Unit = if (value.nonEmpty) f(value)
         jsOptions.animation = options.animation
         jsOptions.content = options.content.render
@@ -38,10 +39,10 @@ trait JSPopovers { self: JSRenderingContext with BootstrapComponents with Popove
     }
   }
 
-  /**
-    * Add small overlays of content, like those on the iPad, to any element for housing secondary information.
-    * Popovers whose both title and content are zero-length are never displayed.
-    * @see [[http://getbootstrap.com/javascript/#popovers]]
+  /** Add small overlays of content, like those on the iPad, to any element for housing secondary information. Popovers
+    * whose both title and content are zero-length are never displayed.
+    * @see
+    *   [[http://getbootstrap.com/javascript/#popovers]]
     */
   object Popover extends PopoverFactory {
     def apply(title: Frag, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): JSPopover = {

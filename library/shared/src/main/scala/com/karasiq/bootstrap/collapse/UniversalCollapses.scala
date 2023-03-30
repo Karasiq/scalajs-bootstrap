@@ -15,8 +15,7 @@ trait UniversalCollapses { self: RenderingContext with Collapses with Utils ⇒
     }
   }
 
-  class UniversalCollapse(val title: Modifier,
-                          val collapseId: String = Bootstrap.newId) extends AbstractCollapse {
+  class UniversalCollapse(val title: Modifier, val collapseId: String = Bootstrap.newId) extends AbstractCollapse {
 
     protected val collapseElementId = s"$collapseId-collapse"
 

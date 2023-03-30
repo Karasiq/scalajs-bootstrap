@@ -8,18 +8,18 @@ trait TextCallbacks extends Callbacks { self: RenderingContext ⇒
 
   protected type ClickElement = Any
   protected type InputElement = Any
-  protected type FormElement = Any
+  protected type FormElement  = Any
 
   object Callback extends CallbackFactory {
-    def onClick(f: ClickElement => Unit): Callback = {
+    def onClick(f: ClickElement ⇒ Unit): Callback = {
       ()
     }
 
-    def onInput(f: (InputElement) => Unit): Callback = {
+    def onInput(f: (InputElement) ⇒ Unit): Callback = {
       ()
     }
 
-    def onSubmit(f: (FormElement) => Unit): Callback = {
+    def onSubmit(f: (FormElement) ⇒ Unit): Callback = {
       ()
     }
   }
