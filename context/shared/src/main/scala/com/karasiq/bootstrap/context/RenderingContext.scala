@@ -5,9 +5,13 @@ import scalatags.generic
 
 import com.karasiq.bootstrap.components.BootstrapComponents
 
-trait RenderingContext extends ReactiveBinds with ReactiveImplicits with Callbacks
-  with BootstrapComponents with ClassModifiers {
-  
+trait RenderingContext
+    extends ReactiveBinds
+    with ReactiveImplicits
+    with Callbacks
+    with BootstrapComponents
+    with ClassModifiers {
+
   type Element
   type Output <: FragT
   type FragT
