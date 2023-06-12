@@ -28,7 +28,7 @@ val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  scalaVersion := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
+  scalaVersion := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.11"),
   crossScalaVersions := {
     if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
     else Seq("2.12.12", scalaVersion.value)
@@ -219,7 +219,7 @@ lazy val testPageV4 = (project in (file("test") / "frontend-v4"))
 // Test server
 // -----------------------------------------------------------------------
 lazy val testServerSettings = Seq(
-  scalaVersion := "2.13.7",
+  scalaVersion := "2.13.11",
   name         := "scalajs-bootstrap-test",
   resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
   libraryDependencies ++= {
