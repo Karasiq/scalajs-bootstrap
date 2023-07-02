@@ -14,7 +14,7 @@ trait ProgressBarStyles { self: RenderingContext ⇒
     private[progressbar] def style(style: String): ProgressBarStyle = new ProgressBarStyle {
       val className = s"progress-bar-$style"
     }
-    lazy val striped: ProgressBarStyle = style("striped")
+    lazy val striped: ProgressBarStyle  = style("striped")
     lazy val animated: ProgressBarStyle = style("animated")
   }
 }
