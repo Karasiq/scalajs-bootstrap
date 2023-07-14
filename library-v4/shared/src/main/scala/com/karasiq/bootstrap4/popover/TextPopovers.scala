@@ -11,17 +11,17 @@ trait TextPopovers { self: RenderingContext with BootstrapComponents with Toolti
   import scalaTags.all._
 
   import BootstrapAttrs._
-  
+
   class TextPopover(val options: PopoverOptions) extends Popover {
     override def render(md: ModifierT*): ModifierT = {
       (`data-toggle` := "popover") +: Bootstrap.dataProps(options.toStrings: _*) +: md
     }
   }
 
-  /**
-    * Add small overlays of content, like those on the iPad, to any element for housing secondary information.
-    * Popovers whose both title and content are zero-length are never displayed.
-    * @see [[http://getbootstrap.com/javascript/#popovers]]
+  /** Add small overlays of content, like those on the iPad, to any element for housing secondary information. Popovers
+    * whose both title and content are zero-length are never displayed.
+    * @see
+    *   [[http://getbootstrap.com/javascript/#popovers]]
     */
   object Popover extends PopoverFactory {
     def apply(title: Frag, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Popover = {

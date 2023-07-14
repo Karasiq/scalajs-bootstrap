@@ -13,15 +13,15 @@ trait TextTooltips { self: RenderingContext with BootstrapComponents with Toolti
 
   class TextTooltip(val options: TooltipOptions) extends AbstractTooltip {
     override def render(md: ModifierT*): ModifierT = {
-      (`data-toggle` := "tooltip") +: Bootstrap.dataProps(options.toStrings:_*) +: md
+      (`data-toggle` := "tooltip") +: Bootstrap.dataProps(options.toStrings: _*) +: md
     }
   }
 
-  /**
-    * Inspired by the excellent jQuery.tipsy plugin written by Jason Frame;
-    * Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage.
-    * Tooltips with zero-length titles are never displayed.
-    * @see [[http://getbootstrap.com/javascript/#tooltips]]
+  /** Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't
+    * rely on images, use CSS3 for animations, and data-attributes for local title storage. Tooltips with zero-length
+    * titles are never displayed.
+    * @see
+    *   [[http://getbootstrap.com/javascript/#tooltips]]
     */
   object Tooltip extends TooltipFactory {
     def apply(content: Frag, placement: TooltipPlacement): AbstractTooltip = {

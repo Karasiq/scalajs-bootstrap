@@ -2,8 +2,7 @@ package com.karasiq.bootstrap4
 
 import rx._
 
-/**
-  * Global context
+/** Global context
   */
 object Bootstrap {
   private[this] lazy val _scalaRxContext = Ctx.Owner.safe()
