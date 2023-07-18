@@ -23,8 +23,13 @@ trait UniversalAlerts { self: RenderingContext with Alerts with Utils ⇒
     private[this] val classes = Seq("alert", "alert-dismissible", "fade", "in")
 
     def closeButton: Tag = {
-      button(`type` := "button", "close".addClass, `data-dismiss` := "alert",
-        aria.label := "Close", span(aria.hidden := true, raw("&times;")))
+      button(
+        `type` := "button",
+        "close".addClass,
+        `data-dismiss` := "alert",
+        aria.label     := "Close",
+        span(aria.hidden := true, raw("&times;"))
+      )
     }
 
     override def renderTag(md: ModifierT*): TagT = {

@@ -5,7 +5,8 @@ import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap4.buttons.Buttons
 import com.karasiq.bootstrap4.utils.Utils
 
-trait Modals extends ModalStyles { self: RenderingContext with Utils with BootstrapComponents with ClassModifiers with Buttons ⇒
+trait Modals extends ModalStyles {
+  self: RenderingContext with Utils with BootstrapComponents with ClassModifiers with Buttons ⇒
   import scalaTags.all._
 
   type Modal <: AbstractModal with BootstrapHtmlComponent
@@ -23,17 +24,22 @@ trait Modals extends ModalStyles { self: RenderingContext with Utils with Bootst
     def dismiss: Modifier
   }
 
-  /**
-    * Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.
-    * @see [[https://getbootstrap.com/javascript/#modals]]
+  /** Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.
+    * @see
+    *   [[https://getbootstrap.com/javascript/#modals]]
     */
   trait ModalFactory {
     def closeButton(title: String = "Close"): Tag
     def button(md: Modifier*): Tag
 
-    def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = closeButton(),
-              style: Modifier = Bootstrap.noModifier, dialogStyle: Modifier = ModalDialogSize.default,
-              contentStyle: Modifier = Bootstrap.noModifier, modalId: String = Bootstrap.newId): Modal
+    def apply(
+        title: Modifier = "Modal dialog",
+        body: Modifier = "",
+        buttons: Modifier = closeButton(),
+        style: Modifier = Bootstrap.noModifier,
+        dialogStyle: Modifier = ModalDialogSize.default,
+        contentStyle: Modifier = Bootstrap.noModifier,
+        modalId: String = Bootstrap.newId
+    ): Modal
   }
 }
-
