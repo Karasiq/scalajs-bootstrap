@@ -6,7 +6,7 @@ package object generic {
   // Context-bound components
   trait ModifierFactory[E] extends Modifier[E] {
     // Shortcuts
-    protected type ElementT = E
+    protected type ElementT  = E
     protected type ModifierT = Modifier[E]
 
     def createModifier: ModifierT
@@ -34,7 +34,7 @@ package object generic {
     }
 
     final def render(md: ModifierT*): ModifierT = {
-      renderFrag(md:_*)
+      renderFrag(md: _*)
     }
   }
 
@@ -44,7 +44,7 @@ package object generic {
     def renderTag(md: ModifierT*): TagT
 
     final def renderFrag(md: ModifierT*): FragT = {
-      renderTag(md:_*)
+      renderTag(md: _*)
     }
   }
 }

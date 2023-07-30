@@ -9,11 +9,11 @@ trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
 
   type GridSystem = UniversalGridSystem
   object GridSystem extends UniversalGridSystem
-  
+
   trait UniversalGridSystem extends AbstractGridSystem {
-    val container: Tag = div(`class` := "container")
+    val container: Tag      = div(`class` := "container")
     val containerFluid: Tag = div(`class` := "container-fluid")
-    val row: Tag = div(`class` := "row")
+    val row: Tag            = div(`class` := "row")
 
     object col extends AbstractColumnFactory {
       val minSize: Int = 1
@@ -29,9 +29,9 @@ trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
           if (_size == 0) baseName else baseName + "-" + _size
         }
         override val createModifier = className.addClass
-        override val size: Int = _size
+        override val size: Int      = _size
       }
-      
+
       def xs(size: Int): GridColSize = singleColSize("", size)
       def sm(size: Int): GridColSize = singleColSize("sm", size)
       def md(size: Int): GridColSize = singleColSize("md", size)
@@ -40,4 +40,3 @@ trait UniversalGrids { self: RenderingContext with Grids with ClassModifiers ⇒
     }
   }
 }
-
