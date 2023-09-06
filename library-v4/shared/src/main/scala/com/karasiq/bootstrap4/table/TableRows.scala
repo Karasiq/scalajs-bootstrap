@@ -12,28 +12,28 @@ trait TableRows { self: RenderingContext with ClassModifiers with Utils ⇒
     def styleName: String
   }
 
-  //noinspection TypeAnnotation
+  // noinspection TypeAnnotation
   object TableRowStyle {
     case object Default extends TableRowStyle {
-      val styleName = "default"
+      val styleName      = "default"
       val createModifier = Bootstrap.noModifier
     }
 
-    case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier  {
-      val className = s"table-$styleName"
+    case class Styled(styleName: String) extends TableRowStyle with StyleClassModifier {
+      val className      = s"table-$styleName"
       val createModifier = className.addClass
     }
 
-    def default = Default
-    lazy val active = Styled("active")
-    lazy val primary = Styled("primary")
+    def default        = Default
+    lazy val active    = Styled("active")
+    lazy val primary   = Styled("primary")
     lazy val secondary = Styled("secondary")
-    lazy val success = Styled("success")
-    lazy val warning = Styled("warning")
-    lazy val danger = Styled("danger")
-    lazy val info = Styled("info")
-    lazy val light = Styled("light")
-    lazy val dark = Styled("dark")
+    lazy val success   = Styled("success")
+    lazy val warning   = Styled("warning")
+    lazy val danger    = Styled("danger")
+    lazy val info      = Styled("info")
+    lazy val light     = Styled("light")
+    lazy val dark      = Styled("dark")
   }
 
   object TableRow {
