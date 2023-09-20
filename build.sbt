@@ -21,7 +21,7 @@ ThisBuild / version := (ThisBuild / version).value + (if (_isSnapshotByGit.value
 // -----------------------------------------------------------------------
 val ScalaTagsVersion     = "0.11.0"
 val ScalaRxVersion       = if (ProjectDefs.scalaJSIs06) "0.4.1" else "0.4.3"
-val ScalaJsDomVersion    = if (ProjectDefs.scalaJSIs06) "1.0.0" else "2.0.0"
+val ScalaJsDomVersion    = if (ProjectDefs.scalaJSIs06) "1.0.0" else "2.7.0"
 val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 
 // -----------------------------------------------------------------------
