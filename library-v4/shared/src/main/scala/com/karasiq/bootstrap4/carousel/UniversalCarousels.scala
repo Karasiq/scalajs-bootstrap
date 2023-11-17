@@ -23,7 +23,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
       val indexes = content().indices
       ol(`class` := "carousel-indicators")(
         mkIndicator(indexes.head)(`class` := "active"),
-        for (i <- indexes.tail) yield mkIndicator(i)
+        for (i ← indexes.tail) yield mkIndicator(i)
       )
     }
 
@@ -51,7 +51,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
     }
 
     def render(md: Modifier*): Modifier = {
-      carousel(`data-ride` := "carousel")(md:_*)
+      carousel(`data-ride` := "carousel")(md: _*)
     }
   }
 
@@ -59,7 +59,7 @@ trait UniversalCarousels { self: RenderingContext with Carousels with Utils with
     def slide(image: String, content: Modifier*): Modifier = {
       Seq(
         img(`class` := "d-block w-100", src := image),
-        div(`class` := "carousel-caption")(content:_*)
+        div(`class` := "carousel-caption")(content: _*)
       )
     }
   }

@@ -8,10 +8,10 @@ import org.scalajs.dom
 import org.scalajs.dom.raw.MouseEvent
 
 trait JSCallbacks extends Callbacks { self: JSRenderingContext ⇒
-  type Callback = js.Function
+  type Callback     = js.Function
   type ClickElement = dom.html.Element
   type InputElement = dom.html.Input
-  type FormElement = dom.html.Form
+  type FormElement  = dom.html.Form
 
   object Callback extends CallbackFactory {
     def onClick(f: ClickElement ⇒ Unit): js.Function = {

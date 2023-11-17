@@ -5,7 +5,8 @@ import com.karasiq.bootstrap.context.RenderingContext
 import com.karasiq.bootstrap.icons.Icons
 import com.karasiq.bootstrap.utils.Utils
 
-trait UniversalPanels { self: RenderingContext with BootstrapComponents with Utils with Icons with Panels with PanelStyles ⇒
+trait UniversalPanels {
+  self: RenderingContext with BootstrapComponents with Utils with Icons with Panels with PanelStyles ⇒
   import scalaTags.all._
 
   import BootstrapAttrs._
@@ -33,18 +34,25 @@ trait UniversalPanels { self: RenderingContext with BootstrapComponents with Uti
       div(`class` := "pull-right panel-head-buttons", buttons)
     }
 
-    /**
-      * Shortcut to PanelBuilder()
+    /** Shortcut to PanelBuilder()
       */
-    def apply(panelId: String = Bootstrap.newId, style: PanelStyle = PanelStyle.default,
-              header: Option[Modifier] = None, footer: Option[Modifier] = None): PanelBuilder = {
+    def apply(
+        panelId: String = Bootstrap.newId,
+        style: PanelStyle = PanelStyle.default,
+        header: Option[Modifier] = None,
+        footer: Option[Modifier] = None
+    ): PanelBuilder = {
       PanelBuilder(panelId, style, header, footer)
     }
   }
 
-  case class PanelBuilder(panelId: String, style: PanelStyle = PanelStyle.default,
-                          header: Option[Modifier] = None, footer: Option[Modifier] = None)
-    extends AbstractPanel with BootstrapHtmlComponent {
+  case class PanelBuilder(
+      panelId: String,
+      style: PanelStyle = PanelStyle.default,
+      header: Option[Modifier] = None,
+      footer: Option[Modifier] = None
+  ) extends AbstractPanel
+      with BootstrapHtmlComponent {
 
     def withId(newId: String): PanelBuilder = {
       copy(panelId = newId)
