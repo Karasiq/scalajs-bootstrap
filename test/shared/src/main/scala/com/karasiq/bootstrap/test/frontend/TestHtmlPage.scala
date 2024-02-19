@@ -9,32 +9,40 @@ import scalaTags.all._
 
 object TestHtmlPage {
   def apply(): String = {
-    "<!doctype html>" + html(head(
-      base(href := "/"),
-      meta(httpEquiv := "content-type", content := "text/html; charset=utf-8"),
-      meta(name := "viewport", content := "width=device-width, initial-scale=1.0"),
-      script(src := "https://code.jquery.com/jquery-1.12.0.js"),
-      raw(bootstrapCdnLinks),
-      scalaTags.tags2.style(raw(fontAwesomeCss)),
-      script(raw(activateTooltipScript)),
-      scalaTags.tags2.title("Bootstrap text page")
-    ), body(
-      new TestContainer
-    ))
+    "<!doctype html>" + html(
+      head(
+        base(href      := "/"),
+        meta(httpEquiv := "content-type", content := "text/html; charset=utf-8"),
+        meta(name      := "viewport", content     := "width=device-width, initial-scale=1.0"),
+        script(src     := "https://code.jquery.com/jquery-1.12.0.js"),
+        raw(bootstrapCdnLinks),
+        scalaTags.tags2.style(raw(fontAwesomeCss)),
+        script(raw(activateTooltipScript)),
+        scalaTags.tags2.title("Bootstrap text page")
+      ),
+      body(
+        new TestContainer
+      )
+    )
   }
 
   private[this] class TestContainer extends BootstrapComponent {
     def render(md: ModifierT*): ModifierT = {
       val testModal = this.createModal
-      val rxText = Var("ERROR") // Pseudo-reactive binding
+      val rxText    = Var("ERROR") // Pseudo-reactive binding
       val navigationBar = NavigationBar()
         .withBrand(rxText, href := "http://getbootstrap.com/components/#navbar")
         .withTabs(
           NavigationTab("Table", "table", "table".faFwIcon, this.createTable),
           NavigationTab("Carousel", "carousel", "picture".glyphicon, this.createCarousel),
-          NavigationTab("Buttons", "empty", "address-book".faFwIcon, Bootstrap.jumbotron(
-            Bootstrap.button("Modal", testModal.toggle)
-          ))
+          NavigationTab(
+            "Buttons",
+            "empty",
+            "address-book".faFwIcon,
+            Bootstrap.jumbotron(
+              Bootstrap.button("Modal", testModal.toggle)
+            )
+          )
         )
         .withContentContainer(e ⇒ GridSystem.container(GridSystem.mkRow(e), marginTop := 60.px))
         .build()
@@ -43,8 +51,16 @@ object TestHtmlPage {
     }
 
     private[this] def createTable = {
-      val table = PagedTable(Rx(Seq("Number", "Square")), Rx(TableRow(Seq(1, 1), Tooltip(b("First row")),
-        onclick := Callback.onClick(_ ⇒ println("Pseudo callback"))) +: (2 to 100).map(i ⇒ TableRow.data(i, i * i))))
+      val table = PagedTable(
+        Rx(Seq("Number", "Square")),
+        Rx(
+          TableRow(
+            Seq(1, 1),
+            Tooltip(b("First row")),
+            onclick := Callback.onClick(_ ⇒ println("Pseudo callback"))
+          ) +: (2 to 100).map(i ⇒ TableRow.data(i, i * i))
+        )
+      )
       table.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped)
     }
 
@@ -54,7 +70,9 @@ object TestHtmlPage {
     }
 
     private[this] def createCarousel = {
-      TestCarousel("https://upload.wikimedia.org/wikipedia/commons/9/9e/Scorpius_featuring_Mars_and_Saturn._%2828837147345%29.jpg")
+      TestCarousel(
+        "https://upload.wikimedia.org/wikipedia/commons/9/9e/Scorpius_featuring_Mars_and_Saturn._%2828837147345%29.jpg"
+      )
     }
   }
 

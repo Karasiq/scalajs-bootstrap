@@ -11,16 +11,17 @@ trait Alerts extends AlertStyles { self: RenderingContext ⇒
     def style: AlertStyle
   }
 
-  /**
-    * Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.
-    * @see [[http://getbootstrap.com/components/#alerts]]
+  /** Provide contextual feedback messages for typical user actions with the handful of available and flexible alert
+    * messages.
+    * @see
+    *   [[http://getbootstrap.com/components/#alerts]]
     */
   trait AlertFactory {
     def create(style: AlertStyle): Alert
     def link: Tag
 
     def apply(style: AlertStyle, content: Modifier*): Tag = {
-      create(style).renderTag(content:_*)
+      create(style).renderTag(content: _*)
     }
   }
 }
