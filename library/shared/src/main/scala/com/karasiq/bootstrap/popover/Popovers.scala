@@ -10,9 +10,19 @@ import com.karasiq.bootstrap.utils.Utils
 trait Popovers { self: RenderingContext with BootstrapComponents with Tooltips with Utils ⇒
   import scalaTags.all._
 
-  case class PopoverOptions(animation: Boolean = true, container: String = "", content: Frag = "", delay: String = "",
-                            html: Boolean = false, placement: TooltipPlacement = TooltipPlacement.right, selector: String = "", template: String = "",
-                            title: Frag = "", trigger: String = "", viewport: String = "") {
+  case class PopoverOptions(
+      animation: Boolean = true,
+      container: String = "",
+      content: Frag = "",
+      delay: String = "",
+      html: Boolean = false,
+      placement: TooltipPlacement = TooltipPlacement.right,
+      selector: String = "",
+      template: String = "",
+      title: Frag = "",
+      trigger: String = "",
+      viewport: String = ""
+  ) {
     def toStrings: Seq[(String, String)] = {
       def opt[T](name: String, value: T, default: T) = Option(name → value).filterNot(_._2 == default)
       Seq(
@@ -35,10 +45,10 @@ trait Popovers { self: RenderingContext with BootstrapComponents with Tooltips w
     def options: PopoverOptions
   }
 
-  /**
-    * Add small overlays of content, like those on the iPad, to any element for housing secondary information.
-    * Popovers whose both title and content are zero-length are never displayed.
-    * @see [[http://getbootstrap.com/javascript/#popovers]]
+  /** Add small overlays of content, like those on the iPad, to any element for housing secondary information. Popovers
+    * whose both title and content are zero-length are never displayed.
+    * @see
+    *   [[http://getbootstrap.com/javascript/#popovers]]
     */
   trait PopoverFactory {
     def apply(title: Frag, content: Frag, placement: TooltipPlacement = TooltipPlacement.auto): Popover
@@ -46,4 +56,3 @@ trait Popovers { self: RenderingContext with BootstrapComponents with Tooltips w
 
   val Popover: PopoverFactory
 }
-
