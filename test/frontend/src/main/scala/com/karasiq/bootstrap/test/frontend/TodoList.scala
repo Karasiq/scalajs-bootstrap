@@ -13,9 +13,9 @@ object TodoList {
   sealed abstract class ItemPriority(val style: TableRowStyle)
 
   object ItemPriority {
-    case object Low extends ItemPriority(TableRowStyle.success)
+    case object Low    extends ItemPriority(TableRowStyle.success)
     case object Normal extends ItemPriority(TableRowStyle.info)
-    case object High extends ItemPriority(TableRowStyle.danger)
+    case object High   extends ItemPriority(TableRowStyle.danger)
     def fromString(s: String): ItemPriority = Seq(Low, Normal, High).find(_.toString == s).get
   }
 
@@ -36,21 +36,34 @@ final class TodoList extends BootstrapHtmlComponent {
   }
 
   def addTestData(): Unit = {
-    items() = items.now ++ (for (_ <- 1 to 20) yield Var(Item(s"Test ${UUID.randomUUID()}", ItemPriority.Low)))
+    items() = items.now ++ (for (_ ← 1 to 20) yield Var(Item(s"Test ${UUID.randomUUID()}", ItemPriority.Low)))
   }
 
   private[this] def showDialog(title: String, priority: ItemPriority)(onApply: (String, ItemPriority) ⇒ Unit): Unit = {
-    val titleText = Var(title)
+    val titleText      = Var(title)
     val prioritySelect = FormInput.simpleSelect("Priority", "Low", "Normal", "High")
     prioritySelect.selected.update(Seq(priority.toString))
     Modal("Add/edit item")
-      .withBody(Form(
-        FormInputGroup(FormInputGroup.label("Title"), FormInputGroup.addon("file-text-o".fontAwesome(FontAwesome.fixedWidth)), FormInputGroup.text(placeholder := "Write description", titleText.reactiveInput)),
-        prioritySelect
-      ))
-      .withButtons(Modal.closeButton("Cancel"), Modal.button("Apply", Modal.dismiss, onclick := Callback.onClick { _ ⇒
-        onApply(titleText.now, ItemPriority.fromString(prioritySelect.selected.now.head))
-      }))
+      .withBody(
+        Form(
+          FormInputGroup(
+            FormInputGroup.label("Title"),
+            FormInputGroup.addon("file-text-o".fontAwesome(FontAwesome.fixedWidth)),
+            FormInputGroup.text(placeholder := "Write description", titleText.reactiveInput)
+          ),
+          prioritySelect
+        )
+      )
+      .withButtons(
+        Modal.closeButton("Cancel"),
+        Modal.button(
+          "Apply",
+          Modal.dismiss,
+          onclick := Callback.onClick { _ ⇒
+            onApply(titleText.now, ItemPriority.fromString(prioritySelect.selected.now.head))
+          }
+        )
+      )
       .show(backdrop = false)
   }
 
@@ -68,13 +81,18 @@ final class TodoList extends BootstrapHtmlComponent {
 
   private[this] def renderItem(item: Var[Item]): TableRow = {
     def todoTitle = Rx(if (item().completed) s(item().title, color.gray) else b(item().title))
-    def buttons = ButtonGroup(ButtonGroupSize.small,
-      Button(ButtonStyle.primary)("Edit", onclick := Callback.onClick(_ ⇒ showEditDialog(item))),
+    def buttons = ButtonGroup(
+      ButtonGroupSize.small,
+      Button(ButtonStyle.primary)("Edit", onclick  := Callback.onClick(_ ⇒ showEditDialog(item))),
       Button(ButtonStyle.danger)("Remove", onclick := Callback.onClick(_ ⇒ items.update(items.now.filter(_.ne(item)))))
     )
     TableRow(
       Seq(
-        Seq[Modifier](todoTitle, GridSystem.col(10), onclick := Callback.onClick(_ ⇒ item.update(item.now.copy(completed = !item.now.completed)))),
+        Seq[Modifier](
+          todoTitle,
+          GridSystem.col(10),
+          onclick := Callback.onClick(_ ⇒ item.update(item.now.copy(completed = !item.now.completed)))
+        ),
         Seq[Modifier](buttons, GridSystem.col(2), textAlign.center)
       ),
       Rx(`class` := {
@@ -84,18 +102,23 @@ final class TodoList extends BootstrapHtmlComponent {
   }
 
   override def renderTag(md: ModifierT*): TagT = {
-    val heading = Rx(Seq[Modifier](
-      Seq[Modifier]("Description", GridSystem.col(10)),
-      Seq[Modifier]("Actions", GridSystem.col(2)))
+    val heading = Rx(
+      Seq[Modifier](Seq[Modifier]("Description", GridSystem.col(10)), Seq[Modifier]("Actions", GridSystem.col(2)))
     )
     val table = PagedTable(heading, items.map(_.map(renderItem)), 5)
 
     Panel(style = PanelStyle.success)
-      .withHeader(Panel.title("th-list".glyphicon, span("Scala.js Todo", Bootstrap.nbsp, Rx(Bootstrap.badge(items().count(i ⇒ !i().completed)))), Panel.buttons(
-        Panel.button("plus".glyphicon, onclick := Callback.onClick(_ ⇒ showAddDialog())),
-        Panel.button("trash".glyphicon, onclick := Callback.onClick(_ ⇒ removeCompleted())),
-        Panel.button("flash".glyphicon, onclick := Callback.onClick(_ ⇒ addTestData()))
-      )))
+      .withHeader(
+        Panel.title(
+          "th-list".glyphicon,
+          span("Scala.js Todo", Bootstrap.nbsp, Rx(Bootstrap.badge(items().count(i ⇒ !i().completed)))),
+          Panel.buttons(
+            Panel.button("plus".glyphicon, onclick  := Callback.onClick(_ ⇒ showAddDialog())),
+            Panel.button("trash".glyphicon, onclick := Callback.onClick(_ ⇒ removeCompleted())),
+            Panel.button("flash".glyphicon, onclick := Callback.onClick(_ ⇒ addTestData()))
+          )
+        )
+      )
       .renderTag(table.renderTag(TableStyle.bordered, TableStyle.hover, TableStyle.striped, TableStyle.condensed))
   }
 }
