@@ -13,7 +13,7 @@ trait TextReactiveBinds extends ReactiveBinds { self: TextRenderingContext ⇒
 
   private[this] val NO_OP_BIND: ReactiveRW[Element, Nothing] = new ReactiveRW[Element, Nothing] {
     def bindWrite(element: Builder, property: Nothing): Unit = ()
-    def bindRead(element: Builder, property: Nothing): Unit = ()
+    def bindRead(element: Builder, property: Nothing): Unit  = ()
   }
 
   implicit def rxEventListener[EL <: Element, EV <: Event]: ReactiveRead[EL, ReactiveBinds.EventListener[EL, EV]] = {
