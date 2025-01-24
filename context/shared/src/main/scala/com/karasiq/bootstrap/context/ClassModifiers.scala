@@ -17,18 +17,18 @@ trait ClassModifiers { self: RenderingContext ⇒
   }
 
   case class ClassAdd(className: String) extends ClassModifier {
-    val classAdded = true
-    val classRemoved = false
+    val classAdded                = true
+    val classRemoved              = false
     def applyTo(t: Element): Unit = addClass(t, className)
   }
 
   case class ClassRemove(className: String) extends ClassModifier {
-    val classAdded = false
-    val classRemoved = true
+    val classAdded                = false
+    val classRemoved              = true
     def applyTo(t: Element): Unit = removeClass(t, className)
   }
 
-  //noinspection MutatorLikeMethodIsParameterless
+  // noinspection MutatorLikeMethodIsParameterless
   implicit class HtmlClassOps(className: String) {
     def addClass: ClassAdd = {
       ClassAdd(className)
@@ -43,13 +43,18 @@ trait ClassModifiers { self: RenderingContext ⇒
     }
 
     def classIf(state: Rx[Boolean]): Modifier = {
-      writeModifier(Modify[Element, Boolean](state, (e, v) ⇒ {
-        if (v) {
-          ClassModifiers.this.addClass(e, className)
-        } else {
-          ClassModifiers.this.removeClass(e, className)
-        }
-      }))
+      writeModifier(
+        Modify[Element, Boolean](
+          state,
+          (e, v) ⇒ {
+            if (v) {
+              ClassModifiers.this.addClass(e, className)
+            } else {
+              ClassModifiers.this.removeClass(e, className)
+            }
+          }
+        )
+      )
     }
   }
 
