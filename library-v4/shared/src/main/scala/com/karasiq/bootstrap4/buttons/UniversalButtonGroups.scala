@@ -9,14 +9,14 @@ trait UniversalButtonGroups { self: RenderingContext with ButtonGroups with Boot
   type ButtonGroup = UniversalButtonGroup
   object ButtonGroup extends ButtonGroupFactory {
     def apply(size: ButtonGroupSize, buttons: Modifier*): ButtonGroup = {
-      new UniversalButtonGroup(size, buttons:_*)
+      new UniversalButtonGroup(size, buttons: _*)
     }
   }
 
   type ButtonToolbar = UniversalButtonToolbar
   object ButtonToolbar extends ButtonToolbarFactory {
     def apply(buttonGroups: ButtonGroup*): ButtonToolbar = {
-      new UniversalButtonToolbar(buttonGroups:_*)
+      new UniversalButtonToolbar(buttonGroups: _*)
     }
   }
 

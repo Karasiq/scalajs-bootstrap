@@ -12,15 +12,15 @@ trait ButtonGroupStyles { self: RenderingContext with Utils ⇒
     val createModifier = Bootstrap.noModifier
   }
 
-  final class ButtonGroupSizeValue private[buttons](val size: String) extends ButtonGroupSize {
-    val className = s"btn-group-$size"
+  final class ButtonGroupSizeValue private[buttons] (val size: String) extends ButtonGroupSize {
+    val className      = s"btn-group-$size"
     val createModifier = className.addClass
   }
 
   object ButtonGroupSize {
-    def default: ButtonGroupSize = DefaultButtonGroupSize
-    lazy val large: ButtonGroupSize = new ButtonGroupSizeValue("lg")
-    lazy val small: ButtonGroupSize = new ButtonGroupSizeValue("sm")
+    def default: ButtonGroupSize         = DefaultButtonGroupSize
+    lazy val large: ButtonGroupSize      = new ButtonGroupSizeValue("lg")
+    lazy val small: ButtonGroupSize      = new ButtonGroupSizeValue("sm")
     lazy val extraSmall: ButtonGroupSize = new ButtonGroupSizeValue("xs")
   }
 }
