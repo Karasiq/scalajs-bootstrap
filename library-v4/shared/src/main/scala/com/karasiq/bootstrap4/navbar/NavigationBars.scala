@@ -10,7 +10,8 @@ import com.karasiq.bootstrap4.grid.Grids
 import com.karasiq.bootstrap4.icons.Icons
 import com.karasiq.bootstrap4.utils.Utils
 
-trait NavigationBars extends NavigationBarStyles { self: RenderingContext with Icons with Grids with Utils with BootstrapComponents with ClassModifiers ⇒
+trait NavigationBars extends NavigationBarStyles {
+  self: RenderingContext with Icons with Grids with Utils with BootstrapComponents with ClassModifiers ⇒
   import scalaTags.all._
 
   // -----------------------------------------------------------------------
@@ -20,9 +21,9 @@ trait NavigationBars extends NavigationBarStyles { self: RenderingContext with I
   case class NavigationTabs(tabs: Rx[Seq[NavigationTab]])
 
   object NavigationTabs {
-    implicit def toRxSeq(nt: NavigationTabs): Rx[Seq[NavigationTab]] = nt.tabs
+    implicit def toRxSeq(nt: NavigationTabs): Rx[Seq[NavigationTab]]    = nt.tabs
     implicit def fromRxSeq(seq: Rx[Seq[NavigationTab]]): NavigationTabs = new NavigationTabs(seq)
-    implicit def fromSeq(seq: Seq[NavigationTab]): NavigationTabs = fromRxSeq(Rx(seq))
+    implicit def fromSeq(seq: Seq[NavigationTab]): NavigationTabs       = fromRxSeq(Rx(seq))
   }
 
   // -----------------------------------------------------------------------
@@ -52,21 +53,36 @@ trait NavigationBars extends NavigationBarStyles { self: RenderingContext with I
   }
 
   trait NavigationBarFactory {
-    /**
-      * Creates navigation bar
-      * @param tabs Navbar tabs
-      * @param barId Bar id attribute
-      * @param brand Navbar "brand" content
-      * @param styles Navbar styles
-      * @param container Navbar container type
-      * @param contentContainer Navbar content container type
-      * @return Navigation bar
+
+    /** Creates navigation bar
+      * @param tabs
+      *   Navbar tabs
+      * @param barId
+      *   Bar id attribute
+      * @param brand
+      *   Navbar "brand" content
+      * @param styles
+      *   Navbar styles
+      * @param container
+      *   Navbar container type
+      * @param contentContainer
+      *   Navbar content container type
+      * @return
+      *   Navigation bar
       */
-    def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation",
-              styles: Seq[Modifier] = Seq(NavigationBarStyle.light, NavigationBarStyle.fixedTop, NavigationBarExpand.lg, Bootstrap.background.light),
-              inlineContent: Modifier = (),
-              container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md),
-              contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md))): NavigationBar
+    def apply(
+        tabs: Seq[NavigationTab] = Nil,
+        barId: String = Bootstrap.newId,
+        brand: Modifier = "Navigation",
+        styles: Seq[Modifier] = Seq(
+          NavigationBarStyle.light,
+          NavigationBarStyle.fixedTop,
+          NavigationBarExpand.lg,
+          Bootstrap.background.light
+        ),
+        inlineContent: Modifier = (),
+        container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md),
+        contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md))
+    ): NavigationBar
   }
 }
-
