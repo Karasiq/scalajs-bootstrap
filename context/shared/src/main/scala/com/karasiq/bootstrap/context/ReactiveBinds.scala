@@ -24,8 +24,7 @@ object ReactiveBinds {
   case class Visibility(visible: Rx[Boolean])
 }
 
-/**
-  * Predefined binds
+/** Predefined binds
   */
 trait ReactiveBinds { self: RenderingContext ⇒
   protected type Event

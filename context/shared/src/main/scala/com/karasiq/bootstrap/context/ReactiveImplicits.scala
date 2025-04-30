@@ -22,13 +22,16 @@ trait ReactiveImplicits { self: RenderingContext ⇒
   }
 
   implicit class RxVariableOps[T](value: Var[T]) {
-    def reactiveRead[EV](event: String, f: (Element, EV) ⇒ T)(implicit read: ReactiveRead[Element, EventListener[Element, EV]]): Modifier = {
-      readModifier(EventListener[Element, EV](event, (el, ev) ⇒ value() = f(el,ev)))
+    def reactiveRead[EV](event: String, f: (Element, EV) ⇒ T)(implicit
+        read: ReactiveRead[Element, EventListener[Element, EV]]
+    ): Modifier = {
+      readModifier(EventListener[Element, EV](event, (el, ev) ⇒ value() = f(el, ev)))
     }
 
-    def reactiveReadWrite[EV](event: String, read: (Element, EV) ⇒ T, write: (Element, T) ⇒ Unit)
-                             (implicit rb: ReactiveRead[Element, EventListener[Element, EV]],
-                              wb: ReactiveWrite[Element, Modify[Element, T]]): Modifier = new Modifier {
+    def reactiveReadWrite[EV](event: String, read: (Element, EV) ⇒ T, write: (Element, T) ⇒ Unit)(implicit
+        rb: ReactiveRead[Element, EventListener[Element, EV]],
+        wb: ReactiveWrite[Element, Modify[Element, T]]
+    ): Modifier = new Modifier {
       override def applyTo(t: Element): Unit = {
         writeModifier(ReactiveBinds.Modify(value, write)).applyTo(t)
         reactiveRead(event, read).applyTo(t)
@@ -39,8 +42,10 @@ trait ReactiveImplicits { self: RenderingContext ⇒
       readModifier(FormValue(value))
     }
 
-    def reactiveInput(implicit rb: ReactiveRead[Element, FormValue[T]],
-                      wb: ReactiveWrite[Element, FormValue[T]]): Modifier = new Modifier {
+    def reactiveInput(implicit
+        rb: ReactiveRead[Element, FormValue[T]],
+        wb: ReactiveWrite[Element, FormValue[T]]
+    ): Modifier = new Modifier {
       def applyTo(t: Element): Unit = {
         writeModifier(FormValue(value)).applyTo(t)
         readModifier(FormValue(value)).applyTo(t)
