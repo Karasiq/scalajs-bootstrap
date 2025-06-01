@@ -21,7 +21,7 @@ object BootstrapTestApp extends App {
     implicit val actorSystem = ActorSystem(Behaviors.empty, "bootstrap-test")
     import actorSystem.executionContext
 
-    Runtime.getRuntime.addShutdownHook(new Thread(() => actorSystem.terminate()))
+    Runtime.getRuntime.addShutdownHook(new Thread(() ⇒ actorSystem.terminate()))
 
     val route =
       get {
@@ -43,7 +43,7 @@ object BootstrapTestApp extends App {
     StdIn.readLine() // let it run until user presses return
     bindingFuture
       .flatMap(_.unbind())                      // trigger unbinding from the port
-      .onComplete(_ => actorSystem.terminate()) // and shutdown when done
+      .onComplete(_ ⇒ actorSystem.terminate()) // and shutdown when done
   }
 
   startup()

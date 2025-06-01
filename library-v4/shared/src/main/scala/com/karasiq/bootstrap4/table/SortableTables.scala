@@ -14,9 +14,12 @@ trait SortableTables extends TableCols { self: RenderingContext with PagedTables
   val SortableTable: AbstractSortableTableFactory
 
   trait AbstractSortableTableFactory {
-    def apply[T](items: Rx[Seq[T]], columns: Rx[Seq[TableCol[T, _]]],
-                 rowModifiers: T ⇒ Modifier = (_: T) ⇒ Bootstrap.noModifier,
-                 filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)): SortableTable[T]
+    def apply[T](
+        items: Rx[Seq[T]],
+        columns: Rx[Seq[TableCol[T, _]]],
+        rowModifiers: T ⇒ Modifier = (_: T) ⇒ Bootstrap.noModifier,
+        filterItem: (T, String) ⇒ Boolean = (i: T, f: String) ⇒ i.toString.contains(f)
+    ): SortableTable[T]
   }
 
   trait AbstractSortableTable[T] {

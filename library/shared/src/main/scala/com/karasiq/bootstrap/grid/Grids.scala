@@ -10,12 +10,12 @@ trait Grids { self: RenderingContext ⇒
   type GridSystem <: AbstractGridSystem
   val GridSystem: GridSystem
 
-  /**
-    * @see [[https://getbootstrap.com/css/#grid-options]]
+  /** @see
+    *   [[https://getbootstrap.com/css/#grid-options]]
     */
   trait AbstractGridSystem {
     type ContainerT = Tag
-    type RowT = Tag
+    type RowT       = Tag
 
     def container: ContainerT
     def containerFluid: ContainerT
@@ -42,7 +42,7 @@ trait Grids { self: RenderingContext ⇒
   trait AbstractColumn extends ModifierFactory {
     def size: Int
     def asDiv: Tag
-    def apply(md: ModifierT*): Tag = this.asDiv.apply(md:_*)
+    def apply(md: ModifierT*): Tag = this.asDiv.apply(md: _*)
   }
 
   trait AbstractColumnFactory {
@@ -56,8 +56,8 @@ trait Grids { self: RenderingContext ⇒
 
     def responsive(xsSize: Int, smSize: Int, mdSize: Int, lgSize: Int): AbstractColumn = new AbstractColumn {
       override val createModifier: ModifierT = Seq[ModifierT](xs(xsSize), sm(smSize), md(mdSize), lg(lgSize))
-      def size: Int = lgSize
-      def asDiv: Tag = div(createModifier)
+      def size: Int                          = lgSize
+      def asDiv: Tag                         = div(createModifier)
     }
 
     def apply(size: Int): AbstractColumn = this.responsive(size, size, size, size)
@@ -76,4 +76,3 @@ trait Grids { self: RenderingContext ⇒
     def print: AbstractGridVisibility
   }
 }
-
