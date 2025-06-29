@@ -5,8 +5,8 @@ import com.karasiq.bootstrap.context.RenderingContext
 trait NavigationBarStyles { self: RenderingContext ⇒
   import scalaTags.all._
 
-  final class NavigationBarStyle private[navbar](style: String) extends ModifierFactory {
-    val className = s"navbar-$style"
+  final class NavigationBarStyle private[navbar] (style: String) extends ModifierFactory {
+    val className      = s"navbar-$style"
     val createModifier = className.addClass
   }
 
@@ -16,8 +16,8 @@ trait NavigationBarStyles { self: RenderingContext ⇒
     lazy val inverse = new NavigationBarStyle("inverse")
 
     // Position
-    lazy val fixedTop = new NavigationBarStyle("fixed-top")
+    lazy val fixedTop    = new NavigationBarStyle("fixed-top")
     lazy val fixedBottom = new NavigationBarStyle("fixed-bottom")
-    lazy val staticTop = new NavigationBarStyle("static-top")
+    lazy val staticTop   = new NavigationBarStyle("static-top")
   }
 }
