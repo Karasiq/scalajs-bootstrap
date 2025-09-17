@@ -16,6 +16,6 @@ trait TableCols { self: RenderingContext ⇒
     def apply[T](cols: TableCol[T, _]*) = cols
   }
 
-  type GenTableCol[T] = TableCol[T, Any]
+  type GenTableCol[T]  = TableCol[T, Any]
   type GenTableCols[T] = Seq[GenTableCol[T]]
 }
