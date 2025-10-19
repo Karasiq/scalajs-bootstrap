@@ -16,11 +16,11 @@ trait ProgressBarStyles { self: RenderingContext ⇒
     }
 
     lazy val success: ProgressBarStyle = style("success")
-    lazy val info: ProgressBarStyle = style("info")
+    lazy val info: ProgressBarStyle    = style("info")
     lazy val warning: ProgressBarStyle = style("warning")
-    lazy val danger: ProgressBarStyle = style("danger")
+    lazy val danger: ProgressBarStyle  = style("danger")
 
-    lazy val striped: ProgressBarStyle = style("striped")
+    lazy val striped: ProgressBarStyle  = style("striped")
     lazy val animated: ProgressBarStyle = new ProgressBarStyle {
       val className = "active"
     }
