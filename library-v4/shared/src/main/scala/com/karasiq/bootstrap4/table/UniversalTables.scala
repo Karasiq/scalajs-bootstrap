@@ -37,6 +37,6 @@ trait UniversalTables { self: RenderingContext with BootstrapComponents with Tab
     }
   }
 
-  protected class StaticUniversalTable(val heading: Rx[Seq[Modifier]],
-                                       val content: Rx[Seq[TableRow]]) extends UniversalTable
+  protected class StaticUniversalTable(val heading: Rx[Seq[Modifier]], val content: Rx[Seq[TableRow]])
+      extends UniversalTable
 }
