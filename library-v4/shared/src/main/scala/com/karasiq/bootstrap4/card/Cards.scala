@@ -24,14 +24,16 @@ trait Cards { self: RenderingContext with Icons with Utils ⇒
     def imageTop(md: Modifier): Tag
     def body(md: Modifier*): Tag
     def text(md: Modifier*): Tag
-    def link(md: Modifier*): Tag 
+    def link(md: Modifier*): Tag
     def button(icon: IconModifier, modifiers: Modifier*): Tag
     def buttons(buttons: Modifier*): Tag
     def group(cards: Modifier*): Tag
 
-    def apply(panelId: String = Bootstrap.newId,
-              header: Option[Modifier] = None,
-              footer: Option[Modifier] = None,
-              content: Seq[Modifier] = Nil): Card
+    def apply(
+        panelId: String = Bootstrap.newId,
+        header: Option[Modifier] = None,
+        footer: Option[Modifier] = None,
+        content: Seq[Modifier] = Nil
+    ): Card
   }
 }
