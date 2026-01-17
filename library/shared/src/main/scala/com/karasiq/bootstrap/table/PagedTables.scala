@@ -14,8 +14,7 @@ trait PagedTables { self: RenderingContext with BootstrapComponents with Tables 
   type PagedTable <: AbstractPagedTable with BootstrapHtmlComponent
   val PagedTable: PagedTableFactory
 
-  /**
-    * Table with pagination
+  /** Table with pagination
     */
   trait AbstractPagedTable {
     def table: Table
@@ -31,7 +30,7 @@ trait PagedTables { self: RenderingContext with BootstrapComponents with Tables 
 
     private[table] def pagesRx(allContent: Rx[Seq[TableRow]], rowsPerPage: Int): Rx[Int] = {
       Rx {
-        val data = allContent()
+        val data   = allContent()
         val result = if (data.isEmpty) {
           1
         } else if (data.length % rowsPerPage == 0) {
@@ -43,7 +42,11 @@ trait PagedTables { self: RenderingContext with BootstrapComponents with Tables 
       }
     }
 
-    private[table] def pagedDataRx(allContent: Rx[Seq[TableRow]], currentPage: Rx[Int], rowsPerPage: Int): Rx[Seq[TableRow]] = {
+    private[table] def pagedDataRx(
+        allContent: Rx[Seq[TableRow]],
+        currentPage: Rx[Int],
+        rowsPerPage: Int
+    ): Rx[Seq[TableRow]] = {
       Rx {
         val data = allContent()
         val page = currentPage()
