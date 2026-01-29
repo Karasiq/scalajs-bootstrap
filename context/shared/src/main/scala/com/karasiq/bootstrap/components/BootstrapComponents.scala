@@ -6,9 +6,9 @@ import com.karasiq.bootstrap.components.generic.{GenComponent, GenDomComponent, 
 import com.karasiq.bootstrap.context.RenderingContext
 
 trait BootstrapComponents { self: RenderingContext ⇒
-  final type ModifierFactory = generic.ModifierFactory[Element]
-  final type BootstrapComponent = generic.BootstrapComponent[Element]
-  final type BootstrapDomComponent = generic.BootstrapDomComponent[Element, FragT]
+  final type ModifierFactory        = generic.ModifierFactory[Element]
+  final type BootstrapComponent     = generic.BootstrapComponent[Element]
+  final type BootstrapDomComponent  = generic.BootstrapDomComponent[Element, FragT]
   final type BootstrapHtmlComponent = generic.BootstrapHtmlComponent[Element, Output, FragT]
 
   implicit def renderBootstrapHtmlComponent[C](bc: C)(implicit ev: C ⇒ BootstrapHtmlComponent): scalaTags.Tag = {
