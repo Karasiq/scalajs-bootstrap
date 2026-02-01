@@ -49,7 +49,7 @@ trait TextClassModifiers extends ClassModifiers { self: TextRenderingContext ⇒
 
       case classIndex ⇒
         val (key, value) = e.attrs(classIndex)
-        val newValue = f(extractClasses(value))
+        val newValue     = f(extractClasses(value))
         e.attrs(classIndex) = (key, ClassesValueSource(newValue))
     }
   }
