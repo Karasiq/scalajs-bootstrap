@@ -10,8 +10,12 @@ import com.karasiq.bootstrap.popover.TextPopovers
 import com.karasiq.bootstrap.tooltip.TextTooltips
 
 // Text components implementation
-trait TextBootstrapBundle extends UniversalBootstrapBundle with TextRenderingContext
-  with TextCarousels with TextTooltips with TextPopovers
+trait TextBootstrapBundle
+    extends UniversalBootstrapBundle
+    with TextRenderingContext
+    with TextCarousels
+    with TextTooltips
+    with TextPopovers
 
 object TextBootstrapBundle {
   def apply()(implicit ctx: Ctx.Owner): TextBootstrapBundle = {

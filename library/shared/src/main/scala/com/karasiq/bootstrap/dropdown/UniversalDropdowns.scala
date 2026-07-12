@@ -19,16 +19,17 @@ trait UniversalDropdowns { self: RenderingContext with Dropdowns with Utils ⇒
     }
   }
 
-  private[dropdown] final class UniversalDropdown(val title: Modifier,
-                                                  val items: Seq[Modifier],
-                                                  val dropdownId: String = Bootstrap.newId)
-    extends AbstractDropdown {
+  private[dropdown] final class UniversalDropdown(
+      val title: Modifier,
+      val items: Seq[Modifier],
+      val dropdownId: String = Bootstrap.newId
+  ) extends AbstractDropdown {
 
     def dropdown: Tag = {
       div(`class` := "dropdown")(
         Bootstrap.button(
           "dropdown-toggle".addClass,
-          id := dropdownId,
+          id            := dropdownId,
           `data-toggle` := "dropdown",
           aria.haspopup := true,
           aria.expanded := false,
@@ -36,7 +37,7 @@ trait UniversalDropdowns { self: RenderingContext with Dropdowns with Utils ⇒
           Bootstrap.nbsp,
           span(`class` := "caret")
         ),
-        ul(`class` := "dropdown-menu", aria.labelledby := dropdownId)(items:_*)
+        ul(`class` := "dropdown-menu", aria.labelledby := dropdownId)(items: _*)
       )
     }
 

@@ -23,9 +23,9 @@ trait Forms { self: RenderingContext with Utils ⇒
   }
 
   trait FormFactory {
-    type FormT = Tag
+    type FormT       = Tag
     type InlineFormT = Tag
-    type SubmitT = Tag
+    type SubmitT     = Tag
 
     def apply(md: Modifier*): FormT
     def inline(md: Modifier*): InlineFormT
@@ -53,7 +53,7 @@ trait Forms { self: RenderingContext with Utils ⇒
     def isDefaultOption: Boolean
 
     def inputType: String = "radio"
-    def inputId: String = this.radioId
+    def inputId: String   = this.radioId
   }
 
   trait AbstractFormRadioGroup extends AbstractFormInput {
@@ -64,22 +64,27 @@ trait Forms { self: RenderingContext with Utils ⇒
   }
 
   trait FormInputFactory {
-    type InputT = Tag
-    type RadioT = AbstractFormRadio
+    type InputT      = Tag
+    type RadioT      = AbstractFormRadio
     type RadioGroupT = AbstractFormRadioGroup
-    type SelectT = AbstractFormSelect
+    type SelectT     = AbstractFormSelect
 
     def ofType(inputType: String, label: Modifier, md: Modifier*): InputT
-    def text(label: Modifier, md: Modifier*): Tag = this.ofType("text", label, md:_*)
-    def number(label: Modifier, md: Modifier*): Tag = this.ofType("number", label, md:_*)
-    def email(label: Modifier, md: Modifier*): Tag = this.ofType("email", label, md:_*)
-    def password(label: Modifier, md: Modifier*): Tag = this.ofType("password", label, md:_*)
+    def text(label: Modifier, md: Modifier*): Tag     = this.ofType("text", label, md: _*)
+    def number(label: Modifier, md: Modifier*): Tag   = this.ofType("number", label, md: _*)
+    def email(label: Modifier, md: Modifier*): Tag    = this.ofType("email", label, md: _*)
+    def password(label: Modifier, md: Modifier*): Tag = this.ofType("password", label, md: _*)
     def file(label: Modifier, md: Modifier*): Tag
     def textArea(title: Modifier, md: Modifier*): InputT
     def checkbox(label: Modifier, md: Modifier*): InputT
 
-    def radio(title: Modifier, radioName: String, radioValue: String,
-              initialState: Boolean = false, radioId: String = Bootstrap.newId): RadioT
+    def radio(
+        title: Modifier,
+        radioName: String,
+        radioValue: String,
+        initialState: Boolean = false,
+        radioId: String = Bootstrap.newId
+    ): RadioT
 
     def radioGroup[T <: RadioT](radios: Rx[Seq[T]]): RadioGroupT
 
@@ -108,7 +113,7 @@ trait Forms { self: RenderingContext with Utils ⇒
     }
 
     // Default
-    def apply(label: Modifier, md: Modifier*): Tag = this.text(label, md:_*)
+    def apply(label: Modifier, md: Modifier*): Tag = this.text(label, md: _*)
   }
 
   trait FormInputGroupFactory {
@@ -120,11 +125,10 @@ trait Forms { self: RenderingContext with Utils ⇒
     def addon(md: Modifier*): AddonT
     def apply(label: Modifier, md: Modifier*): GroupT
 
-    def label(md: Modifier*): InputT = scalaTags.tags.label(md)
-    def text(md: Modifier*): InputT = this.createInput("text", md:_*)
-    def number(md: Modifier*): InputT = this.createInput("number", md:_*)
-    def email(md: Modifier*): InputT = this.createInput("email", md:_*)
-    def password(md: Modifier*): InputT = this.createInput("password", md:_*)
+    def label(md: Modifier*): InputT    = scalaTags.tags.label(md)
+    def text(md: Modifier*): InputT     = this.createInput("text", md: _*)
+    def number(md: Modifier*): InputT   = this.createInput("number", md: _*)
+    def email(md: Modifier*): InputT    = this.createInput("email", md: _*)
+    def password(md: Modifier*): InputT = this.createInput("password", md: _*)
   }
 }
-

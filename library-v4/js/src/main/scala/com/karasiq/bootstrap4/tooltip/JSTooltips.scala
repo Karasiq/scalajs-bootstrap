@@ -17,7 +17,7 @@ trait JSTooltips { self: JSRenderingContext with BootstrapComponents with Toolti
   class JSTooltip(val options: TooltipOptions) extends AbstractTooltip {
     def toggle: Modifier = new Modifier {
       def applyTo(t: Element): Unit = {
-        val jsOptions = scalajs.js.Object().asInstanceOf[JSTooltipOptions]
+        val jsOptions                            = scalajs.js.Object().asInstanceOf[JSTooltipOptions]
         def set(value: String, f: String ⇒ Unit) = if (value.nonEmpty) f(value)
         jsOptions.animation = options.animation
         jsOptions.html = options.html
