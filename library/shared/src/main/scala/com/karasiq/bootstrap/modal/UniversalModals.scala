@@ -5,16 +5,23 @@ import com.karasiq.bootstrap.components.BootstrapComponents
 import com.karasiq.bootstrap.context.{ClassModifiers, RenderingContext}
 import com.karasiq.bootstrap.utils.Utils
 
-trait UniversalModals { self: RenderingContext with Utils with BootstrapComponents with ClassModifiers with Buttons with Modals with ModalStyles ⇒
+trait UniversalModals {
+  self: RenderingContext
+    with Utils
+    with BootstrapComponents
+    with ClassModifiers
+    with Buttons
+    with Modals
+    with ModalStyles ⇒
   import scalaTags.all._
 
   import BootstrapAttrs._
 
   type Modal = ModalBuilder
 
-  /**
-    * Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.
-    * @see [[https://getbootstrap.com/javascript/#modals]]
+  /** Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.
+    * @see
+    *   [[https://getbootstrap.com/javascript/#modals]]
     */
   object Modal extends ModalFactory {
     val dismiss: Modifier = {
@@ -29,9 +36,15 @@ trait UniversalModals { self: RenderingContext with Utils with BootstrapComponen
       Button(ButtonStyle.primary)(md)
     }
 
-    def apply(title: Modifier = "Modal dialog", body: Modifier = "", buttons: Modifier = closeButton(),
-              style: Modifier = Bootstrap.noModifier, dialogStyle: Modifier = ModalDialogSize.default,
-              contentStyle: Modifier = Bootstrap.noModifier, modalId: String = Bootstrap.newId): ModalBuilder = {
+    def apply(
+        title: Modifier = "Modal dialog",
+        body: Modifier = "",
+        buttons: Modifier = closeButton(),
+        style: Modifier = Bootstrap.noModifier,
+        dialogStyle: Modifier = ModalDialogSize.default,
+        contentStyle: Modifier = Bootstrap.noModifier,
+        modalId: String = Bootstrap.newId
+    ): ModalBuilder = {
       ModalBuilder(title, body, buttons, style, dialogStyle, contentStyle, modalId)
     }
   }
@@ -75,19 +88,26 @@ trait UniversalModals { self: RenderingContext with Utils with BootstrapComponen
     }
 
     def renderTag(md: ModifierT*): TagT = {
-      modal(md:_*)
+      modal(md: _*)
     }
   }
 
-  case class ModalBuilder(title: Modifier, body: Modifier, buttons: Modifier, style: Modifier,
-                          dialogStyle: Modifier, contentStyle: Modifier, modalId: String) extends UniversalModal {
+  case class ModalBuilder(
+      title: Modifier,
+      body: Modifier,
+      buttons: Modifier,
+      style: Modifier,
+      dialogStyle: Modifier,
+      contentStyle: Modifier,
+      modalId: String
+  ) extends UniversalModal {
 
-    def withTitle(md: Modifier*): ModalBuilder = copy(title = md)
-    def withBody(md: Modifier*): ModalBuilder = copy(body = md)
-    def withButtons(md: Modifier*): ModalBuilder = copy(buttons = md)
-    def withStyle(md: Modifier*): ModalBuilder = copy(style = md)
-    def withDialogStyle(md: Modifier*): ModalBuilder = copy(dialogStyle = md)
+    def withTitle(md: Modifier*): ModalBuilder        = copy(title = md)
+    def withBody(md: Modifier*): ModalBuilder         = copy(body = md)
+    def withButtons(md: Modifier*): ModalBuilder      = copy(buttons = md)
+    def withStyle(md: Modifier*): ModalBuilder        = copy(style = md)
+    def withDialogStyle(md: Modifier*): ModalBuilder  = copy(dialogStyle = md)
     def withContentStyle(md: Modifier*): ModalBuilder = copy(contentStyle = md)
-    def withId(id: String): ModalBuilder = copy(modalId = id)
+    def withId(id: String): ModalBuilder              = copy(modalId = id)
   }
 }
