@@ -18,17 +18,17 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
     }
 
     def fa(iconName: String, styles: FontAwesomeStyle*): FontAwesomeIcon = {
-      FontAwesome(iconName, styles:_*)
+      FontAwesome(iconName, styles: _*)
     }
 
     def faFw(iconName: String, styles: FontAwesomeStyle*): FontAwesomeIcon = {
-      FontAwesome(iconName, FontAwesome.fixedWidth +: styles:_*)
+      FontAwesome(iconName, FontAwesome.fixedWidth +: styles: _*)
     }
   }
 
   final class BootstrapGlyphicon(val iconName: String) extends BootstrapHtmlComponent with IconModifier {
     override def renderTag(md: ModifierT*): TagT = {
-      span(`class` := "glyphicon glyphicon-" + iconName, aria.hidden := true)(md:_*)
+      span(`class` := "glyphicon glyphicon-" + iconName, aria.hidden := true)(md: _*)
     }
   }
 
@@ -38,9 +38,11 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
     }
   }
 
-  final class FontAwesomeIcon(val iconName: String, val styles: Seq[FontAwesomeStyle]) extends BootstrapHtmlComponent with IconModifier {
+  final class FontAwesomeIcon(val iconName: String, val styles: Seq[FontAwesomeStyle])
+      extends BootstrapHtmlComponent
+      with IconModifier {
     override def renderTag(md: ModifierT*): TagT = {
-      i(`class` := "fa fa-" + iconName, styles, aria.hidden := true)(md:_*)
+      i(`class` := "fa fa-" + iconName, styles, aria.hidden := true)(md: _*)
     }
   }
 
@@ -48,8 +50,8 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
     override val createModifier = ("fa-" + styleName).addClass
   }
 
-  /**
-    * @see [[https://fortawesome.github.io/Font-Awesome/examples]]
+  /** @see
+    *   [[https://fortawesome.github.io/Font-Awesome/examples]]
     */
   object FontAwesome {
     def apply(name: String, styles: FontAwesomeStyle*): FontAwesomeIcon = {
@@ -63,10 +65,10 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
 
     // Size modifiers
     lazy val large: FontAwesomeStyle = "lg"
-    lazy val x2: FontAwesomeStyle = "2x"
-    lazy val x3: FontAwesomeStyle = "3x"
-    lazy val x4: FontAwesomeStyle = "4x"
-    lazy val x5: FontAwesomeStyle = "5x"
+    lazy val x2: FontAwesomeStyle    = "2x"
+    lazy val x3: FontAwesomeStyle    = "3x"
+    lazy val x4: FontAwesomeStyle    = "4x"
+    lazy val x5: FontAwesomeStyle    = "5x"
 
     // Fixed width
     lazy val fixedWidth: FontAwesomeStyle = "fw"
@@ -76,20 +78,20 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
     lazy val line: FontAwesomeStyle = "li"
 
     // Bordered & Pulled icons
-    lazy val border: FontAwesomeStyle = "border"
+    lazy val border: FontAwesomeStyle    = "border"
     lazy val pullRight: FontAwesomeStyle = "pull-right"
-    lazy val pullLeft: FontAwesomeStyle = "pull-left"
+    lazy val pullLeft: FontAwesomeStyle  = "pull-left"
 
     // Animated icons
-    lazy val spin: FontAwesomeStyle = "spin"
+    lazy val spin: FontAwesomeStyle  = "spin"
     lazy val pulse: FontAwesomeStyle = "pulse"
 
     // Rotated & Flipped
-    lazy val rotate90: FontAwesomeStyle = "rotate-90"
-    lazy val rotate180: FontAwesomeStyle = "rotate-90"
-    lazy val rotate270: FontAwesomeStyle = "rotate-90"
+    lazy val rotate90: FontAwesomeStyle       = "rotate-90"
+    lazy val rotate180: FontAwesomeStyle      = "rotate-90"
+    lazy val rotate270: FontAwesomeStyle      = "rotate-90"
     lazy val flipHorizontal: FontAwesomeStyle = "flip-horizontal"
-    lazy val flipVertical: FontAwesomeStyle = "flip-vertical"
+    lazy val flipVertical: FontAwesomeStyle   = "flip-vertical"
 
     // Stacked icons
     def stacked(icons: Tag*): Tag = {
@@ -100,13 +102,13 @@ trait UniversalIcons { self: RenderingContext with Icons with ClassModifiers wit
     lazy val stacked2x: FontAwesomeStyle = "stack-2x"
   }
 
-  //noinspection SpellCheckingInspection
+  // noinspection SpellCheckingInspection
   implicit class BootstrapIconsOps(iconName: String) {
-    def glyphicon: BootstrapGlyphicon = Icon.glyphicon(iconName)
-    def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = Icon.fa(iconName, styles:_*)
+    def glyphicon: BootstrapGlyphicon                           = Icon.glyphicon(iconName)
+    def fontAwesome(styles: FontAwesomeStyle*): FontAwesomeIcon = Icon.fa(iconName, styles: _*)
 
     // Shortcuts
-    def faIcon: FontAwesomeIcon = this.fontAwesome()
+    def faIcon: FontAwesomeIcon   = this.fontAwesome()
     def faFwIcon: FontAwesomeIcon = this.fontAwesome(FontAwesome.fixedWidth)
   }
 }

@@ -20,7 +20,7 @@ trait Collapses { self: RenderingContext with Utils with BootstrapComponents ⇒
     def create(title: Modifier, collapseId: String = Bootstrap.newId): Collapse
 
     def apply(title: Modifier)(content: Modifier*): Tag = {
-      create(title, Bootstrap.newId).renderTag(content:_*)
+      create(title, Bootstrap.newId).renderTag(content: _*)
     }
   }
 }

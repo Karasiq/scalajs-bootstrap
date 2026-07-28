@@ -28,7 +28,7 @@ val ScalaJSJQueryVersion = if (ProjectDefs.scalaJSIs06) "3.0.1" else "3.2.0"
 // Settings
 // -----------------------------------------------------------------------
 lazy val commonSettings = Seq(
-  scalaVersion := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
+  scalaVersion       := (if (ProjectDefs.scalaJSIs06) "2.13.4" else "2.13.7"),
   crossScalaVersions := {
     if (ProjectDefs.scalaJSIs06) Seq("2.11.12", "2.12.12", scalaVersion.value)
     else Seq("2.12.12", scalaVersion.value)
@@ -45,7 +45,7 @@ lazy val publishSettings = Seq(
   pomIncludeRepository   := { _ ⇒ false },
   licenses               := Seq("The MIT License" → url("http://opensource.org/licenses/MIT")),
   homepage               := Some(url("https://github.com/Karasiq/scalajs-bootstrap")),
-  scmInfo := Some(
+  scmInfo                := Some(
     ScmInfo(
       new URL("https://github.com/Karasiq/scalajs-bootstrap"),
       "scm:git:git@github.com:Karasiq/scalajs-bootstrap.git"
@@ -234,9 +234,9 @@ lazy val testServerSettings = Seq(
   clean := clean.dependsOn(testPage / clean, testPageV4 / clean).value
 ) ++ inConfig(Compile)(
   Seq(
-    mainClass            := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
-    compile              := compile.dependsOn(scalaJsBundlerCompile).value,
-    scalaJsBundlerInline := false,
+    mainClass             := Some("com.karasiq.bootstrap.test.backend.BootstrapTestApp"),
+    compile               := compile.dependsOn(scalaJsBundlerCompile).value,
+    scalaJsBundlerInline  := false,
     scalaJsBundlerCompile := {
       val result = scalaJsBundlerCompile
         .dependsOn(testPage / Compile / fastOptJS / webpack, testPageV4 / Compile / fastOptJS / webpack)

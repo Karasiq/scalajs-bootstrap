@@ -17,7 +17,7 @@ final class TestCarousel(imgSrc: String)(implicit val rc: TestCarousel.RC) exten
   type RC = TestCarousel.RC
   import rc._
   import scalaTags.all._
-  
+
   def component = Carousel(
     Carousel.slide(
       imgSrc,
